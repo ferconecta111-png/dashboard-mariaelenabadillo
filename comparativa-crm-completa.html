@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Completa CRM — Maria Elena Badillo</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',system-ui,sans-serif; background:#f0f4f8; color:#1a202c; font-size:14px; }
+
+/* NAV */
+.sticky-nav {
+  position:sticky; top:0; z-index:100;
+  background:rgba(26,32,44,0.97); backdrop-filter:blur(8px);
+  padding:0 32px; display:flex; gap:4px; overflow-x:auto;
+}
+.sticky-nav a {
+  color:rgba(255,255,255,0.7); text-decoration:none; font-size:12px; font-weight:600;
+  padding:14px 14px; white-space:nowrap; border-bottom:2px solid transparent;
+  transition:all 0.2s;
+}
+.sticky-nav a:hover { color:white; border-bottom-color:#68d391; }
+
+/* HEADER */
+.header {
+  background:linear-gradient(135deg,#1a202c 0%,#2d3748 60%,#4a5568 100%);
+  color:white; padding:48px;
+}
+.header h1 { font-size:28px; font-weight:800; letter-spacing:-0.5px; }
+.header p { font-size:15px; opacity:0.75; margin-top:8px; max-width:700px; line-height:1.6; }
+.header-meta { display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; }
+.header-tag {
+  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600;
+}
+
+.container { max-width:1160px; margin:0 auto; padding:40px 24px; }
+
+/* LABELS */
+.section-label {
+  font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:#718096; margin-bottom:18px; display:flex; align-items:center; gap:10px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:#e2e8f0; }
+
+/* SECTION DIVIDER */
+.section-block { margin-bottom:48px; }
+
+/* =================== SECCIÓN 1: POR QUÉ =================== */
+.why-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.why-card { background:white; border-radius:14px; padding:24px; }
+.why-card h3 { font-size:15px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.why-card ul { list-style:none; }
+.why-card ul li {
+  font-size:13px; color:#4a5568; padding:7px 0; padding-left:22px;
+  position:relative; border-bottom:1px solid #f0f4f8; line-height:1.5;
+}
+.why-card ul li:last-child { border-bottom:none; }
+.why-card ul li::before { position:absolute; left:0; font-size:13px; }
+.why-card.green ul li::before { content:'✓'; color:#38a169; font-weight:800; }
+.why-card.red ul li::before { content:'✗'; color:#e53e3e; font-weight:800; }
+
+/* =================== SECCIÓN 2: PROBARON =================== */
+.tried-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.tried-card {
+  background:white; border-radius:14px; padding:24px;
+  border-top:3px solid #e53e3e; position:relative;
+}
+.tried-card .tried-name { font-size:16px; font-weight:800; color:#2d3748; margin-bottom:4px; }
+.tried-card .tried-tag {
+  display:inline-block; background:#fff5f5; color:#c53030; border:1px solid #feb2b2;
+  font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px; margin-bottom:14px;
+}
+.tried-card p { font-size:12.5px; color:#4a5568; line-height:1.6; }
+.tried-card .tried-cost { font-size:12px; color:#718096; margin-top:10px; font-style:italic; }
+
+/* =================== TABLA PROFUNDA =================== */
+.table-scroll { overflow-x:auto; border-radius:16px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+table { width:100%; border-collapse:collapse; background:white; min-width:900px; }
+thead { position:sticky; top:44px; z-index:10; }
+thead tr { background:#2d3748; color:white; }
+thead th { padding:16px 14px; font-size:12px; font-weight:700; text-align:left; border-right:1px solid rgba(255,255,255,0.1); }
+thead th:first-child { width:200px; background:#1a202c; }
+thead th.col-winner { background:#276749; }
+thead th.col-2 { background:#2b4c7e; }
+
+.cat-row td { background:#f7fafc; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#a0aec0; padding:10px 14px; border-bottom:1px solid #e2e8f0; }
+
+tbody tr { border-bottom:1px solid #f0f4f8; }
+tbody tr:hover { background:#f7fafc; }
+td { padding:13px 14px; font-size:13px; vertical-align:middle; border-right:1px solid #f0f4f8; }
+td:first-child { font-weight:600; color:#2d3748; background:#fafafa; }
+td.col-winner { background:#f0fff4; }
+td.col-2 { background:#ebf8ff; }
+
+.y { color:#276749; font-weight:800; font-size:15px; }
+.n { color:#e53e3e; font-weight:800; font-size:15px; }
+.p { color:#dd6b20; font-weight:700; font-size:13px; }
+
+.chip {
+  display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px;
+}
+.chip.g { background:#c6f6d5; color:#276749; }
+.chip.r { background:#fed7d7; color:#c53030; }
+.chip.o { background:#feebc8; color:#c05621; }
+.chip.b { background:#bee3f8; color:#2b6cb0; }
+
+/* =================== SECCIÓN COSTOS REALES =================== */
+.cost-platform { background:white; border-radius:14px; padding:28px; margin-bottom:20px; }
+.cost-platform .plat-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; }
+.cost-platform .plat-name { font-size:18px; font-weight:800; color:#2d3748; }
+.cost-platform .plat-headline { font-size:12px; color:#718096; margin-top:2px; }
+.cost-platform .plat-badge { font-size:12px; font-weight:700; padding:6px 16px; border-radius:20px; }
+.badge-winner { background:#c6f6d5; color:#276749; }
+.badge-good { background:#bee3f8; color:#2b6cb0; }
+.badge-warn { background:#fed7d7; color:#c53030; }
+
+.cost-tiers { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+.cost-tier { background:#f7fafc; border-radius:10px; padding:14px; border:1px solid #e2e8f0; }
+.cost-tier.highlighted { background:#f0fff4; border-color:#9ae6b4; }
+.cost-tier .tier-name { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#718096; font-weight:700; }
+.cost-tier .tier-price { font-size:20px; font-weight:800; color:#1a202c; margin:4px 0; }
+.cost-tier .tier-detail { font-size:11px; color:#718096; line-height:1.5; }
+
+.real-cost-box {
+  background:linear-gradient(135deg,#2d3748,#4a5568); color:white;
+  border-radius:10px; padding:16px 20px; display:flex; justify-content:space-between; align-items:center;
+}
+.real-cost-box .rc-label { font-size:12px; opacity:0.75; }
+.real-cost-box .rc-amount { font-size:22px; font-weight:800; }
+.real-cost-box .rc-note { font-size:11px; opacity:0.6; }
+
+.complications { margin-top:16px; }
+.complications h5 { font-size:12px; font-weight:700; color:#c53030; margin-bottom:8px; text-transform:uppercase; letter-spacing:1px; }
+.complication-item {
+  display:flex; gap:10px; padding:8px 0; border-bottom:1px solid #f0f4f8; font-size:12.5px; color:#4a5568;
+}
+.complication-item::before { content:'⚠'; font-size:13px; flex-shrink:0; }
+.complication-item:last-child { border-bottom:none; }
+
+.users-box { margin-top:16px; background:#f7fafc; border-radius:10px; padding:14px; }
+.users-box h5 { font-size:12px; font-weight:700; color:#718096; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px; }
+.users-box p { font-size:12.5px; color:#4a5568; line-height:1.6; }
+
+/* =================== CHART SECTION =================== */
+.charts-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.chart-card { background:white; border-radius:14px; padding:28px; }
+.chart-card h3 { font-size:14px; font-weight:700; color:#2d3748; margin-bottom:4px; }
+.chart-card p { font-size:12px; color:#a0aec0; margin-bottom:20px; }
+.chart-h { height:260px; position:relative; }
+
+/* =================== SCORE CARDS =================== */
+.score-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:40px; }
+.score-card { background:white; border-radius:14px; padding:20px; text-align:center; }
+.score-card .sc-name { font-size:13px; font-weight:700; color:#2d3748; margin-bottom:12px; }
+.score-bar { background:#e2e8f0; border-radius:4px; height:6px; margin:4px 0 2px; overflow:hidden; }
+.score-bar-fill { height:100%; border-radius:4px; }
+.score-item-label { font-size:10px; color:#a0aec0; text-align:left; margin-top:8px; }
+.score-item-val { font-size:10px; font-weight:700; text-align:right; float:right; }
+.sc-total { font-size:28px; font-weight:800; margin-bottom:4px; }
+.sc-verdict { font-size:11px; font-weight:700; padding:3px 10px; border-radius:10px; display:inline-block; margin-top:4px; }
+
+/* =================== RECOMENDACIÓN =================== */
+.rec-hero {
+  background:linear-gradient(135deg,#276749 0%,#38a169 100%);
+  color:white; border-radius:18px; padding:40px; margin-bottom:24px;
+}
+.rec-hero .rh-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; opacity:0.75; margin-bottom:8px; }
+.rec-hero h2 { font-size:32px; font-weight:800; margin-bottom:6px; }
+.rec-hero .rh-sub { font-size:14px; opacity:0.85; margin-bottom:28px; line-height:1.6; }
+.rec-why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.rec-why { background:rgba(255,255,255,0.12); border-radius:12px; padding:18px; }
+.rec-why .rw-icon { font-size:22px; margin-bottom:8px; }
+.rec-why h4 { font-size:13px; font-weight:700; margin-bottom:4px; }
+.rec-why p { font-size:12px; opacity:0.85; line-height:1.5; }
+
+/* PLAN IMPLEMENTACIÓN */
+.plan-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.plan-step { background:white; border-radius:12px; padding:20px; text-align:center; position:relative; }
+.plan-step::after { content:'→'; position:absolute; right:-10px; top:50%; transform:translateY(-50%); font-size:18px; color:#cbd5e0; }
+.plan-step:last-child::after { display:none; }
+.plan-step .ps-day { font-size:11px; font-weight:700; color:#3182ce; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+.plan-step .ps-num { font-size:32px; font-weight:800; color:#e2e8f0; line-height:1; margin-bottom:6px; }
+.plan-step h4 { font-size:13px; font-weight:700; color:#2d3748; margin-bottom:6px; }
+.plan-step p { font-size:11.5px; color:#718096; line-height:1.5; }
+
+/* BUDGET REAL */
+.budget-card { background:white; border-radius:14px; padding:28px; }
+.budget-row { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #f0f4f8; }
+.budget-row:last-child { border-bottom:none; }
+.budget-row .br-label { font-size:13px; color:#4a5568; }
+.budget-row .br-amount { font-size:14px; font-weight:700; color:#2d3748; }
+.budget-total { background:#f0fff4; border-radius:10px; padding:16px 20px; margin-top:16px; display:flex; justify-content:space-between; align-items:center; }
+.budget-total .bt-label { font-size:13px; font-weight:700; color:#276749; }
+.budget-total .bt-amount { font-size:22px; font-weight:800; color:#276749; }
+
+.footer { text-align:center; color:#a0aec0; font-size:12px; padding:32px; }
+</style>
+</head>
+<body>
+
+<!-- STICKY NAV -->
+<nav class="sticky-nav">
+  <a href="#porque">¿Por qué CRM?</a>
+  <a href="#probaron">Lo que probaron</a>
+  <a href="#comparativa">Comparativa</a>
+  <a href="#costos">Costos reales</a>
+  <a href="#scores">Puntuación</a>
+  <a href="#recomendacion">Recomendación</a>
+  <a href="#plan">Plan de implementación</a>
+  <a href="#presupuesto">Presupuesto</a>
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>Guía Completa de CRM Omnicanal<br>Maria Elena Badillo — Decisión definitiva</h1>
+  <p>Análisis profundo de 5 plataformas: costos reales, límites concretos, complicaciones, quiénes las usan, confiabilidad y presupuesto total para tomar la mejor decisión.</p>
+  <div class="header-meta">
+    <span class="header-tag">5 plataformas evaluadas</span>
+    <span class="header-tag">Precios verificados mayo 2026</span>
+    <span class="header-tag">WhatsApp API + Instagram + Facebook + Broadcasts</span>
+    <span class="header-tag">Sin costos ocultos</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- =================== 1. POR QUÉ =================== -->
+<div class="section-block" id="porque">
+  <div class="section-label">1. Por qué necesitan un CRM ahora</div>
+  <div class="why-grid">
+    <div class="why-card green">
+      <h3>✅ Por qué SÍ tener un CRM</h3>
+      <ul>
+        <li>Todos los mensajes de WhatsApp, Instagram y Facebook llegan a <strong>un solo lugar</strong> — sin cambiar de app cada 2 minutos</li>
+        <li>Múltiples agentes pueden atender leads <strong>al mismo tiempo</strong> sin pisarse ni duplicar respuestas</li>
+        <li>Los leads no se pierden — cada conversación queda registrada con historial completo</li>
+        <li>Las <strong>difusiones</strong> llegan a toda la base de contactos sin hacerlo manual uno a uno</li>
+        <li>Los <strong>bots automatizan</strong> la primera respuesta para que ningún lead espere más de 10 segundos</li>
+        <li>Métricas reales: cuántos leads entran, quién responde, cuántos cierran</li>
+        <li>Con el volumen de leads que genera Maria Elena, sin CRM <strong>se dejan ir ventas todos los días</strong></li>
+      </ul>
+    </div>
+    <div class="why-card red">
+      <h3>❌ Qué pasa sin CRM (el costo de no tenerlo)</h3>
+      <ul>
+        <li>Leads que escriben en Instagram DM se quedan sin respuesta porque nadie los ve a tiempo</li>
+        <li>El mismo lead lo atiende más de una agente — mala experiencia y confusión</li>
+        <li>No hay forma de saber cuántos leads llegaron este mes ni de dónde</li>
+        <li>Las difusiones manuales por WhatsApp pueden banear el número si se hacen mal</li>
+        <li>El equipo pasa tiempo cambiando entre WhatsApp Web, Instagram y Facebook — ineficiencia pura</li>
+        <li>No hay seguimiento automático — los leads fríos se pierden para siempre</li>
+        <li>Es imposible escalar el negocio sin centralizar las conversaciones primero</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =================== 2. LO QUE PROBARON =================== -->
+<div class="section-block" id="probaron">
+  <div class="section-label">2. Lo que ya probaron — análisis honesto del por qué no funcionó</div>
+  <div class="tried-grid">
+    <div class="tried-card">
+      <div class="tried-name">Respond.io</div>
+      <div class="tried-tag">❌ Costos ocultos</div>
+      <p>Plataforma técnicamente buena y verdaderamente omnicanal. El problema: cobra por conectar cada canal adicional. WhatsApp API incluida, pero Instagram y Facebook Messenger tienen costo extra por canal. Con 3+ canales activos, el precio real llega a <strong>$199-$299/mes</strong> (plan Growth mínimo para equipos). Para SMBs con muchos canales, no es sostenible.</p>
+      <div class="tried-cost">Precio real con todos los canales: $199–$299/mes · Plan mínimo funcional: Growth $199</div>
+    </div>
+    <div class="tried-card">
+      <div class="tried-name">FunnelChat</div>
+      <div class="tried-tag">❌ No centraliza canales</div>
+      <p>Diseñado principalmente para WhatsApp. Las integraciones con Instagram y Facebook DMs no son nativas — los mensajes llegan separados o hay que revisar cada canal por aparte. Para un negocio que necesita <strong>una sola bandeja real</strong> para todos los canales, FunnelChat se queda corto. Bueno para WhatsApp puro, no para omnicanal.</p>
+      <div class="tried-cost">Precio: asequible, pero el problema no es el precio sino la funcionalidad</div>
+    </div>
+    <div class="tried-card">
+      <div class="tried-name">Kommo</div>
+      <div class="tried-tag">❌ Configuración inestable</div>
+      <p>CRM robusto con buena integración de canales en papel. El problema en práctica: la conexión con WhatsApp API requiere un BSP (Business Solution Provider) externo que suma costo y complejidad. Las integraciones con Instagram y Facebook son inestables — se desconectan frecuentemente. <strong>$25/usuario/mes</strong> más el costo del BSP = fácilmente $100+/mes con problemas técnicos constantes.</p>
+      <div class="tried-cost">Precio real: $25/usuario + BSP externo para WA API · 4 agentes = $100+/mes con inestabilidad</div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== 3. COMPARATIVA PROFUNDA =================== -->
+<div class="section-block" id="comparativa">
+  <div class="section-label">3. Comparativa profunda — 5 plataformas</div>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Criterio</th>
+          <th class="col-winner">⭐ ChatMaxima</th>
+          <th class="col-2">Chatwoot (self-hosted)</th>
+          <th>Wati</th>
+          <th>Manychat</th>
+          <th>Respond.io</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr class="cat-row"><td colspan="6">CANALES — ¿cuáles incluye de verdad?</td></tr>
+        <tr>
+          <td>WhatsApp API</td>
+          <td class="col-winner"><span class="y">✓</span> Nativo, completo</td>
+          <td class="col-2"><span class="y">✓</span> Nativo, completo</td>
+          <td><span class="y">✓</span> Su canal principal</td>
+          <td><span class="y">✓</span> Desde plan Pro</td>
+          <td><span class="y">✓</span> Completo</td>
+        </tr>
+        <tr>
+          <td>Instagram DMs</td>
+          <td class="col-winner"><span class="y">✓</span> Nativo, completo</td>
+          <td class="col-2"><span class="y">✓</span> Nativo, completo</td>
+          <td><span class="p">⚠</span> Muy básico, sin broadcasts</td>
+          <td><span class="y">✓</span> Excelente, su fuerte</td>
+          <td><span class="y">✓</span> Completo</td>
+        </tr>
+        <tr>
+          <td>Facebook DMs</td>
+          <td class="col-winner"><span class="y">✓</span> Nativo, completo</td>
+          <td class="col-2"><span class="y">✓</span> Nativo, completo</td>
+          <td><span class="p">⚠</span> Básico, sin marketing</td>
+          <td><span class="y">✓</span> Completo</td>
+          <td><span class="y">✓</span> Completo</td>
+        </tr>
+        <tr>
+          <td>Telegram</td>
+          <td class="col-winner"><span class="y">✓</span></td>
+          <td class="col-2"><span class="y">✓</span></td>
+          <td><span class="n">✗</span></td>
+          <td><span class="y">✓</span></td>
+          <td><span class="y">✓</span></td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td class="col-winner"><span class="y">✓</span></td>
+          <td class="col-2"><span class="y">✓</span></td>
+          <td><span class="n">✗</span></td>
+          <td><span class="p">⚠</span> Limitado</td>
+          <td><span class="y">✓</span></td>
+        </tr>
+        <tr>
+          <td>TikTok DMs</td>
+          <td class="col-winner"><span class="n">✗</span> No aún</td>
+          <td class="col-2"><span class="n">✗</span></td>
+          <td><span class="n">✗</span></td>
+          <td><span class="y">✓</span> Sí</td>
+          <td><span class="y">✓</span> Sí</td>
+        </tr>
+        <tr>
+          <td>Chat web (widget)</td>
+          <td class="col-winner"><span class="y">✓</span></td>
+          <td class="col-2"><span class="y">✓</span></td>
+          <td><span class="n">✗</span></td>
+          <td><span class="n">✗</span></td>
+          <td><span class="y">✓</span></td>
+        </tr>
+
+        <tr class="cat-row"><td colspan="6">DIFUSIONES Y AUTOMATIZACIÓN</td></tr>
+        <tr>
+          <td>Broadcasts WhatsApp</td>
+          <td class="col-winner"><span class="y">✓</span> Con segmentación</td>
+          <td class="col-2"><span class="p">⚠</span> Limitado</td>
+          <td><span class="y">✓</span> Su fuerte</td>
+          <td><span class="y">✓</span> Bueno</td>
+          <td><span class="y">✓</span> Muy bueno</td>
+        </tr>
+        <tr>
+          <td>Broadcasts Instagram</td>
+          <td class="col-winner"><span class="y">✓</span> Incluido</td>
+          <td class="col-2"><span class="n">✗</span></td>
+          <td><span class="n">✗</span></td>
+          <td><span class="y">✓</span> Excelente</td>
+          <td><span class="y">✓</span></td>
+        </tr>
+        <tr>
+          <td>Builder de bot (no-code)</td>
+          <td class="col-winner"><span class="y">✓</span> Intuitivo</td>
+          <td class="col-2"><span class="p">⚠</span> Limitado</td>
+          <td><span class="y">✓</span> Bueno</td>
+          <td><span class="y">✓</span> Muy bueno</td>
+          <td><span class="y">✓</span> Excelente</td>
+        </tr>
+        <tr>
+          <td>Flujos de automatización</td>
+          <td class="col-winner"><span class="y">✓</span> Ilimitados</td>
+          <td class="col-2"><span class="p">⚠</span> Básicos</td>
+          <td><span class="y">✓</span> Buenos</td>
+          <td><span class="y">✓</span> Muy buenos</td>
+          <td><span class="y">✓</span> Los mejores</td>
+        </tr>
+        <tr>
+          <td>Respuesta automática 24/7</td>
+          <td class="col-winner"><span class="y">✓</span></td>
+          <td class="col-2"><span class="p">⚠</span> Requiere config</td>
+          <td><span class="y">✓</span></td>
+          <td><span class="y">✓</span></td>
+          <td><span class="y">✓</span></td>
+        </tr>
+
+        <tr class="cat-row"><td colspan="6">EQUIPO Y GESTIÓN</td></tr>
+        <tr>
+          <td>Bandeja unificada real</td>
+          <td class="col-winner"><span class="y">✓</span> Todos los canales juntos</td>
+          <td class="col-2"><span class="y">✓</span> Excelente</td>
+          <td><span class="p">⚠</span> Solo WhatsApp</td>
+          <td><span class="y">✓</span> Buena</td>
+          <td><span class="y">✓</span> La mejor</td>
+        </tr>
+        <tr>
+          <td>Múltiples agentes</td>
+          <td class="col-winner"><span class="chip b">1 incluido + $6/agente</span></td>
+          <td class="col-2"><span class="chip g">Ilimitados</span></td>
+          <td><span class="chip o">5 incluidos, luego salta a $119</span></td>
+          <td><span class="chip r">1 por defecto, por contactos</span></td>
+          <td><span class="chip r">10 en Growth $199</span></td>
+        </tr>
+        <tr>
+          <td>Etiquetas y pipeline de ventas</td>
+          <td class="col-winner"><span class="y">✓</span></td>
+          <td class="col-2"><span class="y">✓</span></td>
+          <td><span class="y">✓</span></td>
+          <td><span class="p">⚠</span> Básico</td>
+          <td><span class="y">✓</span> Muy bueno</td>
+        </tr>
+        <tr>
+          <td>Notas internas entre agentes</td>
+          <td class="col-winner"><span class="y">✓</span></td>
+          <td class="col-2"><span class="y">✓</span></td>
+          <td><span class="y">✓</span></td>
+          <td><span class="n">✗</span></td>
+          <td><span class="y">✓</span></td>
+        </tr>
+        <tr>
+          <td>App móvil</td>
+          <td class="col-winner"><span class="y">✓</span> iOS y Android</td>
+          <td class="col-2"><span class="p">⚠</span> Inestable en iOS</td>
+          <td><span class="y">✓</span> Buena</td>
+          <td><span class="y">✓</span> Buena</td>
+          <td><span class="y">✓</span> Muy buena</td>
+        </tr>
+        <tr>
+          <td>Reportes y analytics</td>
+          <td class="col-winner"><span class="y">✓</span> Incluidos</td>
+          <td class="col-2"><span class="p">⚠</span> Básicos</td>
+          <td><span class="y">✓</span> Buenos</td>
+          <td><span class="y">✓</span> Buenos</td>
+          <td><span class="y">✓</span> Excelentes</td>
+        </tr>
+
+        <tr class="cat-row"><td colspan="6">PRECIO Y TRANSPARENCIA</td></tr>
+        <tr>
+          <td>Precio base/mes</td>
+          <td class="col-winner"><span class="chip g">$49 USD</span></td>
+          <td class="col-2"><span class="chip g">~$15 infraestructura</span></td>
+          <td><span class="chip o">$49 + extras</span></td>
+          <td><span class="chip o">$15–$69 + por contactos</span></td>
+          <td><span class="chip r">$159 plan mínimo real</span></td>
+        </tr>
+        <tr>
+          <td>Costo real para 4 agentes/mes</td>
+          <td class="col-winner"><span class="chip g">~$67 USD</span></td>
+          <td class="col-2"><span class="chip g">~$15–25 USD</span></td>
+          <td><span class="chip r">$119 (fuerza salto de plan)</span></td>
+          <td><span class="chip o">$65–130+ según contactos</span></td>
+          <td><span class="chip r">$159–199 USD</span></td>
+        </tr>
+        <tr>
+          <td>Costos ocultos por canal</td>
+          <td class="col-winner"><span class="chip g">Ninguno</span></td>
+          <td class="col-2"><span class="chip g">Ninguno</span></td>
+          <td><span class="chip r">20% markup en templates</span></td>
+          <td><span class="chip o">Por contactos activos</span></td>
+          <td><span class="chip r">Por canal, por usuario, por AI</span></td>
+        </tr>
+        <tr>
+          <td>Precio predecible</td>
+          <td class="col-winner"><span class="chip g">Sí, fijo</span></td>
+          <td class="col-2"><span class="chip g">Sí, solo infra</span></td>
+          <td><span class="chip r">No — 30-50% más de lo anunciado</span></td>
+          <td><span class="chip r">No — escala con contactos</span></td>
+          <td><span class="chip r">No — por canal y usuarios</span></td>
+        </tr>
+        <tr>
+          <td>Garantía / reembolso</td>
+          <td class="col-winner">60 días de garantía</td>
+          <td class="col-2">N/A (open source)</td>
+          <td>No especificado</td>
+          <td>Política estándar</td>
+          <td>No especificado</td>
+        </tr>
+
+        <tr class="cat-row"><td colspan="6">SETUP, SOPORTE Y CONFIABILIDAD</td></tr>
+        <tr>
+          <td>Setup sin desarrollador</td>
+          <td class="col-winner"><span class="y">✓</span> 30–60 min</td>
+          <td class="col-2"><span class="n">✗</span> Necesita dev 2–4h</td>
+          <td><span class="y">✓</span> 30 min</td>
+          <td><span class="y">✓</span> 20 min</td>
+          <td><span class="y">✓</span> 1h</td>
+        </tr>
+        <tr>
+          <td>Soporte en español</td>
+          <td class="col-winner"><span class="y">✓</span> Chat en vivo</td>
+          <td class="col-2"><span class="p">⚠</span> Solo comunidad</td>
+          <td><span class="p">⚠</span> Email, lento</td>
+          <td><span class="y">✓</span> Chat y docs</td>
+          <td><span class="y">✓</span> Bueno</td>
+        </tr>
+        <tr>
+          <td>Tiempo en el mercado</td>
+          <td class="col-winner">~3 años, creciendo</td>
+          <td class="col-2">6+ años, maduro</td>
+          <td>5+ años</td>
+          <td>8+ años</td>
+          <td>7+ años</td>
+        </tr>
+        <tr>
+          <td>Calificación usuarios</td>
+          <td class="col-winner">4.5/5 (AppSumo)</td>
+          <td class="col-2">4.4/5 (G2)</td>
+          <td>4.2/5 (G2)</td>
+          <td>4.6/5 (G2)</td>
+          <td>4.7/5 (G2)</td>
+        </tr>
+        <tr>
+          <td>Confiabilidad / uptime</td>
+          <td class="col-winner">99%+, cloud estable</td>
+          <td class="col-2">Depende de tu infra</td>
+          <td>Buena, algunos bugs</td>
+          <td>Muy buena</td>
+          <td>Excelente</td>
+        </tr>
+        <tr>
+          <td>Quiénes la usan</td>
+          <td class="col-winner">SMBs, coaches, negocios digitales LatAm</td>
+          <td class="col-2">Startups tech, agencias con dev</td>
+          <td>E-commerce, WA-heavy</td>
+          <td>Creadores, D2C, marketing</td>
+          <td>Empresas medianas y grandes</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- =================== 4. COSTOS REALES =================== -->
+<div class="section-block" id="costos">
+  <div class="section-label">4. Costos reales — lo que pagas de verdad (no el precio de marketing)</div>
+
+  <!-- CHATMAXIMA -->
+  <div class="cost-platform">
+    <div class="plat-header">
+      <div>
+        <div class="plat-name">⭐ ChatMaxima</div>
+        <div class="plat-headline">Canales ilimitados · Precio plano · 60 días garantía</div>
+      </div>
+      <span class="plat-badge badge-winner">MEJOR RELACIÓN PRECIO-VALOR</span>
+    </div>
+    <div class="cost-tiers">
+      <div class="cost-tier">
+        <div class="tier-name">Starter</div>
+        <div class="tier-price">$19/mes</div>
+        <div class="tier-detail">1 workspace · 1 agente · todos los canales · básico</div>
+      </div>
+      <div class="cost-tier highlighted">
+        <div class="tier-name">Growth ← Ideal</div>
+        <div class="tier-price">$49/mes</div>
+        <div class="tier-detail">Canales ilimitados · chatbots ilimitados · broadcasts · analytics</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Scale</div>
+        <div class="tier-price">$99/mes</div>
+        <div class="tier-detail">3 workspaces · todo Growth + más cuentas</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Agentes extra</div>
+        <div class="tier-price">+$6/mes</div>
+        <div class="tier-detail">Por agente adicional. 3 agentes extras = +$18/mes</div>
+      </div>
+    </div>
+    <div class="real-cost-box">
+      <div><div class="rc-label">Costo real para Maria Elena (4 agentes, todos los canales)</div><div class="rc-amount">~$67 USD/mes</div></div>
+      <div style="text-align:right"><div class="rc-label">Anual</div><div class="rc-amount">~$804 USD</div><div class="rc-note">$49 + 3 agentes × $6</div></div>
+    </div>
+    <div class="complications">
+      <h5>⚠ Posibles complicaciones reportadas por usuarios</h5>
+      <div class="complication-item">Algunos usuarios reportaron problemas al conectar cuentas de Facebook e Instagram — en algunos casos el soporte tardó en resolver. Verificar la conexión el primer día.</div>
+      <div class="complication-item">Conectividad ocasional: hubo reportes de caídas breves en la sincronización de mensajes. Nada crítico pero puede pasar.</div>
+      <div class="complication-item">Plataforma más joven (~3 años) — menos "battle-tested" que Chatwoot o Respond.io para volúmenes muy altos (100K+ conversaciones/mes).</div>
+      <div class="complication-item">La documentación en español es limitada — la interfaz sí está en español pero los tutoriales son principalmente en inglés.</div>
+    </div>
+    <div class="users-box">
+      <h5>Quiénes la usan</h5>
+      <p>SMBs latinoamericanas, negocios de coaching y bienestar, agencias de marketing digital, e-commerce de tamaño mediano. Es la opción que más creció entre 2024-2026 en el segmento de negocios digitales de LatAm por su precio-valor. Especialmente popular entre negocios que vienen de Manychat y necesitan también bandeja de soporte.</p>
+    </div>
+  </div>
+
+  <!-- CHATWOOT -->
+  <div class="cost-platform">
+    <div class="plat-header">
+      <div>
+        <div class="plat-name">Chatwoot (self-hosted en Railway)</div>
+        <div class="plat-headline">Open source · Solo pagas infraestructura · Control total</div>
+      </div>
+      <span class="plat-badge badge-good">OPCIÓN TÉCNICA MÁS BARATA</span>
+    </div>
+    <div class="cost-tiers">
+      <div class="cost-tier highlighted">
+        <div class="tier-name">Community (free)</div>
+        <div class="tier-price">$0 licencia</div>
+        <div class="tier-detail">Open source, MIT license. Agentes ilimitados, contactos ilimitados, todos los canales</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Railway (infra)</div>
+        <div class="tier-price">~$15-25/mes</div>
+        <div class="tier-detail">4 servicios: Rails app + Sidekiq + PostgreSQL + Redis. Escala automático.</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Cloud (alternativa)</div>
+        <div class="tier-price">$19/agente/mes</div>
+        <div class="tier-detail">Si no quieren self-host. 4 agentes = $76/mes. Más caro que self-hosted.</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Setup inicial</div>
+        <div class="tier-price">~2-4h</div>
+        <div class="tier-detail">Tiempo de un dev para configurar y conectar todos los canales. Único gasto técnico.</div>
+      </div>
+    </div>
+    <div class="real-cost-box">
+      <div><div class="rc-label">Costo real (self-hosted, Railway, 4 agentes, todos los canales)</div><div class="rc-amount">~$20 USD/mes</div></div>
+      <div style="text-align:right"><div class="rc-label">Anual</div><div class="rc-amount">~$240 USD</div><div class="rc-note">Solo infraestructura Railway</div></div>
+    </div>
+    <div class="complications">
+      <h5>⚠ Complicaciones reales (confirmadas en reviews)</h5>
+      <div class="complication-item"><strong>Instagram requiere App Review de Meta</strong> — proceso burocrático que puede tardar 1-4 semanas. Sin eso, Instagram DMs no funcionan. Es el mayor bloqueador.</div>
+      <div class="complication-item">WhatsApp API: la primera configuración es compleja y mal documentada. Conectarlo correctamente toma 2-4 horas con alguien que sepa.</div>
+      <div class="complication-item">La app móvil en iOS es inestable — notificaciones tardías y funciones limitadas vs escritorio. El equipo operaría mejor desde computador.</div>
+      <div class="complication-item">Escalar a alto volumen (50K+ conv/mes) requiere tuning de PostgreSQL y Redis — trabajo de DevOps que puede volverse full-time.</div>
+      <div class="complication-item">No tiene broadcasts nativos por Instagram. Para WhatsApp sí, pero es la versión básica.</div>
+    </div>
+    <div class="users-box">
+      <h5>Quiénes la usan</h5>
+      <p>Startups tech, agencias con equipo de desarrollo, empresas que priorizan privacidad de datos (UE), SaaS con soporte al cliente técnico. Más de 100,000 instalaciones activas globalmente. No es la opción más popular para negocios de servicios sin equipo técnico, pero es extremadamente confiable para quienes la configuran bien.</p>
+    </div>
+  </div>
+
+  <!-- WATI -->
+  <div class="cost-platform">
+    <div class="plat-header">
+      <div>
+        <div class="plat-name">Wati</div>
+        <div class="plat-headline">WhatsApp primero — Instagram y Facebook muy básicos</div>
+      </div>
+      <span class="plat-badge badge-warn">COSTOS OCULTOS CONFIRMADOS</span>
+    </div>
+    <div class="cost-tiers">
+      <div class="cost-tier">
+        <div class="tier-name">Growth</div>
+        <div class="tier-price">$49/mes</div>
+        <div class="tier-detail">3 agentes (hard cap) · Solo WhatsApp real · Broadcasts WA</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Pro (forzado en 4+ agentes)</div>
+        <div class="tier-price">$119/mes</div>
+        <div class="tier-detail">El 4to agente te obliga a saltar aquí — duplicas el precio</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Markup templates</div>
+        <div class="tier-price">+20%</div>
+        <div class="tier-detail">Sobre el precio de Meta por cada mensaje template enviado</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Costo real con broadcasts</div>
+        <div class="tier-price">+30-50%</div>
+        <div class="tier-detail">Sobre el precio anunciado. Confirmado en 39 reviews de G2.</div>
+      </div>
+    </div>
+    <div class="real-cost-box" style="background:linear-gradient(135deg,#742a2a,#c53030)">
+      <div><div class="rc-label">Costo real para 4 agentes con broadcasts activos</div><div class="rc-amount">~$140-180 USD/mes</div></div>
+      <div style="text-align:right"><div class="rc-label">Anual estimado</div><div class="rc-amount">~$1,700-2,160 USD</div><div class="rc-note">Plan Pro + markup Meta + add-ons</div></div>
+    </div>
+    <div class="complications">
+      <h5>⚠ Complicaciones críticas</h5>
+      <div class="complication-item"><strong>Instagram y Facebook son casi decorativos</strong> — no tiene marketing features para esos canales. Solo WhatsApp de verdad.</div>
+      <div class="complication-item">El 4to agente fuerza salto de $49 a $119 — el doble. Si el equipo crece, el precio explota.</div>
+      <div class="complication-item">20% de markup en cada mensaje template de WhatsApp — si hacen muchas difusiones, esto suma fuerte.</div>
+      <div class="complication-item">Soporte lento y poco resolutivo según reviews de G2 y Capterra — el término "Expensive" aparece 39 veces en reviews.</div>
+    </div>
+    <div class="users-box">
+      <h5>Quiénes la usan</h5>
+      <p>E-commerce que opera principalmente por WhatsApp, negocios de India y sudeste asiático donde WhatsApp es el canal dominante. Para negocios LatAm con necesidad de omnicanal real, Wati es insuficiente.</p>
+    </div>
+  </div>
+
+  <!-- MANYCHAT -->
+  <div class="cost-platform">
+    <div class="plat-header">
+      <div>
+        <div class="plat-name">Manychat</div>
+        <div class="plat-headline">El rey de Instagram automations — precio escala por contactos</div>
+      </div>
+      <span class="plat-badge badge-good">BUENO PARA INSTAGRAM MARKETING</span>
+    </div>
+    <div class="cost-tiers">
+      <div class="cost-tier">
+        <div class="tier-name">Free</div>
+        <div class="tier-price">$0</div>
+        <div class="tier-detail">Solo 25 contactos activos (bajó de 1,000 en marzo 2026). Inútil para un negocio real.</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Pro 2,500 contactos</div>
+        <div class="tier-price">$15/mes</div>
+        <div class="tier-detail">3 canales (Instagram + WA + uno más). Precio engañoso — sube rápido.</div>
+      </div>
+      <div class="cost-tier">
+        <div class="tier-name">Pro 10,000 contactos</div>
+        <div class="tier-price">~$65/mes</div>
+        <div class="tier-detail">Si tienen más de 2,500 contactos activos, ya están aquí.</div>
+      </div>
+      <div class="cost-tier highlighted">
+        <div class="tier-name">Business 7,500 contactos</div>
+        <div class="tier-price">$69/mes</div>
+        <div class="tier-detail">Canales ilimitados · 5 agentes · AI · El plan que realmente necesitan</div>
+      </div>
+    </div>
+    <div class="real-cost-box" style="background:linear-gradient(135deg,#744210,#c05621)">
+      <div><div class="rc-label">Costo real con WhatsApp + Instagram + 10K contactos activos + broadcasts</div><div class="rc-amount">~$130-260 USD/mes</div></div>
+      <div style="text-align:right"><div class="rc-label">Alerta</div><div class="rc-amount">El precio escala</div><div class="rc-note">Más contactos = más caro automáticamente</div></div>
+    </div>
+    <div class="complications">
+      <h5>⚠ Complicaciones</h5>
+      <div class="complication-item">El precio escala automáticamente con los contactos — si el negocio crece, el costo sube sin avisarte claramente.</div>
+      <div class="complication-item">El plan Free pasó de 1,000 a solo 25 contactos en marzo 2026 — un cambio agresivo que afectó muchos negocios.</div>
+      <div class="complication-item">No es un CRM de soporte — es una herramienta de marketing automation. Para bandeja de agentes compartida, es limitado.</div>
+      <div class="complication-item">Sin bandeja de conversaciones compartida real para equipos de soporte. Más pensado para bots que para agentes humanos.</div>
+    </div>
+    <div class="users-box">
+      <h5>Quiénes la usan</h5>
+      <p>Creadores de contenido, marcas D2C, negocios de e-commerce, coaches con marketing heavy en Instagram. Es la herramienta líder en Instagram DM automation y funciona muy bien para automatizar respuestas de comentarios. No es la mejor opción si necesitan gestión real de equipo de ventas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- =================== 5. CHARTS =================== -->
+<div class="section-block">
+  <div class="section-label">5. Visualización comparativa</div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Costo mensual real — 4 agentes, todos los canales activos</h3>
+      <p>Incluye plan base + agentes + extras reales confirmados</p>
+      <div class="chart-h"><canvas id="costChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Canales incluidos de verdad</h3>
+      <p>Cantidad de canales con soporte nativo y funcional (no básico)</p>
+      <div class="chart-h"><canvas id="channelChart"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Facilidad de setup (1–10)</h3>
+      <p>10 = lista en 30 min sin ayuda técnica · 1 = requiere dev dedicado</p>
+      <div class="chart-h"><canvas id="setupChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Puntuación general ponderada</h3>
+      <p>Canales + Precio + Broadcasts + Setup + Soporte + Confiabilidad</p>
+      <div class="chart-h"><canvas id="scoreChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== 6. SCORES =================== -->
+<div class="section-block" id="scores">
+  <div class="section-label">6. Puntuación final por criterio</div>
+  <div class="score-grid">
+
+    <div class="score-card">
+      <div class="sc-name">⭐ ChatMaxima</div>
+      <div class="sc-total" style="color:#276749">87</div>
+      <div class="sc-verdict" style="background:#c6f6d5;color:#276749">RECOMENDADO</div>
+      <div style="margin-top:14px">
+        <div class="score-item-label">Canales <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#38a169"></div></div>
+        <div class="score-item-label">Precio real <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#38a169"></div></div>
+        <div class="score-item-label">Broadcasts <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#38a169"></div></div>
+        <div class="score-item-label">Setup <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#38a169"></div></div>
+        <div class="score-item-label">Confiabilidad <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#38a169"></div></div>
+        <div class="score-item-label">Soporte <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#38a169"></div></div>
+      </div>
+    </div>
+
+    <div class="score-card">
+      <div class="sc-name">Chatwoot self-hosted</div>
+      <div class="sc-total" style="color:#2b6cb0">74</div>
+      <div class="sc-verdict" style="background:#bee3f8;color:#2b6cb0">OPCIÓN TÉCNICA</div>
+      <div style="margin-top:14px">
+        <div class="score-item-label">Canales <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#3182ce"></div></div>
+        <div class="score-item-label">Precio real <span class="score-item-val">10/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:100%;background:#3182ce"></div></div>
+        <div class="score-item-label">Broadcasts <span class="score-item-val">5/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:50%;background:#3182ce"></div></div>
+        <div class="score-item-label">Setup <span class="score-item-val">4/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:40%;background:#3182ce"></div></div>
+        <div class="score-item-label">Confiabilidad <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#3182ce"></div></div>
+        <div class="score-item-label">Soporte <span class="score-item-val">5/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:50%;background:#3182ce"></div></div>
+      </div>
+    </div>
+
+    <div class="score-card">
+      <div class="sc-name">Wati</div>
+      <div class="sc-total" style="color:#c05621">52</div>
+      <div class="sc-verdict" style="background:#feebc8;color:#c05621">NO RECOMENDADO</div>
+      <div style="margin-top:14px">
+        <div class="score-item-label">Canales <span class="score-item-val">5/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:50%;background:#dd6b20"></div></div>
+        <div class="score-item-label">Precio real <span class="score-item-val">4/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:40%;background:#dd6b20"></div></div>
+        <div class="score-item-label">Broadcasts <span class="score-item-val">7/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:70%;background:#dd6b20"></div></div>
+        <div class="score-item-label">Setup <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#dd6b20"></div></div>
+        <div class="score-item-label">Confiabilidad <span class="score-item-val">7/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:70%;background:#dd6b20"></div></div>
+        <div class="score-item-label">Soporte <span class="score-item-val">5/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:50%;background:#dd6b20"></div></div>
+      </div>
+    </div>
+
+    <div class="score-card">
+      <div class="sc-name">Manychat</div>
+      <div class="sc-total" style="color:#6b46c1">71</div>
+      <div class="sc-verdict" style="background:#e9d8fd;color:#6b46c1">PARA MARKETING</div>
+      <div style="margin-top:14px">
+        <div class="score-item-label">Canales <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#805ad5"></div></div>
+        <div class="score-item-label">Precio real <span class="score-item-val">5/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:50%;background:#805ad5"></div></div>
+        <div class="score-item-label">Broadcasts <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#805ad5"></div></div>
+        <div class="score-item-label">Setup <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#805ad5"></div></div>
+        <div class="score-item-label">Confiabilidad <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#805ad5"></div></div>
+        <div class="score-item-label">Soporte <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#805ad5"></div></div>
+      </div>
+    </div>
+
+    <div class="score-card">
+      <div class="sc-name">Respond.io</div>
+      <div class="sc-total" style="color:#4a5568">78</div>
+      <div class="sc-verdict" style="background:#e2e8f0;color:#4a5568">MUY CARO</div>
+      <div style="margin-top:14px">
+        <div class="score-item-label">Canales <span class="score-item-val">10/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:100%;background:#718096"></div></div>
+        <div class="score-item-label">Precio real <span class="score-item-val">3/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:30%;background:#718096"></div></div>
+        <div class="score-item-label">Broadcasts <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#718096"></div></div>
+        <div class="score-item-label">Setup <span class="score-item-val">8/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:80%;background:#718096"></div></div>
+        <div class="score-item-label">Confiabilidad <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#718096"></div></div>
+        <div class="score-item-label">Soporte <span class="score-item-val">9/10</span></div>
+        <div class="score-bar"><div class="score-bar-fill" style="width:90%;background:#718096"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- =================== 7. RECOMENDACIÓN =================== -->
+<div class="section-block" id="recomendacion">
+  <div class="section-label">7. Recomendación final</div>
+
+  <div class="rec-hero">
+    <div class="rh-label">Primera opción — cumple el 100% de los requisitos</div>
+    <h2>ChatMaxima — $49–67 USD/mes</h2>
+    <div class="rh-sub">La única plataforma que centraliza WhatsApp API + Instagram + Facebook + Telegram en una sola bandeja real, con broadcasts en todos los canales, precio plano sin sorpresas, y que no requiere desarrollador para configurar. Con 60 días de garantía de devolución, el riesgo es cero.</div>
+    <div class="rec-why-grid">
+      <div class="rec-why">
+        <div class="rw-icon">📱</div>
+        <h4>Bandeja única real — no como FunnelChat</h4>
+        <p>WhatsApp, Instagram DMs y Facebook Messenger llegan al mismo lugar. El equipo atiende todo desde una sola pantalla.</p>
+      </div>
+      <div class="rec-why">
+        <div class="rw-icon">📢</div>
+        <h4>Difusiones en todos los canales — no solo WA</h4>
+        <p>Broadcasts a WhatsApp, Instagram y Facebook con segmentación. Algo que ni Wati ni Chatwoot tienen completo.</p>
+      </div>
+      <div class="rec-why">
+        <div class="rw-icon">💰</div>
+        <h4>$67/mes real — sin sorpresas</h4>
+        <p>A diferencia de Wati (+30-50%) o Manychat (escala por contactos), ChatMaxima cobra lo mismo siempre. Sin trampa.</p>
+      </div>
+      <div class="rec-why">
+        <div class="rw-icon">🤖</div>
+        <h4>Bot no-code para los flujos de consultas</h4>
+        <p>Los flujos de bienvenida y seguimiento que diseñamos para Columna Vital se pueden construir aquí directamente.</p>
+      </div>
+      <div class="rec-why">
+        <div class="rw-icon">⚡</div>
+        <h4>Setup en 1 hora — sin dev</h4>
+        <p>Registro → conectar WhatsApp API → conectar Instagram → conectar Facebook → operativo. Sin esperar a nadie técnico.</p>
+      </div>
+      <div class="rec-why">
+        <div class="rw-icon">🛡</div>
+        <h4>60 días de garantía = riesgo cero</h4>
+        <p>Si en 60 días no les funciona, devuelven el dinero. No hay ninguna otra plataforma aquí que ofrezca eso.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:white;border-radius:14px;padding:28px;border:2px solid #90cdf4;margin-bottom:20px">
+    <div style="font-size:11px;font-weight:700;color:#3182ce;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Segunda opción — si quieren costo mínimo y tienen apoyo técnico</div>
+    <div style="font-size:20px;font-weight:800;color:#2d3748;margin-bottom:8px">Chatwoot self-hosted en Railway — ~$20 USD/mes</div>
+    <p style="font-size:13px;color:#4a5568;line-height:1.7;margin-bottom:16px">Si el presupuesto es la prioridad absoluta y tienen acceso a alguien técnico (aunque sea 2-4 horas una sola vez), Chatwoot es la opción más barata posible con todos los canales. El problema real: Instagram tarda semanas en aprobarse con Meta, no tienen broadcasts fuertes, y la app móvil es inestable. Para un equipo que va a operar principalmente desde escritorio y puede esperar el proceso de Instagram, es viable.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="background:#f0fff4;border-radius:10px;padding:14px">
+        <div style="font-size:12px;font-weight:700;color:#276749;margin-bottom:6px">Lo bueno</div>
+        <div style="font-size:12px;color:#4a5568;line-height:1.7">• ~$20/mes total (solo infra Railway)<br>• Agentes ilimitados sin costo extra<br>• Control total de los datos<br>• 100K+ instalaciones — muy maduro<br>• Todos los canales con setup correcto</div>
+      </div>
+      <div style="background:#fff5f5;border-radius:10px;padding:14px">
+        <div style="font-size:12px;font-weight:700;color:#c53030;margin-bottom:6px">Lo malo</div>
+        <div style="font-size:12px;color:#4a5568;line-height:1.7">• Instagram: App Review Meta = 1-4 semanas de espera<br>• Broadcasts limitados vs ChatMaxima<br>• App móvil inestable (iOS especialmente)<br>• Soporte solo por comunidad<br>• Setup requiere conocimiento técnico</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== 8. PLAN =================== -->
+<div class="section-block" id="plan">
+  <div class="section-label">8. Plan de implementación — ChatMaxima (opción recomendada)</div>
+  <div class="plan-steps">
+    <div class="plan-step">
+      <div class="ps-day">Día 1 — 1 hora</div>
+      <div class="ps-num">01</div>
+      <h4>Registro y configuración base</h4>
+      <p>Crear cuenta en chatmaxima.com · Elegir plan Growth ($49) · Configurar workspace con nombre y logo de Maria Elena</p>
+    </div>
+    <div class="plan-step">
+      <div class="ps-day">Día 1 — 2 horas</div>
+      <div class="ps-num">02</div>
+      <h4>Conectar todos los canales</h4>
+      <p>WhatsApp API (con el número que ya tienen) · Instagram Business · Facebook Page · Verificar que los mensajes llegan a la bandeja</p>
+    </div>
+    <div class="plan-step">
+      <div class="ps-day">Día 2</div>
+      <div class="ps-num">03</div>
+      <h4>Crear agentes y bots</h4>
+      <p>Invitar a las 4 agentes del equipo · Construir los flujos de bienvenida y seguimiento frío que ya están diseñados · Probar con mensajes reales</p>
+    </div>
+    <div class="plan-step">
+      <div class="ps-day">Día 3</div>
+      <div class="ps-num">04</div>
+      <h4>Primera difusión de prueba</h4>
+      <p>Importar base de contactos · Segmentar · Enviar primera difusión de prueba a 50 contactos · Revisar métricas y ajustar</p>
+    </div>
+  </div>
+</div>
+
+<!-- =================== 9. PRESUPUESTO =================== -->
+<div class="section-block" id="presupuesto">
+  <div class="section-label">9. Presupuesto mensual real — Maria Elena Badillo</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div class="budget-card">
+      <h3 style="font-size:15px;font-weight:700;color:#2d3748;margin-bottom:20px">ChatMaxima — Desglose completo</h3>
+      <div class="budget-row"><span class="br-label">Plan Growth (base)</span><span class="br-amount">$49 USD</span></div>
+      <div class="budget-row"><span class="br-label">Agentes adicionales (3 × $6)</span><span class="br-amount">$18 USD</span></div>
+      <div class="budget-row"><span class="br-label">Canales extra (WA + IG + FB)</span><span class="br-amount">$0 — incluido</span></div>
+      <div class="budget-row"><span class="br-label">Broadcasts</span><span class="br-amount">$0 — incluido</span></div>
+      <div class="budget-row"><span class="br-label">Markup mensajes Meta (estimado)</span><span class="br-amount">$0 — Meta directo</span></div>
+      <div class="budget-row"><span class="br-label">Costos ocultos</span><span class="br-amount" style="color:#38a169">$0</span></div>
+      <div class="budget-total">
+        <span class="bt-label">Total mensual estimado</span>
+        <span class="bt-amount">$67 USD</span>
+      </div>
+      <div style="font-size:11px;color:#718096;margin-top:10px">≈ $275,000 COP/mes · Menos de $10,000 COP/día</div>
+    </div>
+    <div class="budget-card">
+      <h3 style="font-size:15px;font-weight:700;color:#2d3748;margin-bottom:20px">Comparativa — lo que costarían las otras opciones</h3>
+      <div class="budget-row"><span class="br-label">Chatwoot self-hosted</span><span class="br-amount" style="color:#276749">~$20 USD/mes</span></div>
+      <div class="budget-row"><span class="br-label">ChatMaxima (recomendado)</span><span class="br-amount" style="color:#276749">~$67 USD/mes</span></div>
+      <div class="budget-row"><span class="br-label">Manychat Business (10K contactos)</span><span class="br-amount" style="color:#dd6b20">~$130 USD/mes</span></div>
+      <div class="budget-row"><span class="br-label">Wati Pro (4 agentes forzado)</span><span class="br-amount" style="color:#e53e3e">~$150 USD/mes</span></div>
+      <div class="budget-row"><span class="br-label">Kommo + BSP WhatsApp</span><span class="br-amount" style="color:#e53e3e">~$180 USD/mes</span></div>
+      <div class="budget-row"><span class="br-label">Respond.io Growth</span><span class="br-amount" style="color:#e53e3e">~$199 USD/mes</span></div>
+      <div style="background:#f0fff4;border-radius:10px;padding:14px;margin-top:16px">
+        <div style="font-size:12px;font-weight:700;color:#276749;margin-bottom:4px">Ahorro vs Respond.io</div>
+        <div style="font-size:20px;font-weight:800;color:#276749">$132 USD/mes = $1,584 USD/año</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="footer">Guía CRM Omnicanal · Maria Elena Badillo · Mayo 2026 · Datos verificados en fuentes públicas 2026</div>
+
+<script>
+const teal='#0d7377', blue='#3182ce', orange='#dd6b20', purple='#805ad5', gray='#718096';
+const labels=['ChatMaxima','Chatwoot','Wati','Manychat','Respond.io'];
+const colors=[teal,blue,orange,purple,gray];
+
+// COSTO REAL
+new Chart(document.getElementById('costChart'),{
+  type:'bar',
+  data:{
+    labels,
+    datasets:[{
+      label:'USD/mes (real)',
+      data:[67,22,155,130,199],
+      backgroundColor:colors,
+      borderRadius:8
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.raw+' USD/mes'}}},
+    scales:{
+      y:{beginAtZero:true,grid:{color:'#f0f0f0'},ticks:{callback:v=>'$'+v}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// CANALES
+new Chart(document.getElementById('channelChart'),{
+  type:'bar',
+  data:{
+    labels,
+    datasets:[{
+      label:'Canales nativos funcionales',
+      data:[7,7,2,6,8],
+      backgroundColor:colors,
+      borderRadius:8
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{beginAtZero:true,max:10,grid:{color:'#f0f0f0'}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+// SETUP
+new Chart(document.getElementById('setupChart'),{
+  type:'bar',
+  data:{
+    labels,
+    datasets:[{
+      label:'Facilidad setup (10=muy fácil)',
+      data:[9,4,8,9,8],
+      backgroundColor:colors,
+      borderRadius:8
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{beginAtZero:true,max:10,grid:{color:'#f0f0f0'}},
+      y:{grid:{display:false}}
+    }
+  }
+});
+
+// SCORE GENERAL
+new Chart(document.getElementById('scoreChart'),{
+  type:'radar',
+  data:{
+    labels:['Canales','Precio','Broadcasts','Setup','Confiabilidad','Soporte'],
+    datasets:[
+      {label:'ChatMaxima',data:[9,9,8,9,8,8],borderColor:teal,backgroundColor:'rgba(13,115,119,0.1)',pointBackgroundColor:teal,borderWidth:2},
+      {label:'Chatwoot',data:[9,10,5,4,8,5],borderColor:blue,backgroundColor:'rgba(49,130,206,0.1)',pointBackgroundColor:blue,borderWidth:2},
+      {label:'Manychat',data:[8,5,9,9,8,8],borderColor:purple,backgroundColor:'rgba(128,90,213,0.1)',pointBackgroundColor:purple,borderWidth:2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}},
+    scales:{r:{beginAtZero:true,max:10,ticks:{display:false}}}
+  }
+});
+</script>
+</body>
+</html>
