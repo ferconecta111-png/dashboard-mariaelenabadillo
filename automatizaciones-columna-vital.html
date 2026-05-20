@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automatizaciones FunnelChat — Columna Vital</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; color: #1a202c; }
+
+  .header {
+    background: linear-gradient(135deg, #1a4a5e 0%, #0d7377 100%);
+    color: white; padding: 36px 48px;
+  }
+  .header h1 { font-size: 24px; font-weight: 700; }
+  .header p { font-size: 14px; opacity: 0.8; margin-top: 6px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 36px 24px; }
+
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #718096; margin-bottom: 16px;
+  }
+
+  /* AUTOMATION CARD */
+  .auto-card {
+    background: white; border-radius: 16px; margin-bottom: 32px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .auto-header {
+    padding: 24px 28px; display: flex; align-items: center; gap: 16px;
+    border-bottom: 2px solid #f0f4f8;
+  }
+  .auto-badge {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .auto-badge.green { background: #f0fff4; }
+  .auto-badge.blue { background: #ebf8ff; }
+  .auto-header-text h2 { font-size: 17px; font-weight: 700; color: #1a202c; }
+  .auto-header-text p { font-size: 13px; color: #718096; margin-top: 3px; }
+  .auto-impact {
+    margin-left: auto; background: #f0fff4; border: 1px solid #9ae6b4;
+    color: #276749; font-size: 12px; font-weight: 700;
+    padding: 6px 14px; border-radius: 20px; white-space: nowrap;
+  }
+
+  .auto-body { padding: 28px; }
+
+  /* CONFIG ROW */
+  .config-row {
+    display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .config-item {
+    background: #f7fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 12px 16px; flex: 1; min-width: 180px;
+  }
+  .config-item .ci-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #a0aec0; font-weight: 700; }
+  .config-item .ci-value { font-size: 13px; font-weight: 700; color: #2d3748; margin-top: 4px; }
+
+  /* FLOW STEPS */
+  .flow-label { font-size: 12px; font-weight: 700; color: #4a5568; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .flow-steps { display: flex; flex-direction: column; gap: 0; }
+
+  .flow-step {
+    display: flex; gap: 0; position: relative;
+  }
+  .flow-step:not(:last-child)::before {
+    content: ''; position: absolute; left: 19px; top: 48px;
+    width: 2px; height: calc(100% - 24px); background: #e2e8f0; z-index: 0;
+  }
+
+  .step-left { flex-shrink: 0; width: 40px; display: flex; flex-direction: column; align-items: center; padding-top: 12px; }
+  .step-circle {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; z-index: 1; flex-shrink: 0;
+  }
+  .step-circle.trigger { background: #fefcbf; color: #744210; border: 2px solid #f6e05e; }
+  .step-circle.msg { background: #e6fffa; color: #276749; border: 2px solid #81e6d9; }
+  .step-circle.wait { background: #ebf8ff; color: #2b6cb0; border: 2px solid #90cdf4; }
+  .step-circle.condition { background: #faf5ff; color: #6b46c1; border: 2px solid #d6bcfa; }
+  .step-circle.human { background: #fff5f5; color: #c53030; border: 2px solid #feb2b2; }
+
+  .step-right { flex: 1; padding: 8px 0 24px 16px; }
+  .step-right .step-type { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: #a0aec0; margin-bottom: 4px; }
+  .step-right .step-title { font-size: 14px; font-weight: 700; color: #2d3748; margin-bottom: 8px; }
+
+  /* MESSAGE BUBBLE */
+  .msg-bubble {
+    background: #f0fff4; border: 1px solid #c6f6d5;
+    border-radius: 0 12px 12px 12px;
+    padding: 14px 16px; font-size: 13.5px; color: #2d3748;
+    line-height: 1.7; position: relative; max-width: 540px;
+  }
+  .msg-bubble::before {
+    content: ''; position: absolute; top: 0; left: -8px;
+    border-top: 8px solid #c6f6d5; border-left: 8px solid transparent;
+  }
+  .msg-bubble.blue { background: #ebf8ff; border-color: #90cdf4; }
+  .msg-bubble.blue::before { border-top-color: #90cdf4; }
+  .msg-bubble.orange { background: #fffaf0; border-color: #fbd38d; }
+  .msg-bubble.orange::before { border-top-color: #fbd38d; }
+  .msg-bubble .emoji { font-size: 16px; }
+  .msg-bubble strong { color: #1a202c; }
+  .msg-bubble .msg-note {
+    margin-top: 10px; padding-top: 10px; border-top: 1px dashed #c6f6d5;
+    font-size: 11.5px; color: #718096; font-style: italic;
+  }
+  .msg-bubble.blue .msg-note { border-top-color: #90cdf4; }
+  .msg-bubble.orange .msg-note { border-top-color: #fbd38d; }
+
+  /* BUTTONS */
+  .wa-buttons { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .wa-btn {
+    background: white; border: 1.5px solid #38a169; color: #276749;
+    font-size: 12px; font-weight: 700; padding: 7px 14px; border-radius: 20px;
+  }
+  .wa-btn.blue-btn { border-color: #3182ce; color: #2b6cb0; }
+
+  /* WAIT TAG */
+  .wait-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #ebf8ff; border: 1px solid #90cdf4; color: #2b6cb0;
+    font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px;
+  }
+
+  /* CONDITION */
+  .condition-box {
+    background: #faf5ff; border: 1px solid #d6bcfa; border-radius: 10px;
+    padding: 12px 16px; font-size: 13px; color: #553c9a;
+  }
+  .condition-box .cond-if { font-weight: 700; margin-bottom: 6px; }
+  .cond-branch { display: flex; gap: 8px; margin-top: 8px; }
+  .cond-yes { background: #f0fff4; border: 1px solid #9ae6b4; color: #276749; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 10px; }
+  .cond-no { background: #fff5f5; border: 1px solid #feb2b2; color: #c53030; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 10px; }
+
+  /* HUMAN TAG */
+  .human-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff5f5; border: 1px solid #feb2b2; color: #c53030;
+    font-size: 12px; font-weight: 700; padding: 8px 16px; border-radius: 10px;
+  }
+
+  /* TIPS */
+  .tips-box {
+    background: #fffbeb; border: 1px solid #f6e05e; border-radius: 12px;
+    padding: 20px 24px; margin-top: 24px;
+  }
+  .tips-box h4 { font-size: 13px; font-weight: 700; color: #744210; margin-bottom: 12px; }
+  .tips-box ul { list-style: none; }
+  .tips-box li { font-size: 13px; color: #7b341e; padding: 4px 0; padding-left: 20px; position: relative; }
+  .tips-box li::before { content: '💡'; position: absolute; left: 0; font-size: 12px; }
+
+  /* SETUP STEPS */
+  .setup-section { background: white; border-radius: 16px; padding: 28px; margin-bottom: 32px; }
+  .setup-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #1a202c; }
+  .setup-steps { display: flex; flex-direction: column; gap: 12px; }
+  .setup-step { display: flex; gap: 14px; align-items: flex-start; }
+  .setup-num {
+    width: 28px; height: 28px; border-radius: 50%; background: #0d7377; color: white;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .setup-step p { font-size: 13.5px; color: #2d3748; line-height: 1.6; }
+  .setup-step strong { color: #0d7377; }
+
+  .footer { text-align: center; color: #a0aec0; font-size: 12px; padding: 24px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ Automatizaciones FunnelChat — Columna Vital</h1>
+  <p>Flujos completos listos para copiar · Bienvenida + Calificación · Seguimiento leads fríos</p>
+</div>
+
+<div class="container">
+
+  <!-- SETUP PRIMERO -->
+  <div class="setup-section">
+    <h3>📋 Antes de empezar — Configuración en FunnelChat</h3>
+    <div class="setup-steps">
+      <div class="setup-step">
+        <div class="setup-num">1</div>
+        <p>Ve a <strong>Automatizaciones → Nueva automatización</strong> y crea la primera con el nombre <strong>"Bienvenida Columna Vital"</strong></p>
+      </div>
+      <div class="setup-step">
+        <div class="setup-num">2</div>
+        <p>El <strong>trigger</strong> debe ser: <strong>"Nuevo contacto entra al chat"</strong> o <strong>"Primera conversación iniciada"</strong> (el nombre exacto depende de tu versión de FunnelChat)</p>
+      </div>
+      <div class="setup-step">
+        <div class="setup-num">3</div>
+        <p>Copia cada mensaje <strong>exactamente como aparece abajo</strong>, respetando emojis y saltos de línea — eso aumenta la tasa de respuesta</p>
+      </div>
+      <div class="setup-step">
+        <div class="setup-num">4</div>
+        <p>Para la segunda automatización <strong>"Seguimiento frío"</strong>, el trigger es: <strong>"Sin respuesta del contacto después de X horas"</strong> — configura 3 versiones (2h, 24h, 72h)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTOMATIZACIÓN 1 -->
+  <div class="section-label">Automatización 1 de 2</div>
+  <div class="auto-card">
+    <div class="auto-header">
+      <div class="auto-badge green">🎯</div>
+      <div class="auto-header-text">
+        <h2>Bienvenida + Calificación inmediata</h2>
+        <p>Se activa cuando alguien escribe por primera vez desde el anuncio</p>
+      </div>
+      <div class="auto-impact">↑ Impacto: muy alto</div>
+    </div>
+
+    <div class="auto-body">
+      <div class="config-row">
+        <div class="config-item">
+          <div class="ci-label">Trigger</div>
+          <div class="ci-value">Primera conversación</div>
+        </div>
+        <div class="config-item">
+          <div class="ci-label">Demora inicial</div>
+          <div class="ci-value">0 segundos</div>
+        </div>
+        <div class="config-item">
+          <div class="ci-label">Objetivo</div>
+          <div class="ci-value">Calificar y enganchar</div>
+        </div>
+        <div class="config-item">
+          <div class="ci-label">Pasa a humano</div>
+          <div class="ci-value">Al terminar el flujo</div>
+        </div>
+      </div>
+
+      <div class="flow-label">Flujo paso a paso</div>
+      <div class="flow-steps">
+
+        <!-- PASO 1 -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle trigger">⚡</div></div>
+          <div class="step-right">
+            <div class="step-type">Trigger</div>
+            <div class="step-title">Primera conversación iniciada</div>
+          </div>
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle msg">1</div></div>
+          <div class="step-right">
+            <div class="step-type">Mensaje — enviar inmediatamente</div>
+            <div class="step-title">Bienvenida cálida</div>
+            <div class="msg-bubble">
+              <span class="emoji">👋</span> ¡Hola! Bienvenid@ a *Columna Vital*.<br><br>
+              Gracias por escribirnos — estás en el lugar correcto 😊<br><br>
+              Para darte la mejor orientación, cuéntame: <strong>¿qué molestia en tu columna o cuerpo te tiene buscando ayuda hoy?</strong>
+              <div class="msg-note">📌 En FunnelChat: tipo "Texto". No actives respuesta automática de botones aquí — espera texto libre del usuario.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESPERAR -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle wait">⏱</div></div>
+          <div class="step-right">
+            <div class="step-type">Esperar respuesta</div>
+            <div class="step-title">Aguardar hasta 30 minutos</div>
+            <div class="wait-tag">⏱ Espera: respuesta del usuario (máx 30 min)</div>
+          </div>
+        </div>
+
+        <!-- PASO 3 -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle msg">2</div></div>
+          <div class="step-right">
+            <div class="step-type">Mensaje — al recibir respuesta</div>
+            <div class="step-title">Segunda pregunta de calificación</div>
+            <div class="msg-bubble">
+              Entiendo, eso puede ser muy limitante en el día a día 🙏<br><br>
+              <strong>¿Hace cuánto tiempo llevas con esa molestia?</strong>
+              <div class="wa-buttons">
+                <div class="wa-btn">Menos de 1 mes</div>
+                <div class="wa-btn">1 a 6 meses</div>
+                <div class="wa-btn">Más de 6 meses</div>
+                <div class="wa-btn">Años</div>
+              </div>
+              <div class="msg-note">📌 En FunnelChat: usa botones de respuesta rápida con esas 4 opciones.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESPERAR -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle wait">⏱</div></div>
+          <div class="step-right">
+            <div class="step-type">Esperar respuesta</div>
+            <div class="step-title">Aguardar respuesta (máx 20 minutos)</div>
+            <div class="wait-tag">⏱ Espera: respuesta del usuario (máx 20 min)</div>
+          </div>
+        </div>
+
+        <!-- PASO 4 -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle msg">3</div></div>
+          <div class="step-right">
+            <div class="step-type">Mensaje — al recibir respuesta</div>
+            <div class="step-title">Cierre de calificación + urgencia suave</div>
+            <div class="msg-bubble">
+              Muchas gracias por contarme 🙏<br><br>
+              Con esa información ya puedo orientarte mejor. En *Columna Vital* trabajamos con un método especializado que ha ayudado a cientos de personas con exactamente lo que describes.<br><br>
+              <strong>¿Tienes disponibilidad esta semana para una consulta de valoración?</strong> Cupos limitados 📅
+              <div class="wa-buttons">
+                <div class="wa-btn">Sí, quiero agendar</div>
+                <div class="wa-btn">Cuéntame más</div>
+              </div>
+              <div class="msg-note">📌 Si elige "Sí, quiero agendar" → pasar a humano con etiqueta "LISTO PARA CERRAR". Si elige "Cuéntame más" → continuar con mensaje 4.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONDICIÓN -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle condition">?</div></div>
+          <div class="step-right">
+            <div class="step-type">Condición</div>
+            <div class="step-title">¿Qué respondió el usuario?</div>
+            <div class="condition-box">
+              <div class="cond-if">Si responde "Sí, quiero agendar":</div>
+              <div class="cond-branch"><span class="cond-yes">✓ Ir a → Paso 6 (pasar a humano)</span></div>
+              <div class="cond-if" style="margin-top:10px">Si responde "Cuéntame más":</div>
+              <div class="cond-branch"><span class="cond-no">→ Ir a → Paso 5 (más info)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 5 (opcional) -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle msg">4</div></div>
+          <div class="step-right">
+            <div class="step-type">Mensaje — rama "Cuéntame más"</div>
+            <div class="step-title">Propuesta de valor + prueba social</div>
+            <div class="msg-bubble orange">
+              ¡Con gusto! 😊<br><br>
+              En *Columna Vital* ayudamos a personas con dolor de columna, hernias, escoliosis y problemas posturales a recuperar su calidad de vida <strong>sin cirugía y sin medicamentos</strong>.<br><br>
+              Nuestro método ha transformado la vida de más de 500 personas en la región. La consulta de valoración es el primer paso — ahí te explicamos exactamente qué tienes y cómo lo tratamos.<br><br>
+              <strong>¿Te agendamos esta semana?</strong> ¿Cuál día te queda mejor? 📅
+              <div class="msg-note">📌 Si responde con disponibilidad → pasar inmediatamente a humano con etiqueta "LISTO PARA CERRAR".</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 6 - HUMANO -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle human">👤</div></div>
+          <div class="step-right">
+            <div class="step-type">Acción final</div>
+            <div class="step-title">Transferir a agente humano</div>
+            <div class="human-tag">👤 Asignar a: Agente de ventas — etiqueta "LISTO PARA CERRAR"</div>
+            <div style="margin-top:10px;font-size:12px;color:#718096">El agente retoma con toda la información del lead ya recopilada (molestia + tiempo) y solo debe cerrar la cita.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tips-box">
+        <h4>Claves para que funcione</h4>
+        <ul>
+          <li>El primer mensaje debe salir en menos de 10 segundos — eso duplica la tasa de respuesta</li>
+          <li>Usa el nombre del usuario si FunnelChat lo captura: "¡Hola [Nombre]!" se siente mucho más personal</li>
+          <li>No menciones precios en el bot — ese es trabajo del agente humano</li>
+          <li>Entrena al agente: cuando recibe el lead, ya sabe la molestia y el tiempo — úsalos para personalizar el cierre</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTOMATIZACIÓN 2 -->
+  <div class="section-label">Automatización 2 de 2</div>
+  <div class="auto-card">
+    <div class="auto-header">
+      <div class="auto-badge blue">🔄</div>
+      <div class="auto-header-text">
+        <h2>Seguimiento leads fríos — 3 toques</h2>
+        <p>Para quien escribió pero dejó de responder en cualquier punto del flujo</p>
+      </div>
+      <div class="auto-impact">↑ Recupera ~30% de leads</div>
+    </div>
+
+    <div class="auto-body">
+      <div class="config-row">
+        <div class="config-item">
+          <div class="ci-label">Trigger</div>
+          <div class="ci-value">Sin respuesta del contacto</div>
+        </div>
+        <div class="config-item">
+          <div class="ci-label">Toques</div>
+          <div class="ci-value">3 mensajes</div>
+        </div>
+        <div class="config-item">
+          <div class="ci-label">Tiempos</div>
+          <div class="ci-value">2h → 24h → 72h</div>
+        </div>
+        <div class="config-item">
+          <div class="ci-label">Detener si</div>
+          <div class="ci-value">El usuario responde</div>
+        </div>
+      </div>
+
+      <div class="flow-label">3 mensajes de reactivación</div>
+      <div class="flow-steps">
+
+        <!-- TRIGGER -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle trigger">⚡</div></div>
+          <div class="step-right">
+            <div class="step-type">Trigger</div>
+            <div class="step-title">Sin respuesta del usuario por 2 horas</div>
+          </div>
+        </div>
+
+        <!-- TOQUE 1 -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle msg">1</div></div>
+          <div class="step-right">
+            <div class="step-type">Mensaje — a las 2 horas</div>
+            <div class="step-title">Recordatorio suave</div>
+            <div class="msg-bubble">
+              <span class="emoji">👋</span> ¡Hola! Te escribo de *Columna Vital*.<br><br>
+              Quería saber si pudiste leer nuestra conversación — estamos aquí para ayudarte con tu molestia 🙏<br><br>
+              <strong>¿Tienes un momento para contarme qué sientes?</strong>
+              <div class="msg-note">📌 Tono: amigable, sin presión. El objetivo es reabrir la conversación.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESPERAR -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle wait">⏱</div></div>
+          <div class="step-right">
+            <div class="step-type">Esperar</div>
+            <div class="step-title">Si no responde, esperar 24 horas más</div>
+            <div class="wait-tag">⏱ Espera: 24 horas sin respuesta</div>
+          </div>
+        </div>
+
+        <!-- TOQUE 2 -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle msg">2</div></div>
+          <div class="step-right">
+            <div class="step-type">Mensaje — a las 24 horas</div>
+            <div class="step-title">Prueba social + urgencia real</div>
+            <div class="msg-bubble blue">
+              Hola de nuevo 😊<br><br>
+              Esta semana tuvimos varios pacientes que llegaron con el mismo dolor que describes y ya están viendo resultados 💪<br><br>
+              Los cupos para consulta de esta semana se están llenando. <strong>¿Te reservo uno antes de que se acaben?</strong> Solo dime qué día te queda mejor y lo aparti para ti.
+              <div class="msg-note">📌 Tono: prueba social + escasez genuina. Si tienen pocos cupos disponibles, es honesto decirlo.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESPERAR -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle wait">⏱</div></div>
+          <div class="step-right">
+            <div class="step-type">Esperar</div>
+            <div class="step-title">Si no responde, esperar 72 horas más</div>
+            <div class="wait-tag">⏱ Espera: 72 horas sin respuesta</div>
+          </div>
+        </div>
+
+        <!-- TOQUE 3 -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle msg">3</div></div>
+          <div class="step-right">
+            <div class="step-type">Mensaje — a los 3 días — Último toque</div>
+            <div class="step-title">Cierre + puerta abierta</div>
+            <div class="msg-bubble orange">
+              Hola 👋 Sé que el día a día es ocupado y a veces no hay tiempo para todo.<br><br>
+              Solo quería que supieras que en *Columna Vital* seguimos aquí cuando estés list@ 🙌<br><br>
+              Si en algún momento quieres saber más sobre cómo podemos ayudarte con tu molestia, escríbenos y con gusto te atendemos.<br><br>
+              <strong>¡Que te mejores pronto!</strong> 💚
+              <div class="msg-note">📌 Este es el último mensaje. Sin presión, deja la puerta abierta. Después de este mensaje, archivar el lead como "frío" en FunnelChat para no saturar.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARCHIVAR -->
+        <div class="flow-step">
+          <div class="step-left"><div class="step-circle human">📁</div></div>
+          <div class="step-right">
+            <div class="step-type">Acción final</div>
+            <div class="step-title">Etiquetar y archivar</div>
+            <div class="human-tag">📁 Etiquetar como "Lead frío" — archivar conversación</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tips-box">
+        <h4>Configuración clave en FunnelChat</h4>
+        <ul>
+          <li>Activa "Detener automatización si el usuario responde" — si alguien responde en cualquier punto, el bot para y pasa a humano</li>
+          <li>Configura horario: que los mensajes solo salgan entre 8am–8pm Colombia. Un mensaje a las 2am daña la imagen</li>
+          <li>No envíes los 3 toques si el lead ya fue marcado como "cerrado" o "no interesado"</li>
+          <li>Después de 2 semanas sin respuesta, no volver a escribir — FunnelChat puede bloquearte si hay muchos reportes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMEN RESULTADO ESPERADO -->
+  <div style="background:linear-gradient(135deg,#1a4a5e,#0d7377);color:white;border-radius:16px;padding:32px;margin-bottom:32px">
+    <h3 style="font-size:17px;font-weight:700;margin-bottom:20px">📊 Resultado esperado con estas 2 automatizaciones</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:20px;text-align:center">
+        <div style="font-size:32px;font-weight:800">3.9%</div>
+        <div style="font-size:13px;opacity:0.8;margin-top:4px">Tasa cierre actual</div>
+        <div style="font-size:11px;opacity:0.6;margin-top:2px">20 cierres / 519 conv</div>
+      </div>
+      <div style="text-align:center;display:flex;align-items:center;justify-content:center;font-size:36px">→</div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:12px;padding:20px;text-align:center;border:2px solid rgba(255,255,255,0.4)">
+        <div style="font-size:32px;font-weight:800">8–12%</div>
+        <div style="font-size:13px;opacity:0.8;margin-top:4px">Tasa cierre esperada</div>
+        <div style="font-size:11px;opacity:0.6;margin-top:2px">~40–60 cierres / 519 conv</div>
+      </div>
+    </div>
+    <div style="font-size:13px;opacity:0.75;margin-top:20px;text-align:center">Con el mismo gasto en pauta · Solo mejorando el proceso de conversión</div>
+  </div>
+
+</div>
+
+<div class="footer">Columna Vital · Automatizaciones FunnelChat · Mayo 2026</div>
+
+</body>
+</html>
