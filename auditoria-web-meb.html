@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Web | Maria Elena Badillo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --card: #1c1c27;
+    --border: #2a2a38;
+    --red: #ff3b3b;
+    --red-soft: #2a1515;
+    --green: #00e878;
+    --green-soft: #0a2018;
+    --yellow: #ffd93d;
+    --yellow-soft: #221e0a;
+    --blue: #4f8ef7;
+    --blue-soft: #0d1a35;
+    --purple: #b06ef7;
+    --purple-soft: #1a0d35;
+    --text: #e8e8f0;
+    --muted: #7a7a9a;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,15,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 0; overflow-x: auto;
+  }
+  nav a {
+    color: var(--muted); text-decoration: none; font-size: 0.78rem;
+    padding: 1rem 1.1rem; white-space: nowrap; border-bottom: 2px solid transparent;
+    transition: all .2s;
+  }
+  nav a:hover, nav a.active { color: var(--text); border-bottom-color: var(--red); }
+  .nav-brand { color: var(--text); font-weight: 700; font-size: 0.9rem; margin-right: 1.5rem; white-space: nowrap; }
+
+  /* LAYOUT */
+  .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+  section { margin-bottom: 5rem; scroll-margin-top: 60px; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 4rem 2rem; border-bottom: 1px solid var(--border); }
+  .hero .badge { display: inline-block; background: var(--red-soft); color: var(--red); border: 1px solid var(--red); border-radius: 20px; padding: .35rem 1rem; font-size: .75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+  .hero h1 span { color: var(--red); }
+  .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem; }
+  .hero-stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-size: 2rem; font-weight: 800; }
+  .hero-stat .num.red { color: var(--red); }
+  .hero-stat .num.green { color: var(--green); }
+  .hero-stat .num.yellow { color: var(--yellow); }
+  .hero-stat label { display: block; color: var(--muted); font-size: .8rem; margin-top: .2rem; }
+
+  /* SECTION TITLE */
+  .section-title { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+  .section-title .icon { font-size: 1.5rem; }
+  .section-title h2 { font-size: 1.5rem; font-weight: 800; }
+  .section-title p { color: var(--muted); font-size: .9rem; margin-top: .2rem; }
+
+  /* PROBLEMA CARDS */
+  .problems-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+  .problem-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.5rem; position: relative; overflow: hidden;
+  }
+  .problem-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
+  .problem-card.critical::before { background: var(--red); }
+  .problem-card.important::before { background: var(--yellow); }
+  .problem-card.medium::before { background: var(--blue); }
+  .problem-card .severity {
+    display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: .2rem .7rem; border-radius: 10px; margin-bottom: .8rem;
+  }
+  .problem-card.critical .severity { background: var(--red-soft); color: var(--red); }
+  .problem-card.important .severity { background: var(--yellow-soft); color: var(--yellow); }
+  .problem-card.medium .severity { background: var(--blue-soft); color: var(--blue); }
+  .problem-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+  .problem-card p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+  .problem-card .impact {
+    margin-top: 1rem; padding: .7rem; background: var(--surface);
+    border-radius: 8px; font-size: .82rem; color: var(--muted);
+  }
+  .problem-card .impact strong { color: var(--text); }
+
+  /* VERDICTS / KEEP OR CUT */
+  .audit-table { width: 100%; border-collapse: collapse; }
+  .audit-table th { text-align: left; padding: .8rem 1rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .audit-table td { padding: .9rem 1rem; border-bottom: 1px solid var(--border); font-size: .9rem; vertical-align: top; }
+  .audit-table tr:hover td { background: var(--surface); }
+  .tag {
+    display: inline-block; padding: .2rem .7rem; border-radius: 10px;
+    font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  }
+  .tag.cut { background: var(--red-soft); color: var(--red); }
+  .tag.keep { background: var(--green-soft); color: var(--green); }
+  .tag.fix { background: var(--yellow-soft); color: var(--yellow); }
+  .tag.add { background: var(--blue-soft); color: var(--blue); }
+  .tag.move { background: var(--purple-soft); color: var(--purple); }
+
+  /* PROPUESTAS */
+  .proposals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+  .proposal-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.5rem; display: flex; flex-direction: column; gap: .8rem;
+  }
+  .proposal-card .pnum {
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--blue-soft); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: .9rem;
+  }
+  .proposal-card h3 { font-size: 1rem; font-weight: 700; }
+  .proposal-card p { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+  .proposal-card .expected {
+    margin-top: auto; padding: .6rem; background: var(--green-soft);
+    border-radius: 8px; font-size: .82rem; color: var(--green);
+  }
+
+  /* FUNNEL VISUAL */
+  .funnel-wrap { display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+  .funnel-step {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1rem 1.5rem; transition: all .2s;
+    width: 100%; max-width: 700px;
+  }
+  .funnel-step:hover { border-color: var(--blue); }
+  .funnel-step.broken { border-color: var(--red); background: var(--red-soft); }
+  .funnel-step.broken .fstep-title { color: var(--red); }
+  .funnel-step.ok { border-color: var(--green); }
+  .funnel-step .fstep-num { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
+  .funnel-step .fstep-content { flex: 1; }
+  .funnel-step .fstep-title { font-weight: 700; font-size: .95rem; }
+  .funnel-step .fstep-desc { color: var(--muted); font-size: .83rem; margin-top: .2rem; }
+  .funnel-step .fstep-status { font-size: .75rem; font-weight: 700; padding: .2rem .7rem; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
+  .funnel-arrow { color: var(--muted); font-size: 1.2rem; }
+
+  /* BEFORE/AFTER */
+  .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media (max-width: 700px) { .ba-grid { grid-template-columns: 1fr; } }
+  .ba-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .ba-header { padding: .8rem 1.2rem; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .ba-header.before { background: var(--red-soft); color: var(--red); }
+  .ba-header.after { background: var(--green-soft); color: var(--green); }
+  .ba-body { padding: 1.2rem; }
+  .ba-item { display: flex; gap: .7rem; align-items: flex-start; margin-bottom: .8rem; font-size: .88rem; }
+  .ba-item .ico { flex-shrink: 0; margin-top: .1rem; }
+
+  /* PRIORIDADES */
+  .priority-list { display: flex; flex-direction: column; gap: 1rem; }
+  .priority-item {
+    display: flex; align-items: flex-start; gap: 1.2rem;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem;
+  }
+  .p-week { flex-shrink: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .4rem .8rem; font-size: .75rem; font-weight: 700; color: var(--muted); text-align: center; min-width: 70px; }
+  .p-week span { display: block; font-size: 1.1rem; font-weight: 800; color: var(--text); }
+  .p-content h4 { font-weight: 700; margin-bottom: .4rem; }
+  .p-content p { color: var(--muted); font-size: .85rem; line-height: 1.5; }
+  .p-tag-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .6rem; }
+
+  /* NAV PAGE BLUEPRINT */
+  .nav-blueprint { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .nav-bp-header { padding: 1rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); font-weight: 700; font-size: .9rem; }
+  .nav-bp-body { padding: 1.5rem; }
+  .nav-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media(max-width: 600px) { .nav-compare { grid-template-columns: 1fr; } }
+  .nav-items-old, .nav-items-new { }
+  .nav-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .8rem; }
+  .nav-label.old { color: var(--red); }
+  .nav-label.new { color: var(--green); }
+  .nav-item-row { padding: .5rem .8rem; border-radius: 6px; margin-bottom: .4rem; font-size: .88rem; display: flex; align-items: center; gap: .6rem; }
+  .nav-item-row.cut-item { background: var(--red-soft); color: #ff8888; text-decoration: line-through; }
+  .nav-item-row.keep-item { background: var(--green-soft); color: var(--green); }
+  .nav-item-row.move-item { background: var(--yellow-soft); color: var(--yellow); }
+
+  /* SCORE */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+  .score-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; text-align: center; }
+  .score-card .score-val { font-size: 2.5rem; font-weight: 800; }
+  .score-card .score-val.bad { color: var(--red); }
+  .score-card .score-val.med { color: var(--yellow); }
+  .score-card .score-val.ok { color: var(--green); }
+  .score-card .score-label { font-size: .8rem; color: var(--muted); margin-top: .3rem; }
+  .score-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: .8rem; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 2px; }
+  .score-bar-fill.bad { background: var(--red); }
+  .score-bar-fill.med { background: var(--yellow); }
+  .score-bar-fill.ok { background: var(--green); }
+
+  /* GENERAL */
+  .chip-row { display: flex; gap: .5rem; flex-wrap: wrap; margin: .8rem 0; }
+  .chip { padding: .25rem .7rem; border-radius: 20px; font-size: .75rem; font-weight: 600; background: var(--surface); border: 1px solid var(--border); color: var(--muted); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+  .muted { color: var(--muted); }
+  .text-red { color: var(--red); }
+  .text-green { color: var(--green); }
+  .text-yellow { color: var(--yellow); }
+
+  /* PRODUCT LADDER */
+  .ladder { display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap; justify-content: center; padding: 2rem 0; }
+  .ladder-step { text-align: center; }
+  .ladder-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: .5rem;
+    transition: all .3s;
+  }
+  .ladder-box:hover { border-color: var(--blue); transform: translateY(-4px); }
+  .ladder-box .l-icon { font-size: 1.8rem; }
+  .ladder-box .l-name { font-weight: 700; font-size: .95rem; }
+  .ladder-box .l-sub { font-size: .78rem; color: var(--muted); }
+  .ladder-box .l-price { font-size: .82rem; font-weight: 700; padding: .2rem .6rem; border-radius: 6px; }
+  .step1 .ladder-box { min-height: 120px; min-width: 130px; }
+  .step2 .ladder-box { min-height: 160px; min-width: 130px; }
+  .step3 .ladder-box { min-height: 200px; min-width: 130px; }
+  .step4 .ladder-box { min-height: 240px; min-width: 130px; }
+  .step5 .ladder-box { min-height: 280px; min-width: 130px; border-color: var(--purple); }
+  .step5 .ladder-box:hover { border-color: var(--purple); }
+  .ladder-arrow { align-self: center; color: var(--muted); font-size: 1.5rem; margin-bottom: 1.5rem; }
+  .l-price.free { background: var(--blue-soft); color: var(--blue); }
+  .l-price.low { background: var(--green-soft); color: var(--green); }
+  .l-price.mid { background: var(--yellow-soft); color: var(--yellow); }
+  .l-price.high { background: var(--red-soft); color: var(--red); }
+  .l-price.vip { background: var(--purple-soft); color: var(--purple); }
+  .ladder-step .l-label { font-size: .72rem; color: var(--muted); margin-top: .5rem; text-align: center; }
+
+  .info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.5rem; margin: 1.5rem 0; }
+  .info-box.warning { border-left: 3px solid var(--yellow); }
+  .info-box.danger { border-left: 3px solid var(--red); }
+  .info-box.success { border-left: 3px solid var(--green); }
+  .info-box h4 { font-size: .9rem; font-weight: 700; margin-bottom: .5rem; }
+  .info-box p { font-size: .87rem; color: var(--muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">MEB — Auditoría Web</span>
+  <a href="#score">Score</a>
+  <a href="#problemas">Problemas</a>
+  <a href="#ecosistema">Ecosistema</a>
+  <a href="#navaudit">Navegación</a>
+  <a href="#funnel">Funnel</a>
+  <a href="#ladder">Escalera</a>
+  <a href="#propuestas">Propuestas</a>
+  <a href="#prioridades">Prioridades</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="badge">Auditoría Completa · Mayo 2026</span>
+  <h1>La web de Maria Elena<br><span>pierde ventas todos los días</span></h1>
+  <p>Tiene audiencia, autoridad y productos sólidos. Pero el sitio web no cierra ventas — las deriva al WhatsApp como si fuera 2018.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="num red">11</div>
+      <label>Problemas críticos</label>
+    </div>
+    <div class="hero-stat">
+      <div class="num yellow">0</div>
+      <label>Precios visibles en servicios</label>
+    </div>
+    <div class="hero-stat">
+      <div class="num red">10+</div>
+      <label>Ítems en el menú</label>
+    </div>
+    <div class="hero-stat">
+      <div class="num green">8</div>
+      <label>Propuestas de mejora</label>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SCORE GENERAL -->
+  <section id="score">
+    <div class="section-title">
+      <span class="icon">📊</span>
+      <div>
+        <h2>Score actual del sitio</h2>
+        <p>Evaluación por dimensión — escala 1 a 10</p>
+      </div>
+    </div>
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="score-val bad">2</div>
+        <div class="score-label">Claridad de oferta</div>
+        <div class="score-bar"><div class="score-bar-fill bad" style="width:20%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val bad">1</div>
+        <div class="score-label">Precios visibles</div>
+        <div class="score-bar"><div class="score-bar-fill bad" style="width:10%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val bad">3</div>
+        <div class="score-label">Jerarquía de CTAs</div>
+        <div class="score-bar"><div class="score-bar-fill bad" style="width:30%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val med">5</div>
+        <div class="score-label">Autoridad / Prueba social</div>
+        <div class="score-bar"><div class="score-bar-fill med" style="width:50%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val bad">2</div>
+        <div class="score-label">Velocidad de conversión</div>
+        <div class="score-bar"><div class="score-bar-fill bad" style="width:20%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val bad">3</div>
+        <div class="score-label">Navegación</div>
+        <div class="score-bar"><div class="score-bar-fill bad" style="width:30%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val med">6</div>
+        <div class="score-label">Contenido / Copywriting</div>
+        <div class="score-bar"><div class="score-bar-fill med" style="width:60%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val bad">1</div>
+        <div class="score-label">Tracking / Pixel</div>
+        <div class="score-bar"><div class="score-bar-fill bad" style="width:10%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val ok">8</div>
+        <div class="score-label">Credibilidad de marca</div>
+        <div class="score-bar"><div class="score-bar-fill ok" style="width:80%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-val bad">2</div>
+        <div class="score-label">Upsell / Escalera</div>
+        <div class="score-bar"><div class="score-bar-fill bad" style="width:20%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEMAS CRÍTICOS -->
+  <section id="problemas">
+    <div class="section-title">
+      <span class="icon">🔥</span>
+      <div>
+        <h2>Problemas detectados</h2>
+        <p>Lo que está frenando las ventas ahora mismo</p>
+      </div>
+    </div>
+    <div class="problems-grid">
+
+      <div class="problem-card critical">
+        <span class="severity">Crítico</span>
+        <h3>Cero precios visibles en servicios y retos</h3>
+        <p>Ningún servicio de terapia, ningún reto (CTCTC, CAVA, PACO) ni ningún evento tiene precio en la página. El usuario interesado tiene que contactar o agendar para saber cuánto cuesta.</p>
+        <div class="impact"><strong>Impacto:</strong> El 70% de usuarios que no ven precio, rebotan. Están perdiendo leads calificados en automático.</div>
+      </div>
+
+      <div class="problem-card critical">
+        <span class="severity">Crítico</span>
+        <h3>Menú con 10+ ítems — parálisis de decisión</h3>
+        <p>Servicios, Cursos 30 días, Eventos, Sobre Maria Elena, Su libro, Oráculo, Su equipo, Blog, Boletín, Contacto, Login, Carrito. Demasiadas opciones = ninguna acción.</p>
+        <div class="impact"><strong>Impacto:</strong> El foco del usuario se dispersa. No hay un camino claro hacia la compra.</div>
+      </div>
+
+      <div class="problem-card critical">
+        <span class="severity">Crítico</span>
+        <h3>Pixel de Meta sin evento Purchase</h3>
+        <p>El pixel está instalado pero el evento de compra no está configurado. Meta no puede optimizar ads para ventas reales — solo para tráfico.</p>
+        <div class="impact"><strong>Impacto:</strong> Todo el gasto en Meta Ads es ineficiente. No se pueden usar campañas de conversión ni ROAS real.</div>
+      </div>
+
+      <div class="problem-card critical">
+        <span class="severity">Crítico</span>
+        <h3>El sitio convierte al WhatsApp, no a la caja</h3>
+        <p>Todos los botones de "Quiero una sesión" y "Reservar" llevan a WhatsApp o formulario de contacto. La venta depende de que un humano responda y cierre manualmente.</p>
+        <div class="impact"><strong>Impacto:</strong> Cuello de botella total. Cada lead requiere intervención humana. Escalar es imposible sin escalar el equipo.</div>
+      </div>
+
+      <div class="problem-card critical">
+        <span class="severity">Crítico</span>
+        <h3>Fechas desactualizadas matan credibilidad</h3>
+        <p>MACA: "Por confirmar, 2023". Retiro Perú: "Primer semestre 2025". Un usuario nuevo que ve estas fechas asume que el negocio no está activo.</p>
+        <div class="impact"><strong>Impacto:</strong> Pérdida de confianza inmediata. Daña la percepción de profesionalismo construida en años.</div>
+      </div>
+
+      <div class="problem-card critical">
+        <span class="severity">Crítico</span>
+        <h3>Métricas de logros mostrando "0"</h3>
+        <p>La sección "Logros" tiene: 0 seguidores, 0 estudiantes, 0 pacientes. El JavaScript no carga los números. Una de las secciones de prueba social más importantes está rota.</p>
+        <div class="impact"><strong>Impacto:</strong> Una de las herramientas de conversión más poderosas (prueba social con números) está completamente dañada.</div>
+      </div>
+
+      <div class="problem-card important">
+        <span class="severity">Importante</span>
+        <h3>4 opt-ins diferentes sin estrategia clara</h3>
+        <p>Masterclass gratis, Masterclass nutrición, Masterclass potencial, Newsletter. Cuatro promesas diferentes capturando emails sin un embudo definido de qué pasa después.</p>
+        <div class="impact"><strong>Impacto:</strong> Lista de emails segmentada en 4 sin nurturing claro. El lead entra y se enfría.</div>
+      </div>
+
+      <div class="problem-card important">
+        <span class="severity">Importante</span>
+        <h3>Tienda solo envía a Colombia</h3>
+        <p>"NO REALIZAMOS ENVÍOS FUERA DE COLOMBIA" — pero tiene +200,000 seguidores en 20+ países. Los fans internacionales no pueden comprar nada físico.</p>
+        <div class="impact"><strong>Impacto:</strong> Revenue perdido de audiencia internacional que quiere comprar pero no puede.</div>
+      </div>
+
+      <div class="problem-card important">
+        <span class="severity">Importante</span>
+        <h3>Subdomain de cursos roto (ECONNREFUSED)</h3>
+        <p>cursos.mariaelenabadillo.com no responde. Cuando alguien llega ahí desde un link o Google, recibe error de conexión.</p>
+        <div class="impact"><strong>Impacto:</strong> Tráfico pagado y orgánico que llega a esa URL rebota con error. Dinero tirado.</div>
+      </div>
+
+      <div class="problem-card important">
+        <span class="severity">Importante</span>
+        <h3>No hay urgencia ni escasez en ninguna oferta</h3>
+        <p>PACO dice "200 cupos disponibles" pero no dice cuántos quedan. Ningún evento tiene cuenta regresiva. Nada crea presión de compra ahora.</p>
+        <div class="impact"><strong>Impacto:</strong> Sin urgencia, la decisión de compra se pospone indefinidamente. "Lo pienso" = no compra.</div>
+      </div>
+
+      <div class="problem-card medium">
+        <span class="severity">Medio</span>
+        <h3>Newsletter pide 5 datos — demasiada fricción</h3>
+        <p>Para suscribirse al boletín pide: Nombre, Email, Teléfono, Cumpleaños y País. Es más datos que muchas compras online.</p>
+        <div class="impact"><strong>Impacto:</strong> Tasa de suscripción baja. Solo completan el formulario los muy motivados.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ECOSISTEMA AUDITADO -->
+  <section id="ecosistema">
+    <div class="section-title">
+      <span class="icon">🗺️</span>
+      <div>
+        <h2>Todo el ecosistema — qué queda, qué se corta</h2>
+        <p>Cada elemento del sitio auditado con veredicto</p>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th>Elemento</th>
+          <th>Veredicto</th>
+          <th>Por qué</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hero — Retiro "Volviendo al Ser"</strong><br><span class="muted">Agosto 5-9, 2026</span></td>
+          <td><span class="tag keep">MANTENER</span></td>
+          <td>Es el evento de mayor ticket. Tiene fecha concreta y urgencia real. Pero falta precio y countdown.</td>
+        </tr>
+        <tr>
+          <td><strong>Menú principal</strong><br><span class="muted">10+ ítems</span></td>
+          <td><span class="tag fix">REDUCIR</span></td>
+          <td>Máximo 5 ítems: Terapia / Cursos / Eventos / Sobre mí / Contacto. El resto va al footer.</td>
+        </tr>
+        <tr>
+          <td><strong>Sección 4 terapeutas</strong><br><span class="muted">Noelia, Adriana, Fransury, Elizabet</span></td>
+          <td><span class="tag fix">ARREGLAR</span></td>
+          <td>Buena, pero los CTAs llevan a WhatsApp. Deben llevar a página de reserva con precio + pago en línea.</td>
+        </tr>
+        <tr>
+          <td><strong>Newsletter — 5 campos</strong><br><span class="muted">Nombre, email, tel, cumple, país</span></td>
+          <td><span class="tag fix">SIMPLIFICAR</span></td>
+          <td>Solo nombre + email. El teléfono y cumpleaños se piden después si es necesario.</td>
+        </tr>
+        <tr>
+          <td><strong>Sección logros/números</strong><br><span class="muted">Mostrando "0"</span></td>
+          <td><span class="tag fix">ARREGLAR YA</span></td>
+          <td>Bug de JS. Impacto directo en confianza. Fix urgente — es la prueba social más poderosa.</td>
+        </tr>
+        <tr>
+          <td><strong>Cursos en línea</strong><br><span class="muted">5 cursos: Conecta, Ruptura, Amarte, etc.</span></td>
+          <td><span class="tag keep">MANTENER</span></td>
+          <td>Producto sólido. Falta precio visible y botón de compra directo (sin ir al WhatsApp).</td>
+        </tr>
+        <tr>
+          <td><strong>Retos CTCTC / CAVA / PACO / MACA</strong></td>
+          <td><span class="tag fix">RESTRUCTURAR</span></td>
+          <td>La escalera de retos es brillante como producto. Pero no se entiende visualmente. Ver sección Escalera.</td>
+        </tr>
+        <tr>
+          <td><strong>Eventos: Sanar para Manifestar</strong><br><span class="muted">Madrid, Lima, Colombia</span></td>
+          <td><span class="tag keep">MANTENER</span></td>
+          <td>Producto de ticket medio-alto. Poner precio, cupos y botón de reserva directo con pago.</td>
+        </tr>
+        <tr>
+          <td><strong>Oráculo</strong></td>
+          <td><span class="tag move">MOVER A FOOTER</span></td>
+          <td>Producto nicho que no debe competir con terapia o cursos en la navegación principal.</td>
+        </tr>
+        <tr>
+          <td><strong>Su libro</strong><br><span class="muted">"También Es Posible Para Ti"</span></td>
+          <td><span class="tag move">MOVER A FOOTER</span></td>
+          <td>Elemento de autoridad, no de conversión directa. Funciona mejor en el "Sobre mí" o sidebar.</td>
+        </tr>
+        <tr>
+          <td><strong>Blog</strong></td>
+          <td><span class="tag move">MOVER A FOOTER</span></td>
+          <td>SEO importante pero no en la navegación principal. Quita foco de la compra.</td>
+        </tr>
+        <tr>
+          <td><strong>Boletín en nav</strong></td>
+          <td><span class="tag cut">ELIMINAR DEL NAV</span></td>
+          <td>El newsletter se captura con popups y formularios. No necesita ítem en el menú principal.</td>
+        </tr>
+        <tr>
+          <td><strong>4 masterclasses/opt-ins distintos</strong></td>
+          <td><span class="tag fix">UNIFICAR</span></td>
+          <td>Un solo lead magnet potente: "Masterclass gratis de transformación" → captura → secuencia automatizada.</td>
+        </tr>
+        <tr>
+          <td><strong>Tienda — productos físicos</strong><br><span class="muted">Solo Colombia</span></td>
+          <td><span class="tag fix">EXPANDIR</span></td>
+          <td>Agregar productos digitales (meditaciones, PDFs, recordings) sin restricción geográfica.</td>
+        </tr>
+        <tr>
+          <td><strong>Subdomain cursos.mariaelenabadillo.com</strong></td>
+          <td><span class="tag fix">ARREGLAR</span></td>
+          <td>Caído. Todo el tráfico que llega ahí ve error. Fix urgente o redirigir a dominio principal.</td>
+        </tr>
+        <tr>
+          <td><strong>Fechas 2023 / 2025 en eventos pasados</strong></td>
+          <td><span class="tag cut">ELIMINAR</span></td>
+          <td>Dañan la credibilidad. Si el evento no tiene fecha confirmada, mostrar "Próximamente" sin año viejo.</td>
+        </tr>
+        <tr>
+          <td><strong>Viaje Perú / Valle Sagrado</strong></td>
+          <td><span class="tag fix">ACTUALIZAR</span></td>
+          <td>Si hay fecha 2026, ponerla. Si no, quitar temporalmente. No dejar "Primer semestre 2025" en 2026.</td>
+        </tr>
+        <tr>
+          <td><strong>Testimonios</strong><br><span class="muted">13+ testimonios en texto</span></td>
+          <td><span class="tag fix">MEJORAR</span></td>
+          <td>Buenos pero en texto. Agregar video testimonios y resultados específicos (antes/después emocional).</td>
+        </tr>
+        <tr>
+          <td><strong>Botón WhatsApp flotante</strong></td>
+          <td><span class="tag keep">MANTENER</span></td>
+          <td>Esencial para cierre humano. Mantener pero que sea complemento, no el único camino.</td>
+        </tr>
+        <tr>
+          <td><strong>PayU como único método de pago</strong></td>
+          <td><span class="tag fix">AMPLIAR</span></td>
+          <td>Agregar Stripe para audiencia internacional (Europa, USA). PayU está bien para Colombia.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- NAVEGACIÓN ACTUAL VS PROPUESTA -->
+  <section id="navaudit">
+    <div class="section-title">
+      <span class="icon">🧭</span>
+      <div>
+        <h2>Navegación: actual vs propuesta</h2>
+        <p>El menú es lo primero que ve el usuario — tiene que guiar, no confundir</p>
+      </div>
+    </div>
+    <div class="nav-blueprint">
+      <div class="nav-bp-header">Menú principal</div>
+      <div class="nav-bp-body">
+        <div class="nav-compare">
+          <div class="nav-items-old">
+            <div class="nav-label old">HOY — 12 ítems (parálisis)</div>
+            <div class="nav-item-row cut-item">✕ Servicios (dropdown)</div>
+            <div class="nav-item-row cut-item">✕ Cursos de 30 días</div>
+            <div class="nav-item-row cut-item">✕ Eventos</div>
+            <div class="nav-item-row cut-item">✕ Sobre Maria Elena</div>
+            <div class="nav-item-row cut-item">✕ Su libro</div>
+            <div class="nav-item-row cut-item">✕ Oráculo</div>
+            <div class="nav-item-row cut-item">✕ Su equipo</div>
+            <div class="nav-item-row cut-item">✕ Blog</div>
+            <div class="nav-item-row cut-item">✕ Boletín</div>
+            <div class="nav-item-row cut-item">✕ Contacto</div>
+            <div class="nav-item-row cut-item">✕ Iniciar sesión</div>
+            <div class="nav-item-row cut-item">✕ Carrito</div>
+          </div>
+          <div class="nav-items-new">
+            <div class="nav-label new">PROPUESTO — 5 ítems + CTA</div>
+            <div class="nav-item-row keep-item">✓ Terapia online</div>
+            <div class="nav-item-row keep-item">✓ Cursos y Retos</div>
+            <div class="nav-item-row keep-item">✓ Eventos</div>
+            <div class="nav-item-row keep-item">✓ Sobre María Elena</div>
+            <div class="nav-item-row move-item">→ Libro / Blog / Oráculo → Footer</div>
+            <div class="nav-item-row keep-item" style="background:#1a1060;color:#b06ef7;margin-top:1rem;font-weight:700">🎯 RESERVAR CONSULTA GRATIS →</div>
+          </div>
+        </div>
+        <div class="info-box warning" style="margin-top:1.5rem">
+          <h4>Regla de oro de navegación para venta</h4>
+          <p>El menú debe tener máximo 5 ítems + 1 CTA destacado en botón de color. Todo lo secundario va al footer. El objetivo del menú no es mostrar todo lo que existe — es llevar al usuario al producto correcto en el menor tiempo posible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNNEL ACTUAL -->
+  <section id="funnel">
+    <div class="section-title">
+      <span class="icon">🚿</span>
+      <div>
+        <h2>Dónde se rompe el funnel hoy</h2>
+        <p>El camino del usuario desde que llega hasta que paga</p>
+      </div>
+    </div>
+    <div class="funnel-wrap">
+      <div class="funnel-step ok">
+        <div class="fstep-num">1</div>
+        <div class="fstep-content">
+          <div class="fstep-title">Usuario llega al sitio</div>
+          <div class="fstep-desc">Desde ad de Meta, Google o redes sociales</div>
+        </div>
+        <span class="fstep-status" style="background:var(--green-soft);color:var(--green)">✓ Funciona</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step broken">
+        <div class="fstep-num">2</div>
+        <div class="fstep-content">
+          <div class="fstep-title">Ve la oferta — no hay precio</div>
+          <div class="fstep-desc">El 70% de usuarios que no ven precio no continúan. Rebotan aquí.</div>
+        </div>
+        <span class="fstep-status" style="background:var(--red-soft);color:var(--red)">✗ ROTO</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step broken">
+        <div class="fstep-num">3</div>
+        <div class="fstep-content">
+          <div class="fstep-title">Hace clic en el CTA — va a WhatsApp</div>
+          <div class="fstep-desc">Todos los botones de compra abren WhatsApp. Aquí empieza la intervención manual.</div>
+        </div>
+        <span class="fstep-status" style="background:var(--red-soft);color:var(--red)">✗ CUELLO</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step broken">
+        <div class="fstep-num">4</div>
+        <div class="fstep-content">
+          <div class="fstep-title">Espera respuesta del equipo</div>
+          <div class="fstep-desc">Si no responden rápido, el lead se enfría y compra en otro lugar.</div>
+        </div>
+        <span class="fstep-status" style="background:var(--yellow-soft);color:var(--yellow)">⚠ Variable</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step broken">
+        <div class="fstep-num">5</div>
+        <div class="fstep-content">
+          <div class="fstep-title">Cierre manual y pago</div>
+          <div class="fstep-desc">El equipo envía link de pago. Múltiples pasos = abandono en cada uno.</div>
+        </div>
+        <span class="fstep-status" style="background:var(--red-soft);color:var(--red)">✗ ROTO</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step" style="border-color:var(--blue)">
+        <div class="fstep-num">6</div>
+        <div class="fstep-content">
+          <div class="fstep-title">Meta Pixel no registra la venta</div>
+          <div class="fstep-desc">Sin evento Purchase, Meta no sabe quién compró. Los ads no aprenden. Targeting se degrada.</div>
+        </div>
+        <span class="fstep-status" style="background:var(--red-soft);color:var(--red)">✗ INVISIBLE</span>
+      </div>
+    </div>
+
+    <div class="ba-grid" style="margin-top: 2rem">
+      <div class="ba-card">
+        <div class="ba-header before">Funnel roto — hoy</div>
+        <div class="ba-body">
+          <div class="ba-item"><span class="ico">❌</span> Llega → no ve precio → rebota</div>
+          <div class="ba-item"><span class="ico">❌</span> Si queda, va a WhatsApp a preguntar</div>
+          <div class="ba-item"><span class="ico">❌</span> Espera respuesta (horas/días)</div>
+          <div class="ba-item"><span class="ico">❌</span> Cierre manual por agente</div>
+          <div class="ba-item"><span class="ico">❌</span> Pago por link separado</div>
+          <div class="ba-item"><span class="ico">❌</span> Meta no registra la compra</div>
+          <div class="ba-item"><span class="ico">❌</span> No hay upsell automático</div>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-header after">Funnel propuesto</div>
+        <div class="ba-body">
+          <div class="ba-item"><span class="ico">✅</span> Llega → ve precio + beneficios claros</div>
+          <div class="ba-item"><span class="ico">✅</span> CTA lleva a página de pago directo</div>
+          <div class="ba-item"><span class="ico">✅</span> Pago en línea (PayU + Stripe)</div>
+          <div class="ba-item"><span class="ico">✅</span> Confirmación automática + agendamiento</div>
+          <div class="ba-item"><span class="ico">✅</span> Pixel registra Purchase</div>
+          <div class="ba-item"><span class="ico">✅</span> Email automático de bienvenida</div>
+          <div class="ba-item"><span class="ico">✅</span> Oferta de upsell (paquete 3 sesiones)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESCALERA DE PRODUCTOS -->
+  <section id="ladder">
+    <div class="section-title">
+      <span class="icon">📈</span>
+      <div>
+        <h2>Escalera de valor — el activo más poderoso del negocio</h2>
+        <p>Tiene una escalera de productos brillante que nadie entiende porque no se muestra visualmente</p>
+      </div>
+    </div>
+    <div class="info-box success">
+      <h4>Esto es lo que más vale del negocio y está escondido</h4>
+      <p>Maria Elena tiene una escalera de valor perfecta: entra gratis, paga poco, paga más, paga mucho. Pero en el sitio están mezclados en subpáginas separadas sin una narrativa de progresión. Hay que mostrar el camino completo como una jornada de transformación.</p>
+    </div>
+    <div class="ladder">
+      <div class="ladder-step step1">
+        <div class="ladder-box">
+          <div class="l-icon">🎁</div>
+          <div class="l-name">Lead Magnet</div>
+          <div class="l-sub">Masterclass gratis</div>
+          <div class="l-price free">GRATIS</div>
+        </div>
+        <div class="l-label">Entrada<br>a la comunidad</div>
+      </div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step step2">
+        <div class="ladder-box">
+          <div class="l-icon">📚</div>
+          <div class="l-name">Cursos online</div>
+          <div class="l-sub">Ruptura, Amarte, etc.</div>
+          <div class="l-price low">$50–$150 USD</div>
+        </div>
+        <div class="l-label">Primera<br>compra</div>
+      </div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step step3">
+        <div class="ladder-box">
+          <div class="l-icon">🔥</div>
+          <div class="l-name">CTCTC + CAVA</div>
+          <div class="l-sub">Retos 30 días</div>
+          <div class="l-price mid">$200–$400 USD</div>
+        </div>
+        <div class="l-label">Comunidad<br>activa</div>
+      </div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step step4">
+        <div class="ladder-box">
+          <div class="l-icon">💑</div>
+          <div class="l-name">PACO + Terapia</div>
+          <div class="l-sub">Reto + sesiones 1:1</div>
+          <div class="l-price high">$400–$800 USD</div>
+        </div>
+        <div class="l-label">Transformación<br>profunda</div>
+      </div>
+      <div class="ladder-arrow">→</div>
+      <div class="ladder-step step5">
+        <div class="ladder-box">
+          <div class="l-icon">🌟</div>
+          <div class="l-name">Retiros / MACA</div>
+          <div class="l-sub">Volviendo al Ser · Perú</div>
+          <div class="l-price vip">$1,000–$3,000 USD</div>
+        </div>
+        <div class="l-label">Ticket alto<br>experiencia VIP</div>
+      </div>
+    </div>
+    <div class="info-box warning">
+      <h4>Qué falta en la escalera</h4>
+      <p>1. Una página que muestre visualmente esta progresión al usuario. 2. Precios reales en cada peldaño. 3. El prerequisito "debes completar CTCTC antes de CAVA" explicado como beneficio, no como barrera. 4. Historias de clientes que pasaron por toda la escalera.</p>
+    </div>
+  </section>
+
+  <!-- PROPUESTAS -->
+  <section id="propuestas">
+    <div class="section-title">
+      <span class="icon">⚡</span>
+      <div>
+        <h2>8 propuestas concretas</h2>
+        <p>Con impacto medible en conversión y revenue</p>
+      </div>
+    </div>
+    <div class="proposals-grid">
+
+      <div class="proposal-card">
+        <div class="pnum">1</div>
+        <h3>Mostrar precios en todas las páginas de producto</h3>
+        <p>Precio visible + opción de pago en cuotas + comparativa (sesión única vs paquete). Si el precio es estratégico, poner mínimo "Desde $X".</p>
+        <div class="expected">Impacto esperado: +40–60% en conversión de visita a intención de compra</div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="pnum">2</div>
+        <h3>Botón de compra directa en cada servicio</h3>
+        <p>Cada terapeuta, cada curso, cada reto necesita un botón "Comprar ahora" que lleve directamente a checkout con pago. No a WhatsApp.</p>
+        <div class="expected">Impacto esperado: Reduce dependencia del equipo de ventas. Ventas 24/7 sin intervención.</div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="pnum">3</div>
+        <h3>Instalar evento Purchase en Meta Pixel</h3>
+        <p>Agregar fbq('track', 'Purchase') en la página de confirmación de pago. Permite usar campañas de conversión reales y ROAS optimizado.</p>
+        <div class="expected">Impacto esperado: Ads de Meta 3–5x más eficientes. Targeting de lookalike de compradores.</div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="pnum">4</div>
+        <h3>Página de escalera de valor — "Tu Camino de Transformación"</h3>
+        <p>Una página que muestra visualmente los 5 niveles del sistema (gratis → retiro VIP). Con precios, beneficios por nivel, y CTA específico para cada uno.</p>
+        <div class="expected">Impacto esperado: Aumenta ticket promedio. El cliente ve el journey completo y quiere avanzar.</div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="pnum">5</div>
+        <h3>Un solo lead magnet potente + secuencia automatizada</h3>
+        <p>Unificar las 4 masterclasses en 1 oferta clara: "Masterclass gratuita: El primer paso hacia tu transformación". Secuencia de 5 emails automáticos después.</p>
+        <div class="expected">Impacto esperado: Lista de emails más limpia, nurturing activo, ventas en automático desde email.</div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="pnum">6</div>
+        <h3>Urgencia y escasez reales en cada oferta</h3>
+        <p>Contador regresivo en el retiro de agosto. "Solo quedan X cupos" en PACO (tiene 200 confirmados). Fecha límite de precio especial en cursos.</p>
+        <div class="expected">Impacto esperado: Reduce postergación de decisión. Ventas más rápidas con mismo tráfico.</div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="pnum">7</div>
+        <h3>Tienda digital: meditaciones, PDFs, recordings</h3>
+        <p>Crear productos digitales descargables sin límite geográfico: audios de meditación, guías PDF, recordings de seminarios. Venta en WooCommerce o Gumroad.</p>
+        <div class="expected">Impacto esperado: Revenue de audiencia internacional (España, México, USA, Europa) que hoy no puede comprar nada.</div>
+      </div>
+
+      <div class="proposal-card">
+        <div class="pnum">8</div>
+        <h3>Video testimonios + resultados específicos</h3>
+        <p>Reemplazar los 13 testimonios en texto por 3–5 videos de 60 segundos con nombre, país, y un cambio específico medible ("pasé de ataques de pánico diarios a dormir 7 horas").</p>
+        <div class="expected">Impacto esperado: Testimonios en video convierten 4–6x más que texto. Es prueba social irrefutable.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PRIORIDADES -->
+  <section id="prioridades">
+    <div class="section-title">
+      <span class="icon">🗓️</span>
+      <div>
+        <h2>Plan de acción — por semana</h2>
+        <p>Ordenado por impacto / esfuerzo</p>
+      </div>
+    </div>
+    <div class="priority-list">
+
+      <div class="priority-item">
+        <div class="p-week">Semana<span>1</span></div>
+        <div class="p-content">
+          <h4>Fixes urgentes que no cuestan nada</h4>
+          <p>Arreglar números a cero en sección logros (bug JS). Eliminar o actualizar fechas 2023/2025 en eventos. Redirigir cursos.mariaelenabadillo.com al dominio principal. Quitar ítems innecesarios del menú.</p>
+          <div class="p-tag-row">
+            <span class="tag fix">Semana 1</span>
+            <span class="tag keep">Sin costo</span>
+            <span class="chip">Credibilidad</span>
+            <span class="chip">Conversión</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="p-week">Semana<span>2</span></div>
+        <div class="p-content">
+          <h4>Instalar Pixel Purchase + precios visibles</h4>
+          <p>Agregar fbq('track', 'Purchase') en páginas de confirmación. Poner precios (o "Desde $X") en cada servicio de terapia, cada curso y cada reto. Mayor ROI posible de cualquier cambio técnico.</p>
+          <div class="p-tag-row">
+            <span class="tag fix">Semana 2</span>
+            <span class="chip">Tracking</span>
+            <span class="chip">Conversión</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="p-week">Semana<span>3</span></div>
+        <div class="p-content">
+          <h4>Checkout directo en terapias y cursos prioritarios</h4>
+          <p>Las 4 terapeutas y los 2 cursos más vendidos deben tener botón de compra directa con precio y pago (PayU + Stripe). Sin pasar por WhatsApp. El equipo sigue disponible pero no es el único camino.</p>
+          <div class="p-tag-row">
+            <span class="tag add">Semana 3</span>
+            <span class="chip">Revenue</span>
+            <span class="chip">Automatización</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="p-week">Semana<span>4</span></div>
+        <div class="p-content">
+          <h4>Página "Tu camino de transformación" + urgencia</h4>
+          <p>Crear la página de escalera de valor completa. Agregar contador regresivo al retiro de agosto. Cupos restantes en PACO. Esto requiere diseño pero el impacto en ticket promedio es alto.</p>
+          <div class="p-tag-row">
+            <span class="tag add">Semana 4</span>
+            <span class="chip">Ticket promedio</span>
+            <span class="chip">Upsell</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="p-week">Mes<span>2</span></div>
+        <div class="p-content">
+          <h4>Lead magnet único + secuencia de emails + tienda digital</h4>
+          <p>Unificar masterclasses en 1 oferta. Configurar secuencia de 5 emails post-registro. Crear primeros 3 productos digitales (meditación, guía PDF, recording de seminario). Disponibles para toda la audiencia internacional.</p>
+          <div class="p-tag-row">
+            <span class="tag add">Mes 2</span>
+            <span class="chip">Email marketing</span>
+            <span class="chip">Internacional</span>
+            <span class="chip">Pasivo</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="info-box success" style="margin-top:2rem">
+      <h4>Resumen ejecutivo para Maria Elena</h4>
+      <p>
+        El negocio tiene todo lo necesario para vender en piloto automático: autoridad, audiencia, testimonios, escalera de productos y demanda real. El problema no es el marketing — es la infraestructura de venta.
+        Con 4 semanas de trabajo técnico (precios visibles, checkout directo, pixel configurado y menú simplificado), el mismo tráfico actual puede convertir entre 2 y 3 veces más sin gastar un peso adicional en pauta.
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<div style="background:var(--surface);border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.85rem;margin-top:3rem">
+  Auditoría realizada por Fernanda Conde · Centro de Bienestar Maria Elena Badillo · Mayo 2026
+</div>
+
+<script>
+  // Active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
