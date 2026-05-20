@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendario de Contenido — Maria Elena Badillo</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',sans-serif; background:#07050f; color:#e2e8f0; min-height:100vh; }
+
+header {
+  background: linear-gradient(135deg,#1a0533,#2d0f5f,#1a0533);
+  padding:28px 40px; border-bottom:1px solid #3d1a6e;
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+}
+header h1 { font-size:22px; font-weight:800; color:#fff; }
+header p { color:#c4b5fd; font-size:13px; margin-top:4px; }
+
+.leyenda { display:flex; gap:12px; flex-wrap:wrap; }
+.ley-item { display:flex; align-items:center; gap:6px; font-size:11px; color:#a78bfa; }
+.ley-dot { width:10px; height:10px; border-radius:50%; }
+
+.container { max-width:1500px; margin:0 auto; padding:28px 32px; }
+
+/* Fase banner */
+.fase-banner {
+  border-radius:12px; padding:14px 20px; margin-bottom:20px;
+  display:flex; align-items:center; gap:12px;
+  border-left:5px solid var(--c);
+  background: var(--bg);
+}
+.fase-banner .fase-nombre { font-size:14px; font-weight:700; color:var(--c); }
+.fase-banner .fase-desc { font-size:12px; color:#94a3b8; margin-top:2px; }
+.fase-banner .fase-icon { font-size:22px; }
+
+/* Semana grid */
+.semana-label { font-size:11px; color:#6b48a0; text-transform:uppercase; letter-spacing:1px; margin:24px 0 10px; }
+.dias-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:6px; }
+.dia-header { text-align:center; font-size:10px; color:#6b48a0; text-transform:uppercase; letter-spacing:0.5px; padding-bottom:6px; }
+
+/* Día card */
+.dia-card {
+  background:#110d22; border:1px solid #2a1a4a; border-radius:12px;
+  padding:12px; min-height:220px; transition:all 0.2s; position:relative;
+}
+.dia-card:hover { border-color:#6b21a8; transform:translateY(-2px); }
+.dia-card.vacio { background:#0a0814; border-color:#150d28; opacity:0.4; }
+.dia-card.hoy { border-color:#8b5cf6; box-shadow:0 0 0 1px #8b5cf6; }
+
+.dia-num {
+  font-size:16px; font-weight:800; color:#fff; margin-bottom:8px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.dia-dow { font-size:10px; color:#6b48a0; font-weight:500; }
+
+/* Post items */
+.post-item {
+  border-radius:8px; padding:8px 10px; margin-bottom:7px;
+  border-left:3px solid var(--c);
+  background:var(--bg);
+  cursor:default;
+}
+.post-plataforma { display:flex; gap:4px; margin-bottom:4px; }
+.plat-badge {
+  font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+  padding:1px 6px; border-radius:10px;
+}
+.plat-ig { background:rgba(225,48,108,0.2); color:#f472b6; }
+.plat-tk { background:rgba(0,0,0,0.4); color:#94a3b8; border:1px solid #374151; }
+.plat-ambas { background:rgba(139,92,246,0.2); color:#c4b5fd; }
+
+.post-formato { font-size:9px; color:#7c6fa0; margin-bottom:3px; text-transform:uppercase; }
+.post-hook { font-size:11px; color:#e2e8f0; line-height:1.4; }
+.post-hora { font-size:9px; color:#4b5563; margin-top:4px; }
+
+.stories-badge {
+  background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3);
+  border-radius:8px; padding:6px 8px; margin-bottom:7px;
+  font-size:10px; color:#fbbf24;
+}
+
+/* Tipo colores */
+.tipo-educativo   { --c:#6366f1; --bg:rgba(99,102,241,0.07); }
+.tipo-dolor       { --c:#ec4899; --bg:rgba(236,72,153,0.07); }
+.tipo-testimonio  { --c:#10b981; --bg:rgba(16,185,129,0.07); }
+.tipo-humanidad   { --c:#f59e0b; --bg:rgba(245,158,11,0.07); }
+.tipo-lanzamiento { --c:#ef4444; --bg:rgba(239,68,68,0.07); }
+.tipo-engagement  { --c:#8b5cf6; --bg:rgba(139,92,246,0.07); }
+.tipo-live        { --c:#06b6d4; --bg:rgba(6,182,212,0.07); }
+
+/* Tips de horario */
+.horario-tip { font-size:10px; color:#4b5563; margin-top:8px; padding-top:6px; border-top:1px solid #1e1540; }
+
+/* Resumen estrategia */
+.estrategia-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+.estrategia-card {
+  background:#110d22; border:1px solid #2a1a4a; border-radius:12px; padding:16px;
+  border-top:3px solid var(--c,#8b5cf6);
+}
+.est-titulo { font-size:12px; font-weight:700; color:#c4b5fd; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; }
+.est-item { font-size:11px; color:#94a3b8; padding:4px 0; border-bottom:1px solid #1e1540; }
+.est-item:last-child { border-bottom:none; }
+.est-item strong { color:#e2e8f0; }
+
+footer { text-align:center; padding:24px; color:#2d1a50; font-size:12px; border-top:1px solid #150d28; margin-top:20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Calendario de Contenido — Maria Elena Badillo</h1>
+    <p>21 Mayo → 30 Junio 2026 &nbsp;·&nbsp; Instagram & TikTok &nbsp;·&nbsp; Estrategia basada en investigación de tendencias 2026</p>
+  </div>
+  <div class="leyenda">
+    <div class="ley-item"><div class="ley-dot" style="background:#ec4899"></div> Dolor / Awareness</div>
+    <div class="ley-item"><div class="ley-dot" style="background:#6366f1"></div> Educativo</div>
+    <div class="ley-item"><div class="ley-dot" style="background:#10b981"></div> Testimonio</div>
+    <div class="ley-item"><div class="ley-dot" style="background:#f59e0b"></div> Humanidad</div>
+    <div class="ley-item"><div class="ley-dot" style="background:#06b6d4"></div> Live</div>
+    <div class="ley-item"><div class="ley-dot" style="background:#ef4444"></div> Lanzamiento</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Estrategia resumen -->
+  <div class="estrategia-grid" style="margin-top:4px">
+    <div class="estrategia-card" style="--c:#ec4899">
+      <div class="est-titulo">Mix de contenido</div>
+      <div class="est-item"><strong>35%</strong> Educativo</div>
+      <div class="est-item"><strong>25%</strong> Inspiracional</div>
+      <div class="est-item"><strong>20%</strong> Testimonios</div>
+      <div class="est-item"><strong>10%</strong> Humanidad</div>
+      <div class="est-item"><strong>10%</strong> Venta directa</div>
+    </div>
+    <div class="estrategia-card" style="--c:#6366f1">
+      <div class="est-titulo">Frecuencia semanal</div>
+      <div class="est-item"><strong>3-4</strong> Reels / TikToks</div>
+      <div class="est-item"><strong>2</strong> Carruseles IG</div>
+      <div class="est-item"><strong>Diario</strong> Stories IG</div>
+      <div class="est-item"><strong>1</strong> Post estático</div>
+      <div class="est-item"><strong>1/mes</strong> Live gratuito</div>
+    </div>
+    <div class="estrategia-card" style="--c:#10b981">
+      <div class="est-titulo">Mejores horarios</div>
+      <div class="est-item"><strong>10:00 AM</strong> Col/Perú (principal)</div>
+      <div class="est-item"><strong>12:30 PM</strong> Hora almuerzo</div>
+      <div class="est-item"><strong>7:00 PM</strong> Pico nocturno</div>
+      <div class="est-item"><strong>Mar y Jue</strong> Mejores días</div>
+      <div class="est-item"><strong>Evitar</strong> Dom noche</div>
+    </div>
+    <div class="estrategia-card" style="--c:#f59e0b">
+      <div class="est-titulo">Fases del período</div>
+      <div class="est-item"><strong>May 21-30</strong> Siembra de dolor</div>
+      <div class="est-item"><strong>Jun 1-7</strong> Autoridad</div>
+      <div class="est-item"><strong>Jun 8-14</strong> Prueba social</div>
+      <div class="est-item"><strong>Jun 15-21</strong> Humanidad</div>
+      <div class="est-item"><strong>Jun 22-30</strong> Siembra lanzamiento</div>
+    </div>
+  </div>
+
+  <!-- MAYO -->
+  <div class="fase-banner" style="--c:#ec4899; --bg:rgba(236,72,153,0.06)">
+    <div class="fase-icon">🌱</div>
+    <div>
+      <div class="fase-nombre">FASE 1 — SIEMBRA DE DOLOR &nbsp;|&nbsp; 21–31 Mayo</div>
+      <div class="fase-desc">Activar en la audiencia la conciencia del problema que los programas resuelven. No vender todavía. El contenido debe hacer que la persona piense "esto me está hablando a mí".</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:6px; margin-top:8px;">
+    <div class="dia-header">Lun</div><div class="dia-header">Mar</div><div class="dia-header">Mié</div>
+    <div class="dia-header">Jue</div><div class="dia-header">Vie</div><div class="dia-header">Sáb</div><div class="dia-header">Dom</div>
+  </div>
+
+  <div class="dias-grid">
+    <!-- May 21 Jue -->
+    <div class="dia-card vacio"></div>
+    <div class="dia-card vacio"></div>
+    <div class="dia-card vacio"></div>
+    <div class="dia-card hoy">
+      <div class="dia-num">21 <span class="dia-dow">Jue</span></div>
+      <div class="stories-badge">📱 Stories: "¿Qué cambiarías de ti si pudieras?" — Encuesta</div>
+      <div class="post-item tipo-dolor">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 45 seg</div>
+        <div class="post-hook">"Si llevas meses sintiéndote estancada/o, puede ser por esto…"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 22 Vie -->
+    <div class="dia-card">
+      <div class="dia-num">22 <span class="dia-dow">Vie</span></div>
+      <div class="stories-badge">📱 Stories: Reflexión de viernes + CTA a guardar el carrusel</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 8 slides</div>
+        <div class="post-hook">"5 señales de que tus emociones están bloqueando tu vida sin que lo notes"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 23 Sáb -->
+    <div class="dia-card">
+      <div class="dia-num">23 <span class="dia-dow">Sáb</span></div>
+      <div class="stories-badge">📱 Stories: Detrás de cámaras del equipo</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Video · 30 seg</div>
+        <div class="post-hook">Frase poderosa de Maria Elena narrada a cámara — íntima, sin producción</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 24 Dom -->
+    <div class="dia-card">
+      <div class="dia-num">24 <span class="dia-dow">Dom</span></div>
+      <div class="stories-badge">📱 Stories: "¿Cómo está tu corazón hoy?" — Solo Stories, no feed</div>
+    </div>
+  </div>
+
+  <div class="dias-grid" style="margin-top:10px">
+    <!-- May 25 Lun -->
+    <div class="dia-card">
+      <div class="dia-num">25 <span class="dia-dow">Lun</span></div>
+      <div class="stories-badge">📱 Stories: Motivación inicio de semana</div>
+      <div class="post-item tipo-dolor">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Carrusel IG + Video TK · 7 slides</div>
+        <div class="post-hook">"¿Por qué sigues eligiendo personas que te lastiman aunque no quieras?"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 26 Mar -->
+    <div class="dia-card">
+      <div class="dia-num">26 <span class="dia-dow">Mar</span></div>
+      <div class="stories-badge">📱 Stories: Pregunta abierta + responder DMs</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 30 seg</div>
+        <div class="post-hook">"Lo que tu ansiedad realmente te está diciendo (y nadie te explica)"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 27 Mié -->
+    <div class="dia-card">
+      <div class="dia-num">27 <span class="dia-dow">Mié</span></div>
+      <div class="stories-badge">📱 Stories interactiva: Encuesta "¿Cuál emoción te cuesta más manejar?" — ansiedad / tristeza / ira / miedo</div>
+    </div>
+    <!-- May 28 Jue -->
+    <div class="dia-card">
+      <div class="dia-num">28 <span class="dia-dow">Jue</span></div>
+      <div class="stories-badge">📱 Stories: Pantallazo mensaje de participante</div>
+      <div class="post-item tipo-testimonio">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 30 seg</div>
+        <div class="post-hook">"Ella llegó al programa sintiéndose rota. Esto fue lo que cambió en 3 meses"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 29 Vie -->
+    <div class="dia-card">
+      <div class="dia-num">29 <span class="dia-dow">Vie</span></div>
+      <div class="stories-badge">📱 Stories: CTA a guardar el carrusel</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 10 slides</div>
+        <div class="post-hook">"Las 4 heridas emocionales que bloquean tu vida (y cómo reconocerlas)"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 30 Sáb -->
+    <div class="dia-card">
+      <div class="dia-num">30 <span class="dia-dow">Sáb</span></div>
+      <div class="stories-badge">📱 Stories: Weekend / humanidad del equipo</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-tk">TK</span></div>
+        <div class="post-formato">Video · 20 seg</div>
+        <div class="post-hook">Detrás de cámaras del equipo — momento real, auténtico, sin guión</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- May 31 Dom -->
+    <div class="dia-card">
+      <div class="dia-num">31 <span class="dia-dow">Dom</span></div>
+      <div class="stories-badge">📱 Stories: "¿Qué dejás atrás este mes?" — Cierre de mayo</div>
+    </div>
+  </div>
+
+  <!-- JUNIO FASE 2 -->
+  <div class="fase-banner" style="--c:#6366f1; --bg:rgba(99,102,241,0.06); margin-top:28px">
+    <div class="fase-icon">🎓</div>
+    <div>
+      <div class="fase-nombre">FASE 2 — AUTORIDAD Y MÉTODO &nbsp;|&nbsp; 1–7 Junio</div>
+      <div class="fase-desc">Posicionar a Maria Elena y el equipo como la solución. La audiencia ya siente el dolor — ahora ve que hay un camino y que esta es la persona correcta para guiarla.</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:6px; margin-top:8px;">
+    <div class="dia-header">Lun</div><div class="dia-header">Mar</div><div class="dia-header">Mié</div>
+    <div class="dia-header">Jue</div><div class="dia-header">Vie</div><div class="dia-header">Sáb</div><div class="dia-header">Dom</div>
+  </div>
+
+  <div class="dias-grid">
+    <!-- Jun 1 Lun -->
+    <div class="dia-card">
+      <div class="dia-num">1 <span class="dia-dow">Lun</span></div>
+      <div class="stories-badge">📱 Stories: "Junio empieza con propósito" — motivación</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Carrusel IG · 8 slides &nbsp;|&nbsp; Video TK · 45 seg</div>
+        <div class="post-hook">"El método que usamos para sanar desde adentro (y por qué funciona cuando todo lo demás falló)"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- Jun 2 Mar -->
+    <div class="dia-card">
+      <div class="dia-num">2 <span class="dia-dow">Mar</span></div>
+      <div class="stories-badge">📱 Stories: "¿Tienes una pregunta para mí?" — Q&A</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 60 seg</div>
+        <div class="post-hook">Maria Elena a cámara: "Una cosa que aprendí en mis años como terapeuta que cambió cómo veo la sanación"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- Jun 3 Mié -->
+    <div class="dia-card">
+      <div class="dia-num">3 <span class="dia-dow">Mié</span></div>
+      <div class="stories-badge">📱 Stories Q&A abierto: Preguntas sobre terapia y sanación — responder con video en Stories</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-tk">TK</span></div>
+        <div class="post-formato">Video · 30 seg</div>
+        <div class="post-hook">Mini-herramienta terapéutica: "Haz esto durante 5 minutos cuando sientas que no puedes más"</div>
+        <div class="post-hora">📍 12:30 PM</div>
+      </div>
+    </div>
+    <!-- Jun 4 Jue -->
+    <div class="dia-card">
+      <div class="dia-num">4 <span class="dia-dow">Jue</span></div>
+      <div class="stories-badge">📱 Stories: Recordatorio del carrusel de hoy</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 9 slides</div>
+        <div class="post-hook">"¿Qué pasa en tu cuerpo cuando no procesas una emoción? (La ciencia que nadie explica simple)"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- Jun 5 Vie -->
+    <div class="dia-card">
+      <div class="dia-num">5 <span class="dia-dow">Vie</span></div>
+      <div class="stories-badge">📱 Stories: Avance del Live del domingo</div>
+      <div class="post-item tipo-dolor">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 45 seg</div>
+        <div class="post-hook">"La razón por la que manifestar no te funciona no es lo que crees"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- Jun 6 Sáb -->
+    <div class="dia-card">
+      <div class="dia-num">6 <span class="dia-dow">Sáb</span></div>
+      <div class="stories-badge">📱 Stories: Invitación al Live del domingo con countdown</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Post estático</div>
+        <div class="post-hook">Cita de Maria Elena con diseño: frase que nombre lo que la audiencia siente pero no sabe articular</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <!-- Jun 7 Dom -->
+    <div class="dia-card">
+      <div class="dia-num">7 <span class="dia-dow">Dom</span></div>
+      <div class="stories-badge">📱 Stories: Recordatorio del Live + "¿Vienen?"</div>
+      <div class="post-item tipo-live">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG Live</span></div>
+        <div class="post-formato">Live gratuito · 45-60 min</div>
+        <div class="post-hook">"Pregúntame sobre sanación emocional" — Enseñar, no vender. Terminar con CTA a sesión individual.</div>
+        <div class="post-hora">📍 7:00 PM (hora Colombia)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="fase-banner" style="--c:#10b981; --bg:rgba(16,185,129,0.06); margin-top:28px">
+    <div class="fase-icon">⭐</div>
+    <div>
+      <div class="fase-nombre">FASE 3 — PRUEBA SOCIAL &nbsp;|&nbsp; 8–14 Junio</div>
+      <div class="fase-desc">La audiencia ya te conoce. Ahora buscan ver que el método funciona en personas como ellas. Los testimonios son el contenido más caro y más valioso de esta fase.</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:6px; margin-top:8px;">
+    <div class="dia-header">Lun</div><div class="dia-header">Mar</div><div class="dia-header">Mié</div>
+    <div class="dia-header">Jue</div><div class="dia-header">Vie</div><div class="dia-header">Sáb</div><div class="dia-header">Dom</div>
+  </div>
+
+  <div class="dias-grid">
+    <div class="dia-card">
+      <div class="dia-num">8 <span class="dia-dow">Lun</span></div>
+      <div class="stories-badge">📱 Stories: "¿Quieres saber qué dicen nuestros alumnos?"</div>
+      <div class="post-item tipo-testimonio">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 10 slides</div>
+        <div class="post-hook">Historia completa de alumna SPM: antes, proceso, resultado. Narrada en sus propias palabras.</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+      <div class="post-item tipo-testimonio">
+        <div class="post-plataforma"><span class="plat-badge plat-tk">TK</span></div>
+        <div class="post-formato">Video · 20 seg</div>
+        <div class="post-hook">Clip corto del testimonio en video — "Lo que cambió en mí después del SPM"</div>
+        <div class="post-hora">📍 7:00 PM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">9 <span class="dia-dow">Mar</span></div>
+      <div class="stories-badge">📱 Stories: Pantallazo de mensaje de participante + "Esto me escribió alguien ayer"</div>
+      <div class="post-item tipo-testimonio">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 30 seg</div>
+        <div class="post-hook">Maria Elena narra: "Ella llegó sin esperanza. Esto fue lo que cambió." — Historia real condensada</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">10 <span class="dia-dow">Mié</span></div>
+      <div class="stories-badge">📱 Stories: Serie de pantallazos con permiso de participantes — resultados reales</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">11 <span class="dia-dow">Jue</span></div>
+      <div class="stories-badge">📱 Stories: "¿Quieres conocer a nuestro equipo?"</div>
+      <div class="post-item tipo-testimonio">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 8 slides</div>
+        <div class="post-hook">Elizabet: su historia, su método, por qué eligió esta profesión + resultados de sus pacientes</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-tk">TK</span></div>
+        <div class="post-formato">Video · 30 seg</div>
+        <div class="post-hook">Clip de Elizabet presentándose y hablando de su especialidad — auténtico, sin guión</div>
+        <div class="post-hora">📍 7:00 PM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">12 <span class="dia-dow">Vie</span></div>
+      <div class="stories-badge">📱 Stories: CTA a DM para info sobre sesiones</div>
+      <div class="post-item tipo-testimonio">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 30 seg</div>
+        <div class="post-hook">"Cuando tú cambias, todo cambia. Esta es la historia de [nombre de alumna]"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">13 <span class="dia-dow">Sáb</span></div>
+      <div class="stories-badge">📱 Stories: Pregunta a comunidad "¿Cuál ha sido tu mayor aprendizaje en terapia?"</div>
+      <div class="post-item tipo-testimonio">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Post estático</div>
+        <div class="post-hook">Frase de impacto tomada de un testimonio real — diseño limpio, letra grande</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">14 <span class="dia-dow">Dom</span></div>
+      <div class="stories-badge">📱 Stories: "¿Estás lista para tu transformación?" — pregunta reflexiva + link sesión individual $75</div>
+    </div>
+  </div>
+
+  <!-- FASE 4 -->
+  <div class="fase-banner" style="--c:#f59e0b; --bg:rgba(245,158,11,0.06); margin-top:28px">
+    <div class="fase-icon">💛</div>
+    <div>
+      <div class="fase-nombre">FASE 4 — CONEXIÓN Y HUMANIDAD &nbsp;|&nbsp; 15–21 Junio</div>
+      <div class="fase-desc">Mostrar quiénes son detrás del negocio. Las personas compran a personas. Esta semana genera la confianza más profunda — la que hace que el próximo lanzamiento venda solo.</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:6px; margin-top:8px;">
+    <div class="dia-header">Lun</div><div class="dia-header">Mar</div><div class="dia-header">Mié</div>
+    <div class="dia-header">Jue</div><div class="dia-header">Vie</div><div class="dia-header">Sáb</div><div class="dia-header">Dom</div>
+  </div>
+
+  <div class="dias-grid">
+    <div class="dia-card">
+      <div class="dia-num">15 <span class="dia-dow">Lun</span></div>
+      <div class="stories-badge">📱 Stories: Presentación de cada terapeuta con foto</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 6 slides</div>
+        <div class="post-hook">"Quiénes somos detrás de Centro de Bienestar" — Presentación real del equipo completo</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-tk">TK</span></div>
+        <div class="post-formato">Video · 45 seg</div>
+        <div class="post-hook">Cada terapeuta dice 15 seg quién es y qué hace — montaje dinámico</div>
+        <div class="post-hora">📍 7:00 PM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">16 <span class="dia-dow">Mar</span></div>
+      <div class="stories-badge">📱 Stories: Preguntas sobre la historia de Maria Elena</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 60 seg</div>
+        <div class="post-hook">Maria Elena: "Por qué me dedico a esto" — historia personal, vulnerable, sin filtro</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">17 <span class="dia-dow">Mié</span></div>
+      <div class="stories-badge">📱 Stories: Día a día real del equipo — detrás de cámaras, momentos reales</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">18 <span class="dia-dow">Jue</span></div>
+      <div class="stories-badge">📱 Stories: "Un día con Fransury / Adriana" — detrás de cámaras</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Carrusel IG · 6 slides &nbsp;|&nbsp; Video TK · 30 seg</div>
+        <div class="post-hook">"Un día en la vida de Adriana" — humanizar al equipo, mostrar la vocación real detrás del trabajo</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">19 <span class="dia-dow">Vie</span></div>
+      <div class="stories-badge">📱 Stories: "Algo que no saben de nosotros" — dato sorpresa del equipo</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 30 seg</div>
+        <div class="post-hook">"Algo que nadie sabe sobre trabajar en bienestar emocional" — real, sin glamour</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">20 <span class="dia-dow">Sáb</span></div>
+      <div class="stories-badge">📱 Stories: Momento divertido del equipo — humor suave</div>
+      <div class="post-item tipo-humanidad">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Post estático</div>
+        <div class="post-hook">Foto del equipo completo con mensaje de gratitud a la comunidad</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">21 <span class="dia-dow">Dom</span></div>
+      <div class="stories-badge">📱 Stories: "¿Cómo está tu corazón a mitad del año?" — Reflexión de mitad de 2026</div>
+    </div>
+  </div>
+
+  <!-- FASE 5 -->
+  <div class="fase-banner" style="--c:#ef4444; --bg:rgba(239,68,68,0.06); margin-top:28px">
+    <div class="fase-icon">🔥</div>
+    <div>
+      <div class="fase-nombre">FASE 5 — SIEMBRA DEL PRÓXIMO LANZAMIENTO &nbsp;|&nbsp; 22–30 Junio</div>
+      <div class="fase-desc">Empezar a calentar a la audiencia para el próximo lanzamiento sin revelar qué es todavía. Generar curiosidad, anticipación y FOMO. El misterio bien manejado convierte más que cualquier anuncio directo.</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:6px; margin-top:8px;">
+    <div class="dia-header">Lun</div><div class="dia-header">Mar</div><div class="dia-header">Mié</div>
+    <div class="dia-header">Jue</div><div class="dia-header">Vie</div><div class="dia-header">Sáb</div><div class="dia-header">Dom</div>
+  </div>
+
+  <div class="dias-grid">
+    <div class="dia-card">
+      <div class="dia-num">22 <span class="dia-dow">Lun</span></div>
+      <div class="stories-badge">📱 Stories: "¿Están listos para lo que viene?"</div>
+      <div class="post-item tipo-educativo">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 8 slides</div>
+        <div class="post-hook">"Lo que aprendimos de nuestros alumnos este primer semestre del año"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">23 <span class="dia-dow">Mar</span></div>
+      <div class="stories-badge">📱 Stories: Responder comentarios del Reel de hoy en video</div>
+      <div class="post-item tipo-engagement">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 30 seg</div>
+        <div class="post-hook">"Si pudieras cambiar UNA sola cosa de tu vida ahora mismo, ¿qué sería?" — Engagement masivo, guardar respuestas para próximo lanzamiento</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">24 <span class="dia-dow">Mié</span></div>
+      <div class="stories-badge">📱 Stories: Encuesta "¿Qué tema quieres que tratemos en nuestro próximo programa?" — recopilar pain points</div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">25 <span class="dia-dow">Jue</span></div>
+      <div class="stories-badge">📱 Stories: Guiño misterioso — "Algo viene este julio…"</div>
+      <div class="post-item tipo-lanzamiento">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Carrusel · 7 slides</div>
+        <div class="post-hook">"Por qué el segundo semestre del año es el momento perfecto para sanar (y no dejarlo para el año nuevo)"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">26 <span class="dia-dow">Vie</span></div>
+      <div class="stories-badge">📱 Stories: Countdown "algo viene en X días"</div>
+      <div class="post-item tipo-lanzamiento">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 20 seg</div>
+        <div class="post-hook">Maria Elena a cámara: "Algo viene. Y va a cambiar tu vida. Prepárate." — Sin detalles, solo anticipación</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">27 <span class="dia-dow">Sáb</span></div>
+      <div class="stories-badge">📱 Stories: "Esto es lo que estamos preparando para ustedes" — pistas visuales</div>
+      <div class="post-item tipo-lanzamiento">
+        <div class="post-plataforma"><span class="plat-badge plat-ig">IG</span></div>
+        <div class="post-formato">Post estático</div>
+        <div class="post-hook">Imagen de anticipación con frase: "Lo mejor está por venir. Julio 2026."</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">28 <span class="dia-dow">Dom</span></div>
+      <div class="stories-badge">📱 Stories: "¿Cuál es el área de tu vida que más quieres transformar este segundo semestre?" — recopilar para el lanzamiento</div>
+    </div>
+  </div>
+
+  <div class="dias-grid" style="margin-top:10px">
+    <div class="dia-card">
+      <div class="dia-num">29 <span class="dia-dow">Lun</span></div>
+      <div class="stories-badge">📱 Stories: "Ya queda poco. ¿Están listas?"</div>
+      <div class="post-item tipo-lanzamiento">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Carrusel IG · 6 slides &nbsp;|&nbsp; Video TK · 45 seg</div>
+        <div class="post-hook">"Las 3 razones por las que este es el año en que todo cambia para ti"</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card">
+      <div class="dia-num">30 <span class="dia-dow">Mar</span></div>
+      <div class="stories-badge">📱 Stories: "Mañana lo anunciamos. Activa las notificaciones."</div>
+      <div class="post-item tipo-lanzamiento">
+        <div class="post-plataforma"><span class="plat-badge plat-ambas">IG + TK</span></div>
+        <div class="post-formato">Reel · 30 seg</div>
+        <div class="post-hook">Maria Elena: "Prepárense. Algo grande llega en julio. Esto es todo lo que les puedo decir por ahora." — Cierre del mes con máximo FOMO</div>
+        <div class="post-hora">📍 10:00 AM</div>
+      </div>
+    </div>
+    <div class="dia-card vacio"></div>
+    <div class="dia-card vacio"></div>
+    <div class="dia-card vacio"></div>
+    <div class="dia-card vacio"></div>
+    <div class="dia-card vacio"></div>
+  </div>
+
+</div>
+
+<footer>Calendario generado el 20 Mayo 2026 &nbsp;·&nbsp; Maria Elena Badillo — Centro de Bienestar &nbsp;·&nbsp; Instagram & TikTok Strategy</footer>
+
+</body>
+</html>
