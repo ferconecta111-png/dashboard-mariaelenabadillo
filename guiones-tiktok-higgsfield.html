@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9 Guiones TikTok · Higgsfield · Ansiedad</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07080f;--s:#0f1018;--card:#161720;--border:#22243a;
+  --p:#818cf8;--teal:#2dd4bf;--green:#4ade80;--gold:#fbbf24;
+  --pink:#f472b6;--red:#f87171;--text:#eef0ff;--muted:#6b7280;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6}
+
+nav{position:sticky;top:0;z-index:99;background:rgba(7,8,15,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;overflow-x:auto;gap:.2rem}
+.nb{font-weight:800;font-size:.85rem;margin-right:1.2rem;white-space:nowrap;background:linear-gradient(90deg,var(--p),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+nav a{color:var(--muted);text-decoration:none;font-size:.76rem;padding:.8rem .85rem;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s}
+nav a:hover{color:var(--text);border-bottom-color:var(--p)}
+
+.hero{padding:3rem 1.5rem 2.5rem;text-align:center;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(129,140,248,.18) 0%,transparent 70%);border-bottom:1px solid var(--border)}
+.badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.3);border-radius:20px;padding:.3rem 1rem;font-size:.72rem;font-weight:700;color:var(--p);letter-spacing:1px;text-transform:uppercase;margin-bottom:1.2rem}
+.hero h1{font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:900;line-height:1.1;margin-bottom:.7rem}
+.hero h1 .g{background:linear-gradient(135deg,var(--p),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{color:var(--muted);font-size:.9rem;max-width:560px;margin:0 auto 1.5rem}
+
+.rules-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem;max-width:900px;margin:0 auto}
+.rule{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;font-size:.8rem}
+.rule .ri{font-size:1.4rem;margin-bottom:.3rem}
+.rule strong{display:block;font-weight:700;font-size:.82rem;margin-bottom:.2rem}
+.rule p{color:var(--muted);font-size:.76rem}
+
+.wrap{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+
+/* VIDEO CARD */
+.video-card{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:2rem;overflow:hidden;transition:.2s}
+.video-card:hover{border-color:rgba(129,140,248,.35)}
+.vc-header{padding:1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.5rem}
+.vc-left{display:flex;align-items:center;gap:.8rem}
+.vc-num{width:2.5rem;height:2.5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.95rem;flex-shrink:0}
+.vc-meta h3{font-size:1rem;font-weight:800}
+.vc-meta .sub{font-size:.78rem;color:var(--muted);margin-top:.1rem}
+.vc-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.tag{display:inline-block;padding:.18rem .6rem;border-radius:8px;font-size:.68rem;font-weight:700}
+.tag.edu{background:rgba(129,140,248,.12);color:var(--p)}
+.tag.emo{background:rgba(244,114,182,.12);color:var(--pink)}
+.tag.acc{background:rgba(45,212,191,.12);color:var(--teal)}
+.tag.dur{background:rgba(251,191,36,.1);color:var(--gold)}
+
+.vc-body{padding:1.3rem}
+
+/* SCRIPT SECTIONS */
+.script-section{margin-bottom:1.2rem}
+.ss-label{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.ss-label.hook{color:var(--gold)}
+.ss-label.body{color:var(--p)}
+.ss-label.cta{color:var(--teal)}
+.ss-label .dot{width:.5rem;height:.5rem;border-radius:50%;background:currentColor}
+
+.script-box{background:var(--s);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;font-size:.92rem;line-height:1.75;position:relative}
+.script-box .pause{display:inline-block;background:rgba(251,191,36,.1);color:var(--gold);border-radius:4px;padding:0 .3rem;font-size:.72rem;font-weight:700;margin:0 .1rem;vertical-align:middle}
+.script-box .emphasis{color:var(--text);font-weight:700}
+.script-box .question{color:var(--p);font-weight:600}
+
+.hook-box{background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(251,191,36,.03));border:1px solid rgba(251,191,36,.25);border-radius:10px;padding:1.1rem 1.3rem;font-size:.98rem;line-height:1.7;font-weight:600;color:var(--gold)}
+
+.tips-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem}
+@media(max-width:550px){.tips-row{grid-template-columns:1fr}}
+.tip-box{background:var(--s);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-size:.8rem}
+.tip-box .tl{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:.3rem}
+.tip-box p{color:var(--muted);line-height:1.5}
+.tip-box strong{color:var(--text)}
+
+.hashtag-row{margin-top:.8rem;font-size:.8rem;color:var(--p);font-style:italic}
+
+/* Color per video */
+.v1 .vc-num{background:rgba(129,140,248,.15);color:var(--p)}
+.v1{border-top:3px solid var(--p)}
+.v2 .vc-num{background:rgba(244,114,182,.15);color:var(--pink)}
+.v2{border-top:3px solid var(--pink)}
+.v3 .vc-num{background:rgba(45,212,191,.15);color:var(--teal)}
+.v3{border-top:3px solid var(--teal)}
+.v4 .vc-num{background:rgba(251,191,36,.15);color:var(--gold)}
+.v4{border-top:3px solid var(--gold)}
+.v5 .vc-num{background:rgba(129,140,248,.15);color:var(--p)}
+.v5{border-top:3px solid var(--p)}
+.v6 .vc-num{background:rgba(244,114,182,.15);color:var(--pink)}
+.v6{border-top:3px solid var(--pink)}
+.v7 .vc-num{background:rgba(45,212,191,.15);color:var(--teal)}
+.v7{border-top:3px solid var(--teal)}
+.v8 .vc-num{background:rgba(251,191,36,.15);color:var(--gold)}
+.v8{border-top:3px solid var(--gold)}
+.v9 .vc-num{background:rgba(74,222,128,.15);color:var(--green)}
+.v9{border-top:3px solid var(--green)}
+
+.higgsfield-box{background:rgba(129,140,248,.05);border:1px solid rgba(129,140,248,.2);border-radius:10px;padding:.9rem 1.1rem;margin-top:.9rem;font-size:.8rem}
+.higgsfield-box .hl{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--p);margin-bottom:.4rem}
+.higgsfield-box p{color:var(--muted);line-height:1.55}
+.higgsfield-box strong{color:var(--text)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:2.5rem 0}
+
+.final-box{background:linear-gradient(135deg,rgba(129,140,248,.12),rgba(45,212,191,.06));border:1px solid rgba(129,140,248,.3);border-radius:14px;padding:2rem;text-align:center;margin-top:2rem}
+.final-box h2{font-size:1.3rem;font-weight:800;margin-bottom:.7rem}
+.final-box p{color:var(--muted);font-size:.88rem;line-height:1.7;max-width:560px;margin:0 auto}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nb">🎬 9 Guiones TikTok</span>
+  <a href="#v1">1</a><a href="#v2">2</a><a href="#v3">3</a><a href="#v4">4</a>
+  <a href="#v5">5</a><a href="#v6">6</a><a href="#v7">7</a><a href="#v8">8</a><a href="#v9">9</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">🎙️ Higgsfield · TikTok · Bienestar emocional</div>
+  <h1>Los primeros 9 videos<br><span class="g">que construyen tu audiencia</span></h1>
+  <p class="hero-sub">Puro valor, cero venta. El objetivo es que te sigan, te guarden y confíen en ti antes del video 10.</p>
+  <div class="rules-row">
+    <div class="rule"><div class="ri">⏱️</div><strong>30–45 seg</strong><p>Duración ideal por video</p></div>
+    <div class="rule"><div class="ri">🎯</div><strong>Hook 0–3 seg</strong><p>Los primeros 3 segundos lo deciden todo</p></div>
+    <div class="rule"><div class="ri">🚫</div><strong>Sin venta</strong><p>Los 9 primeros son solo valor</p></div>
+    <div class="rule"><div class="ri">💾</div><strong>Busca saves</strong><p>El save es la métrica reina en TikTok</p></div>
+    <div class="rule"><div class="ri">🗣️</div><strong>Tono natural</strong><p>Como hablarle a una amiga</p></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- VIDEO 1 -->
+<div class="video-card v1" id="v1" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">1</div>
+      <div class="vc-meta">
+        <h3>5 síntomas físicos que NO sabías que eran ansiedad</h3>
+        <div class="sub">Pilar educativo · Lista · Alto potencial de saves</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag edu">Educativo</span>
+      <span class="tag dur">~35 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK — primeros 3 segundos</div>
+      <div class="hook-box">¿Sabías que la ansiedad tiene síntomas físicos que casi nadie relaciona con el estrés?</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        ¿Sabías que la ansiedad tiene síntomas físicos que casi nadie relaciona con el estrés? <span class="pause">[pausa]</span><br><br>
+        Número uno: <span class="emphasis">rechinar los dientes mientras duermes.</span> <span class="pause">[pausa]</span> No es dental, es tensión nerviosa.<br><br>
+        Número dos: <span class="emphasis">las manos y los pies siempre fríos.</span> Tu sistema nervioso está en alerta y corta la circulación.<br><br>
+        Número tres: <span class="emphasis">ese nudo en el estómago</span> que aparece sin razón aparente.<br><br>
+        Número cuatro: <span class="emphasis">picazón o cosquilleo en la piel</span> sin causa médica.<br><br>
+        Y número cinco, el más ignorado: <span class="emphasis">la fatiga extrema</span> aunque hayas dormido ocho horas.<br><br>
+        <span class="question">¿Cuántos reconoces?</span> Cuéntame en los comentarios.
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Guarda este video para compartirlo con alguien que lo necesite.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> cálido, cercano, como explicándole a una amiga · <strong>Velocidad:</strong> media, con pausa real entre cada número · <strong>Énfasis:</strong> subir ligeramente el volumen en cada síntoma numerado · <strong>Expresión:</strong> seria pero empática, no dramática</p>
+    </div>
+    <div class="hashtag-row">#ansiedad #sintomadeansiedad #saludmental #ansiedadlatente #bienestareemocional #fyp</div>
+  </div>
+</div>
+
+<!-- VIDEO 2 -->
+<div class="video-card v2" id="v2" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">2</div>
+      <div class="vc-meta">
+        <h3>El médico me dijo que estaba bien — pero yo no lo estaba</h3>
+        <div class="sub">Pilar emocional · Storytime · Alto potencial de comentarios</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag emo">Emocional</span>
+      <span class="tag dur">~40 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">Fui al médico tres veces en un mes. Análisis perfectos. Y yo me sentía fatal.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        Fui al médico tres veces en un mes. Análisis perfectos. Electrocardiograma normal. Y yo me sentía fatal. <span class="pause">[pausa larga]</span><br><br>
+        Palpitaciones. Sensación de que me faltaba el aire. Las manos dormidas. Me despertaba a las tres de la mañana con el corazón acelerado.<br><br>
+        Y los médicos me decían: <span class="emphasis">"Todo está bien, estás sana."</span> <span class="pause">[pausa]</span><br><br>
+        Lo que nadie me explicó es que <span class="emphasis">todos esos síntomas eran físicos, pero el origen era emocional.</span> Era mi sistema nervioso completamente agotado.<br><br>
+        Si esto te suena conocido, <span class="question">¿me lo cuentas en los comentarios?</span> <span class="pause">[pausa]</span> Quiero saber si eres la única o si somos muchas.
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Sígueme porque esta semana voy a hablar más de esto.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> vulnerable, honesto, íntimo — como confesar algo difícil · <strong>Velocidad:</strong> lenta al principio, más fluida al explicar · <strong>Pausa larga:</strong> de verdad, 1.5 segundos después de "me sentía fatal" · <strong>Expresión:</strong> ligeramente triste pero con esperanza al final</p>
+    </div>
+    <div class="hashtag-row">#ansiedad #storytime #saludmental #sistemanervioso #palpitaciones #fyp #parati</div>
+  </div>
+</div>
+
+<!-- VIDEO 3 -->
+<div class="video-card v3" id="v3" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">3</div>
+      <div class="vc-meta">
+        <h3>Por qué se te duermen las manos cuando estás estresada</h3>
+        <div class="sub">Pilar educativo · Explicación científica simple · Saves altos</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag edu">Educativo</span>
+      <span class="tag dur">~35 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">¿Se te duermen las manos sin razón? Esto es lo que está pasando en tu cuerpo.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        ¿Se te duermen las manos sin razón? <span class="pause">[pausa]</span> Esto es lo que está pasando en tu cuerpo y nadie te lo explica.<br><br>
+        Cuando tu sistema nervioso detecta peligro — real o imaginado — <span class="emphasis">activa el modo supervivencia.</span> <span class="pause">[pausa]</span><br><br>
+        En ese estado, la sangre se concentra en los órganos vitales y se aleja de las extremidades. <span class="emphasis">Por eso las manos se enfrían, se adormecen, hormiguean.</span><br><br>
+        El problema es que con la ansiedad crónica, <span class="emphasis">el cuerpo vive en ese modo de alerta constantemente.</span> <span class="pause">[pausa]</span> No es que algo esté roto. Es que llevas demasiado tiempo en emergencia.<br><br>
+        <span class="question">¿Te pasa esto?</span> Guarda este video, lo vamos a necesitar.
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Guárdalo y compártelo con alguien que siempre tenga las manos frías.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> explicativo, tipo profesora accesible, no clínico · <strong>Énfasis:</strong> "modo supervivencia" y "emergencia" con pausa antes · <strong>Velocidad:</strong> media-lenta, dejar que la explicación respire · <strong>Expresión:</strong> seria pero accesible, como revelando un secreto</p>
+    </div>
+    <div class="hashtag-row">#ansiedad #manosdormidas #sistemanervioso #saludfisica #curiosidadescientificas #fyp</div>
+  </div>
+</div>
+
+<!-- VIDEO 4 -->
+<div class="video-card v4" id="v4" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">4</div>
+      <div class="vc-meta">
+        <h3>Técnica 4-7-8: calma tu cuerpo en 60 segundos</h3>
+        <div class="sub">Pilar accionable · Tutorial · Máximos saves y compartidos</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag acc">Accionable</span>
+      <span class="tag dur">~45 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">Cuando la ansiedad te agarra de noche, haz esto. En 60 segundos sientes la diferencia.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        Cuando la ansiedad te agarra de noche, haz esto. En 60 segundos sientes la diferencia. <span class="pause">[pausa]</span><br><br>
+        Se llama la técnica cuatro, siete, ocho. Y activa directamente tu sistema nervioso parasimpático — el que le dice a tu cuerpo: <span class="emphasis">"Ya pasó. Estás a salvo."</span> <span class="pause">[pausa]</span><br><br>
+        Primero: <span class="emphasis">inhala por la nariz contando cuatro segundos.</span> <span class="pause">[pausa]</span><br>
+        Segundo: <span class="emphasis">retén el aire contando siete.</span> <span class="pause">[pausa]</span><br>
+        Tercero: <span class="emphasis">exhala lento por la boca contando ocho.</span> <span class="pause">[pausa]</span><br><br>
+        Repite cuatro veces. <span class="pause">[pausa]</span><br><br>
+        Tu frecuencia cardíaca baja. La tensión muscular se suelta. El pánico empieza a ceder.<br><br>
+        <span class="question">¿Lo vas a intentar esta noche?</span>
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Guarda este video para cuando lo necesites a las 3 de la mañana.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> tranquilo, pausado, casi terapéutico · <strong>Velocidad:</strong> lenta en los pasos de la técnica — dejar espacio para que se visualice · <strong>Pausa importante:</strong> después de cada número de la técnica · <strong>Expresión:</strong> serena, reconfortante, confiable</p>
+    </div>
+    <div class="hashtag-row">#tecnicaderespiracion #ansiedad #478 #calmalansiedad #respiracion #parati #fyp</div>
+  </div>
+</div>
+
+<!-- VIDEO 5 -->
+<div class="video-card v5" id="v5" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">5</div>
+      <div class="vc-meta">
+        <h3>Por qué tienes colon irritable aunque comas bien</h3>
+        <div class="sub">Pilar educativo · Síntoma específico · Muy buscado en TikTok</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag edu">Educativo</span>
+      <span class="tag dur">~40 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">Tienes colon irritable, comes bien, evitas todo lo que dicen... y sigue igual. Esto es lo que nadie te está diciendo.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        Tienes colon irritable, comes bien, evitas todo lo que dicen que lo empeora... y sigue igual. <span class="pause">[pausa]</span> Esto es lo que nadie te está diciendo.<br><br>
+        El intestino tiene más de <span class="emphasis">cien millones de neuronas.</span> Los científicos lo llaman el segundo cerebro. Y responde directamente al estrés y la ansiedad.<br><br>
+        Cuando tu mente está en estado de alerta constante, <span class="emphasis">tu intestino también lo está.</span> <span class="pause">[pausa]</span> No importa lo que comas. La inflamación, los espasmos, el dolor — vienen de arriba.<br><br>
+        No es el gluten. No es el café. <span class="emphasis">Es tu sistema nervioso.</span> <span class="pause">[pausa]</span><br><br>
+        Tratar solo la dieta sin atender la ansiedad es como regar una planta enferma de raíz. <span class="question">¿Alguien más lo está viviendo así?</span>
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Guarda esto y compártelo — hay mucha gente que necesita escucharlo.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> revelador, como compartiendo información valiosa que pocos conocen · <strong>Énfasis fuerte:</strong> "cien millones de neuronas" y "Es tu sistema nervioso" · <strong>Pausa antes:</strong> de la metáfora de la planta · <strong>Expresión:</strong> convencida, directa, con energía de "te voy a decir la verdad"</p>
+    </div>
+    <div class="hashtag-row">#coloniritable #ansiedad #segundocerebro #intestino #saluddigestiva #fyp #parati</div>
+  </div>
+</div>
+
+<!-- VIDEO 6 -->
+<div class="video-card v6" id="v6" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">6</div>
+      <div class="vc-meta">
+        <h3>Qué es una crisis de ansiedad y cómo saber si la estás teniendo</h3>
+        <div class="sub">Pilar educativo · Muy buscado · Alto tráfico orgánico</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag edu">Educativo</span>
+      <span class="tag dur">~40 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">Muchas personas han tenido una crisis de ansiedad y no sabían que era eso. Esto es lo que sientes cuando ocurre.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        Muchas personas han tenido una crisis de ansiedad y no sabían que era eso. <span class="pause">[pausa]</span> Esto es lo que sientes cuando ocurre.<br><br>
+        El corazón se acelera de golpe. <span class="pause">[pausa]</span> Sientes que te falta el aire. <span class="pause">[pausa]</span> Las manos hormiguean. Hay una sensación de que algo terrible va a pasar, aunque no sabes qué.<br><br>
+        Algunas personas van a urgencias pensando que tienen un infarto. <span class="pause">[pausa]</span> Y los análisis salen normales.<br><br>
+        Una crisis de ansiedad <span class="emphasis">no es peligrosa, pero se siente como si lo fuera.</span> Esa es la parte más dura.<br><br>
+        Lo que hay que recordar en ese momento es: <span class="emphasis">va a pasar. Siempre pasa.</span> Tu cuerpo no puede mantener ese estado más de diez minutos. <span class="pause">[pausa]</span><br><br>
+        <span class="question">¿Has vivido algo así?</span>
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Sígueme. Esta semana hablo de cómo manejarlas cuando aparecen.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> empático, contenedor, como alguien que sabe de lo que habla por experiencia propia · <strong>Ritmo:</strong> pausas reales entre síntomas para que el espectador los vaya reconociendo · <strong>Frase clave:</strong> "Va a pasar. Siempre pasa." — decirla despacio, con convicción · <strong>Expresión:</strong> comprensiva, cálida</p>
+    </div>
+    <div class="hashtag-row">#crisisansiedad #ataquedepanico #ansiedad #saludmental #fyp #parati #comocalmarlaansiedad</div>
+  </div>
+</div>
+
+<!-- VIDEO 7 -->
+<div class="video-card v7" id="v7" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">7</div>
+      <div class="vc-meta">
+        <h3>3 cosas que le pasan a tu cuerpo cuando llevas años con estrés crónico</h3>
+        <div class="sub">Pilar educativo · Impacto acumulado · Urgencia emocional</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag edu">Educativo</span>
+      <span class="tag dur">~40 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">Si llevas más de un año con estrés constante, tu cuerpo ya está pagando el precio. Estos son los tres signos.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        Si llevas más de un año con estrés constante, tu cuerpo ya está pagando el precio. <span class="pause">[pausa]</span> Estos son los tres signos físicos que nadie te enseñó a identificar.<br><br>
+        Primero: <span class="emphasis">el cortisol elevado cronicamente inflama.</span> Dolores de cabeza frecuentes, contracturas que no ceden, piel sensible. No es mala suerte. Es química.<br><br>
+        Segundo: <span class="emphasis">el sistema inmune se debilita.</span> Si siempre te resfrías, si tardas en recuperarte, si cualquier cosa te deja sin energía — el estrés está detrás.<br><br>
+        Tercero: <span class="emphasis">el ciclo del sueño se rompe.</span> Te cuesta dormirte, te despiertas de madrugada, o duermes diez horas y sigues agotada.<br><br>
+        El cuerpo habla. <span class="pause">[pausa]</span> La pregunta es si lo estamos escuchando.
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Guarda esto. Y cuéntame en los comentarios cuántos reconoces.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> serio pero sin alarmar, como una advertencia amigable · <strong>Énfasis:</strong> en los tres conceptos clave con pausa natural antes de cada uno · <strong>Frase final:</strong> "El cuerpo habla. La pregunta es si lo estamos escuchando" — decirla despacio, mirar directo a cámara · <strong>Expresión:</strong> directa, comprometida</p>
+    </div>
+    <div class="hashtag-row">#estrescronico #cortisol #saludfisica #insomnio #ansiedad #fyp #bienestareemocional</div>
+  </div>
+</div>
+
+<!-- VIDEO 8 -->
+<div class="video-card v8" id="v8" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">8</div>
+      <div class="vc-meta">
+        <h3>Por qué estás siempre cansada aunque no hagas nada</h3>
+        <div class="sub">Pilar emocional · Muy identificable · Comentarios altos</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag emo">Emocional</span>
+      <span class="tag dur">~35 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">¿Siempre cansada aunque no hagas nada? No es flojera. Tu cuerpo te está diciendo algo importante.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        ¿Siempre cansada aunque no hagas nada? <span class="pause">[pausa]</span> No es flojera. Tu cuerpo te está diciendo algo importante.<br><br>
+        Cuando la mente está en modo alerta constante — preocupándose, anticipando, controlando — <span class="emphasis">consume una cantidad brutal de energía.</span> <span class="pause">[pausa]</span><br><br>
+        El cerebro ansioso trabaja el doble que uno en calma. Aunque estés tumbada en el sofá, por dentro estás corriendo un maratón.<br><br>
+        Esa fatiga no se cura con dormir más. <span class="pause">[pausa]</span> Se cura <span class="emphasis">aprendiendo a apagar el modo alerta.</span><br><br>
+        <span class="question">¿Te identificas con esto?</span> <span class="pause">[pausa]</span> Escríbeme "YO" en los comentarios si esto eres tú.
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL</div>
+      <div class="script-box">Sígueme porque el próximo video hablo de cómo empezar a apagarlo.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> validador, como quien finalmente da permiso de no sentirse culpable · <strong>Énfasis:</strong> "No es flojera" — con convicción, y "maratón" — con energía · <strong>Pedir YO en comentarios:</strong> pausa después de la pregunta para que se sienta genuina · <strong>Expresión:</strong> comprensiva, directa, cálida</p>
+    </div>
+    <div class="hashtag-row">#fatiga #ansiedad #siemprecansada #energiabaja #saludmental #fyp #identificate</div>
+  </div>
+</div>
+
+<!-- VIDEO 9 -->
+<div class="video-card v9" id="v9" style="scroll-margin-top:55px">
+  <div class="vc-header">
+    <div class="vc-left">
+      <div class="vc-num">9</div>
+      <div class="vc-meta">
+        <h3>La diferencia entre el estrés normal y la ansiedad que necesita atención</h3>
+        <div class="sub">Pilar educativo · Puente al video 10 · Prepara la venta</div>
+      </div>
+    </div>
+    <div class="vc-tags">
+      <span class="tag edu">Educativo</span>
+      <span class="tag acc">Puente v.10</span>
+      <span class="tag dur">~45 seg</span>
+    </div>
+  </div>
+  <div class="vc-body">
+    <div class="script-section">
+      <div class="ss-label hook"><span class="dot"></span>HOOK</div>
+      <div class="hook-box">No todo estrés es ansiedad. Pero hay una señal muy clara que te dice cuándo cruzaste la línea.</div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label body"><span class="dot"></span>GUION COMPLETO</div>
+      <div class="script-box">
+        No todo estrés es ansiedad. Pero hay una señal muy clara que te dice cuándo cruzaste la línea. <span class="pause">[pausa]</span><br><br>
+        El estrés normal tiene una causa. Termina cuando termina el problema. <span class="pause">[pausa]</span> La ansiedad no necesita causa real. <span class="emphasis">Existe aunque todo esté bien.</span><br><br>
+        La señal más clara es esta: <span class="pause">[pausa]</span> cuando <span class="emphasis">tu cuerpo ya no sabe estar en calma.</span> Cuando el descanso no descansa. Cuando no recuerdas cómo es no estar en guardia.<br><br>
+        Eso ya no es estrés puntual. Eso es el sistema nervioso atrapado en un ciclo que necesita ayuda para salir.<br><br>
+        Esta semana voy a compartir algo que me ayudó a entender exactamente por qué el cuerpo reacciona así y cómo empezar a revertirlo. <span class="pause">[pausa]</span><br><br>
+        <span class="question">¿Estás en el grupo del estrés o en el de la ansiedad crónica?</span> Cuéntame.
+      </div>
+    </div>
+    <div class="script-section">
+      <div class="ss-label cta"><span class="dot"></span>CTA FINAL — Prepara el video 10</div>
+      <div class="script-box">Activa las notificaciones. El próximo video lo vas a querer ver.</div>
+    </div>
+    <div class="higgsfield-box">
+      <div class="hl">⚙️ Instrucciones para Higgsfield</div>
+      <p><strong>Tono:</strong> reflexivo, como llegando a una conclusión importante juntas · <strong>Énfasis máximo:</strong> "tu cuerpo ya no sabe estar en calma" — pausa larga antes, decirlo despacio · <strong>El anticipo del video 10:</strong> decirlo con genuina emoción, como quien va a revelar algo valioso · <strong>Expresión:</strong> seria pero esperanzadora al final</p>
+    </div>
+    <div class="hashtag-row">#ansiedad #estres #saludmental #ansiedadcronica #sistemanervioso #fyp #siguemeee</div>
+  </div>
+</div>
+
+<hr style="border:none;border-top:1px solid var(--border);margin:2rem 0">
+
+<div class="final-box">
+  <h2>¿Qué sigue después del video 9?</h2>
+  <p>
+    El video 10 es el primero donde mencionas el recurso de forma natural.<br>
+    No como publicidad — como una recomendación genuina de algo que encontraste.<br><br>
+    <strong style="color:var(--p)">"Llevo semanas hablando de los síntomas físicos de la ansiedad y muchos me han preguntado qué recurso recomiendo. Les comparto lo que yo revisé y que me pareció muy completo → link en bio."</strong><br><br>
+    Con 9 videos de valor acumulado, esa frase convierte. Porque no viene de la nada — viene de 9 capítulos de confianza.
+  </p>
+</div>
+
+</div>
+
+<div style="background:var(--s);border-top:1px solid var(--border);padding:1.5rem;text-align:center;color:var(--muted);font-size:.8rem;margin-top:2rem">
+  9 Guiones TikTok · Higgsfield · Afiliada Hotmart · Fernanda Conde · Mayo 2026
+</div>
+
+<script>
+const ls = document.querySelectorAll('nav a');
+const ids = ['v1','v2','v3','v4','v5','v6','v7','v8','v9'];
+window.addEventListener('scroll', () => {
+  let c = '';
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && scrollY >= el.offsetTop - 65) c = id;
+  });
+  ls.forEach(a => a.style.color = a.getAttribute('href')==='#'+c ? 'var(--p)' : '');
+});
+</script>
+</body>
+</html>
