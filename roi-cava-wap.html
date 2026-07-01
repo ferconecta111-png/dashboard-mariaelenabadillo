@@ -439,6 +439,291 @@
   </div>
 </div>
 
+<!-- DESGLOSE DE GASTO POR CAMPAÑA -->
+<div class="section-title">Desglose completo del gasto — las 4 campañas CAVA</div>
+
+<div class="grid grid-2">
+  <!-- Gráfica de torta -->
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Distribución del presupuesto por campaña</div>
+    <div class="chart-wrap"><canvas id="chartGastoCampanas" height="260"></canvas></div>
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+        <span style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#4ADE80;display:inline-block"></span>RMK CAVA WAP Copia</span>
+        <span style="color:var(--gold);font-weight:700;">$846,834 COP <span style="color:var(--text-dim);font-weight:400;">(52.5%)</span></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+        <span style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#C9A55A;display:inline-block"></span>RMK CAVA Ventas Web</span>
+        <span style="color:var(--gold);font-weight:700;">$532,976 COP <span style="color:var(--text-dim);font-weight:400;">(33.1%)</span></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+        <span style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#9B7FD4;display:inline-block"></span>AWS CAVA Visitas Perfil</span>
+        <span style="color:var(--gold);font-weight:700;">$204,737 COP <span style="color:var(--text-dim);font-weight:400;">(12.7%)</span></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+        <span style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#F87171;display:inline-block"></span>RMK CAVA WAP Original</span>
+        <span style="color:var(--gold);font-weight:700;">$27,365 COP <span style="color:var(--text-dim);font-weight:400;">(1.7%)</span></span>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;justify-content:space-between;font-size:14px;font-weight:700;">
+        <span style="color:var(--text)">TOTAL</span>
+        <span style="color:var(--green)">$1,611,912 COP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla detallada -->
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Métricas por campaña</div>
+
+    <!-- Campana 1 -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-left:3px solid #4ADE80;border-radius:10px;padding:14px 16px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">RMK CAVA | Ventas WhatsApp - Copia</div>
+          <div style="font-size:11px;color:var(--green);margin-top:2px;">10–30 jun · WAP · Principal ⭐</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:18px;font-weight:800;color:var(--green)">$846,834</div>
+          <div style="font-size:10px;color:var(--text-dim)">COP · 52.5%</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text)">52,049</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Impresiones</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--gold)">4.12%</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">CTR</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--green)">301</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Msgs WAP</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--purple-light)">$2,813</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">COP/conv</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campana 2 -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-left:3px solid #C9A55A;border-radius:10px;padding:14px 16px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">RMK CAVA | Ventas Web</div>
+          <div style="font-size:11px;color:var(--gold);margin-top:2px;">2–18 jun · Conversiones web</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:18px;font-weight:800;color:var(--gold)">$532,976</div>
+          <div style="font-size:10px;color:var(--text-dim)">COP · 33.1%</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text)">51,553</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Impresiones</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--gold)">5.78%</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">CTR</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--yellow)">68</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Checkouts</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--red)">⚠️ Pixel</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Duplicado</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campana 3 -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-left:3px solid #9B7FD4;border-radius:10px;padding:14px 16px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">AWS CAVA | Visitas Perfil</div>
+          <div style="font-size:11px;color:var(--purple-light);margin-top:2px;">9–16 jun · CO MX US AR CL PA ES IT · Awareness</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:18px;font-weight:800;color:var(--purple-light)">$204,737</div>
+          <div style="font-size:10px;color:var(--text-dim)">COP · 12.7%</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text)">16,544</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Impresiones</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--gold)">4.90%</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">CTR</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text)">810</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Clics</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text)">11,224</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Alcance</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campana 4 -->
+    <div style="background:var(--card2);border:1px solid var(--border);border-left:3px solid #F87171;border-radius:10px;padding:14px 16px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">RMK CAVA | Ventas WhatsApp (original)</div>
+          <div style="font-size:11px;color:var(--red);margin-top:2px;">9 jun+ · WAP · Sin conversiones activas</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:18px;font-weight:800;color:var(--red)">$27,365</div>
+          <div style="font-size:10px;color:var(--text-dim)">COP · 1.7%</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text)">12,464</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Impresiones</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--gold)">2.90%</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">CTR</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--text-dim)">0</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Msgs WAP</div>
+        </div>
+        <div style="text-align:center;background:var(--card);border-radius:6px;padding:8px 4px;">
+          <div style="font-size:15px;font-weight:700;color:var(--purple-light)">$2,196</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">CPM</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- GASTO TOTAL CUENTA + IMPUESTOS -->
+<div class="section-title">Gasto total en pauta — 1 al 30 junio 2026 · todas las campañas</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Desglose por campaña — gasto neto Meta</div>
+
+    <div style="display:flex;flex-direction:column;gap:6px;">
+
+      <!-- Fila encabezado -->
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:0 0 8px;border-bottom:1px solid var(--border);">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim)">Campaña</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);text-align:right">Gasto COP</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);text-align:right">% del total</div>
+      </div>
+
+      <!-- CAVA -->
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text)">RMK CAVA | Ventas WhatsApp - Copia</div>
+          <div style="font-size:10px;color:var(--green)">CAVA · WAP · 10–30 jun</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);text-align:right">$846,834</div>
+        <div style="text-align:right"><span class="tl-chip green" style="font-size:10px">50.1%</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text)">RMK CAVA | Ventas Web</div>
+          <div style="font-size:10px;color:var(--gold)">CAVA · Web · 2–18 jun</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);text-align:right">$532,976</div>
+        <div style="text-align:right"><span class="tl-chip gold" style="font-size:10px">31.6%</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text)">AWS CAVA | Visitas Perfil</div>
+          <div style="font-size:10px;color:var(--purple-light)">CAVA · Awareness · 9–16 jun</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);text-align:right">$204,737</div>
+        <div style="text-align:right"><span class="tl-chip purple" style="font-size:10px">12.1%</span></div>
+      </div>
+
+      <!-- Volviendo al Ser -->
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text)">AWS | Visitas Perfil | Volviendo al Ser</div>
+          <div style="font-size:10px;color:var(--text-dim)">Otro producto · Awareness · jun</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);text-align:right">$77,017</div>
+        <div style="text-align:right"><span class="tl-chip gray" style="font-size:10px">4.6%</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--text)">RMK CAVA | Ventas WhatsApp (original)</div>
+          <div style="font-size:10px;color:var(--red)">CAVA · WAP · 9 jun+</div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);text-align:right">$27,365</div>
+        <div style="text-align:right"><span class="tl-chip red" style="font-size:10px">1.6%</span></div>
+      </div>
+
+      <!-- Totales -->
+      <div style="background:var(--card2);border-radius:8px;padding:12px 0 4px;">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
+          <div style="font-size:13px;color:var(--text-muted)">Subtotal gasto neto (Meta)</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);text-align:right">$1,688,929 COP</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
+          <div style="font-size:13px;color:var(--yellow)">IVA 19% servicios digitales (Colombia)</div>
+          <div style="font-size:14px;font-weight:700;color:var(--yellow);text-align:right">$320,897 COP</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 12px;border-top:1px solid var(--border);margin-top:4px;">
+          <div style="font-size:14px;font-weight:700;color:var(--text)">TOTAL REAL PAGADO (con impuestos)</div>
+          <div style="font-size:16px;font-weight:800;color:var(--green);text-align:right">$2,009,826 COP</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Gráfica barras horizontales -->
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Gasto por campaña (COP)</div>
+    <div class="chart-wrap"><canvas id="chartGastoBarras" height="280"></canvas></div>
+    <div style="margin-top:20px;">
+      <div class="attr-box">
+        <div class="attr-title">Sobre el IVA del 19%</div>
+        <p>Meta Platforms cobra <strong>IVA del 19%</strong> sobre la pauta digital en Colombia según la Ley de Economía Digital. Este impuesto se aplica al total del gasto neto y aparece en la factura electrónica de Meta. El gasto neto es lo que muestra el Administrador de Anuncios; el total real pagado incluye el IVA.</p>
+      </div>
+    </div>
+    <div style="margin-top:12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;">Resumen de inversión CAVA vs total cuenta</div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+        <span style="color:var(--text-muted)">Solo campañas CAVA (neto)</span>
+        <span style="color:var(--gold);font-weight:700;">$1,611,912 COP</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+        <span style="color:var(--text-muted)">Otras campañas (Volviendo al Ser)</span>
+        <span style="color:var(--text-dim);font-weight:700;">$77,017 COP</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+        <span style="color:var(--text-muted)">Total neto cuenta</span>
+        <span style="color:var(--text);font-weight:700;">$1,688,929 COP</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;">
+        <span style="color:var(--yellow)">+ IVA 19%</span>
+        <span style="color:var(--yellow);font-weight:700;">$320,897 COP</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:1px solid var(--border);margin-top:4px;font-size:14px;font-weight:800;">
+        <span style="color:var(--text)">Total real pagado junio</span>
+        <span style="color:var(--green)">$2,009,826 COP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FÓRMULAS -->
 <div class="section-title">Fórmulas — cómo se calculan ROAS y ROI</div>
 <div class="grid grid-2">
@@ -776,6 +1061,54 @@ new Chart(document.getElementById('chartFunnel'), {
     responsive: true,
     plugins: { legend: { labels: { color: '#8B84A8', font: { size: 11 } } } },
     cutout: '60%'
+  }
+});
+
+// Barras horizontales gasto por campaña
+new Chart(document.getElementById('chartGastoBarras'), {
+  type: 'bar',
+  data: {
+    labels: ['WAP Copia','Ventas Web','Visitas Perfil CAVA','Volviendo al Ser','WAP Original'],
+    datasets: [{
+      label: 'Gasto COP',
+      data: [846834, 532976, 204737, 77017, 27365],
+      backgroundColor: ['rgba(74,222,128,0.8)','rgba(201,165,90,0.8)','rgba(155,127,212,0.8)','rgba(138,132,168,0.5)','rgba(248,113,113,0.7)'],
+      borderColor: ['#4ADE80','#C9A55A','#9B7FD4','#5A5478','#F87171'],
+      borderWidth: 2, borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` $${ctx.parsed.x.toLocaleString('es-CO')} COP` } }
+    },
+    scales: {
+      x: { ticks: { color:'#5A5478', font:{size:10}, callback: v => '$'+(v/1000)+'K' }, grid:{color:'#1C192A'} },
+      y: { ticks: { color:'#8B84A8', font:{size:11} }, grid:{color:'#1C192A'} }
+    }
+  }
+});
+
+// Torta gasto por campaña
+new Chart(document.getElementById('chartGastoCampanas'), {
+  type: 'doughnut',
+  data: {
+    labels: ['WAP Copia (52.5%)', 'Ventas Web (33.1%)', 'Visitas Perfil (12.7%)', 'WAP Original (1.7%)'],
+    datasets: [{
+      data: [846834, 532976, 204737, 27365],
+      backgroundColor: ['rgba(74,222,128,0.8)','rgba(201,165,90,0.8)','rgba(155,127,212,0.8)','rgba(248,113,113,0.8)'],
+      borderColor: ['#4ADE80','#C9A55A','#9B7FD4','#F87171'],
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '55%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` $${ctx.parsed.toLocaleString('es-CO')} COP` } }
+    }
   }
 });
 
