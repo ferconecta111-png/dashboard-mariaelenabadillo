@@ -670,22 +670,29 @@
       </div>
 
       <!-- Totales -->
-      <div style="background:var(--card2);border-radius:8px;padding:12px 0 4px;">
-        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
-          <div style="font-size:13px;color:var(--text-muted)">Pagado con Mastercard ···· 9992</div>
-          <div style="font-size:14px;font-weight:700;color:var(--text);text-align:right">$1,685,816 COP</div>
+      <div style="background:var(--card2);border-radius:8px;padding:12px 0 4px;margin-top:4px;">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;border-bottom:1px solid var(--border);">
+          <div style="font-size:12px;color:var(--text-dim)">Subtotal Ads Manager (API)</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-dim);text-align:right">$1,688,929 COP</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
-          <div style="font-size:13px;color:var(--text-muted)">Crédito publicitario aplicado</div>
-          <div style="font-size:14px;font-weight:700;color:var(--green);text-align:right">− $6 COP</div>
+          <div style="font-size:12px;color:var(--text-dim)">Crédito publicitario aplicado</div>
+          <div style="font-size:13px;font-weight:600;color:var(--green);text-align:right">− $6 COP</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
-          <div style="font-size:13px;color:var(--green)">IVA / VAT (Meta Platforms Ireland Ltd)</div>
-          <div style="font-size:14px;font-weight:700;color:var(--green);text-align:right">$0 COP · 0%</div>
+          <div style="font-size:12px;color:var(--text-dim)">Ajuste de facturación Meta</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-dim);text-align:right">− $3,101 COP</div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 12px;border-top:1px solid var(--border);margin-top:4px;">
-          <div style="font-size:14px;font-weight:700;color:var(--text)">TOTAL REAL PAGADO · factura Meta</div>
-          <div style="font-size:16px;font-weight:800;color:var(--green);text-align:right">$1,685,822 COP</div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
+          <div style="font-size:12px;color:var(--green)">IVA / VAT — Meta Platforms Ireland</div>
+          <div style="font-size:13px;font-weight:700;color:var(--green);text-align:right">$0 · 0%</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px 12px;border-top:2px solid var(--gold);margin-top:4px;background:rgba(201,165,90,.07);border-radius:0 0 8px 8px;">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:var(--gold)">TOTAL COBRADO A TARJETA</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Mastercard ···· 9992 · según factura Meta</div>
+          </div>
+          <div style="font-size:20px;font-weight:800;color:var(--gold);text-align:right;align-self:center;">$1,685,822 COP</div>
         </div>
       </div>
 
@@ -703,31 +710,24 @@
       </div>
     </div>
     <div style="margin-top:12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
-      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;">Resumen de inversión CAVA vs total cuenta</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px;">¿De qué se compone el total?</div>
       <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
-        <span style="color:var(--text-muted)">Solo campañas CAVA (neto)</span>
+        <span style="color:var(--text-muted)">Campañas CAVA (4 campañas)</span>
         <span style="color:var(--gold);font-weight:700;">$1,611,912 COP</span>
       </div>
       <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
-        <span style="color:var(--text-muted)">Otras campañas (Volviendo al Ser)</span>
-        <span style="color:var(--text-dim);font-weight:700;">$77,017 COP</span>
+        <span style="color:var(--text-muted)">Volviendo al Ser (otra campaña)</span>
+        <span style="color:var(--text-dim);font-weight:700;">+ $77,017 COP</span>
       </div>
       <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
-        <span style="color:var(--text-muted)">Total neto cuenta (Ads Manager)</span>
-        <span style="color:var(--text);font-weight:700;">$1,688,929 COP</span>
+        <span style="color:var(--green)">IVA / VAT</span>
+        <span style="color:var(--green);font-weight:700;">$0 · Meta cobra 0%</span>
       </div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;">
-        <span style="color:var(--green)">IVA / VAT (Meta Platforms Ireland)</span>
-        <span style="color:var(--green);font-weight:700;">$0 COP · 0%</span>
+      <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid var(--gold);margin-top:4px;font-size:15px;font-weight:800;">
+        <span style="color:var(--gold)">Total cobrado a tu tarjeta</span>
+        <span style="color:var(--gold)">$1,685,822 COP</span>
       </div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">
-        <span style="color:var(--text-dim)">Diferencia API vs factura (redondeo)</span>
-        <span style="color:var(--text-dim);font-weight:600;">−$3,107 COP</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:1px solid var(--border);margin-top:4px;font-size:14px;font-weight:800;">
-        <span style="color:var(--text)">Total real pagado junio · según factura</span>
-        <span style="color:var(--green)">$1,685,822 COP</span>
-      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px;">Fuente: Resumen de Facturación Meta · jun 1–30 · 34 cargos a Mastercard ···· 9992</div>
     </div>
   </div>
 </div>
