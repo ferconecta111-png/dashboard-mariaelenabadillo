@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROI CAVA WAP — Maria Elena Badillo</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
+  :root {
+    --bg: #0D0B14;
+    --card: #16131F;
+    --card2: #1C192A;
+    --border: #2A2540;
+    --gold: #C9A55A;
+    --gold-light: #E8C880;
+    --purple: #9B7FD4;
+    --purple-light: #C4AEFF;
+    --green: #4ADE80;
+    --red: #F87171;
+    --yellow: #FCD34D;
+    --text: #EDE9F8;
+    --text-muted: #8B84A8;
+    --text-dim: #5A5478;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header .brand { color: var(--gold); font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: var(--text); line-height: 1.2; }
+  .header h1 span { color: var(--gold); }
+  .header .sub { color: var(--text-muted); font-size: 14px; margin-top: 10px; }
+  .header .period {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 6px 16px; margin-top: 14px;
+    font-size: 13px; color: var(--purple-light);
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* GRID */
+  .grid { display: grid; gap: 16px; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-1-2 { grid-template-columns: 1fr 2fr; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .card.gold-border { border-color: var(--gold); border-width: 1px; }
+  .card-label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+  .card-value { font-size: 32px; font-weight: 700; color: var(--text); line-height: 1; }
+  .card-value.gold { color: var(--gold); }
+  .card-value.green { color: var(--green); }
+  .card-value.purple { color: var(--purple-light); }
+  .card-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .card-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(74,222,128,.12); color: var(--green);
+    border-radius: 6px; padding: 3px 8px; font-size: 11px; font-weight: 600; margin-top: 8px;
+  }
+  .card-badge.warn { background: rgba(252,211,77,.12); color: var(--yellow); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-dim); margin: 32px 0 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* FORMULA BOX */
+  .formula-box {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: 'Inter', monospace;
+  }
+  .formula-title { font-size: 12px; font-weight: 600; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+  .formula-eq { font-size: 18px; font-weight: 500; color: var(--text); line-height: 1.6; }
+  .formula-eq .highlight { color: var(--gold-light); font-weight: 700; }
+  .formula-eq .muted { color: var(--text-muted); font-size: 13px; }
+  .formula-line { border-top: 1.5px solid var(--purple); margin: 6px 0; }
+  .formula-note { font-size: 12px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; }
+  .formula-result { font-size: 22px; font-weight: 700; color: var(--green); margin-top: 10px; }
+
+  /* BENCHMARK TABLE */
+  .bench-table { width: 100%; border-collapse: collapse; }
+  .bench-table th { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); text-align: left; padding: 0 0 12px; }
+  .bench-table td { padding: 10px 0; border-top: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+  .bench-table td:first-child { color: var(--text-muted); }
+  .bench-table td:nth-child(2) { color: var(--gold); font-weight: 600; }
+  .bench-table td:nth-child(3) { color: var(--text-dim); font-size: 12px; }
+  .bench-table td:last-child { text-align: right; }
+  .tag { display: inline-flex; align-items: center; gap: 4px; border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; }
+  .tag.good { background: rgba(74,222,128,.12); color: var(--green); }
+  .tag.warn { background: rgba(252,211,77,.12); color: var(--yellow); }
+  .tag.bad  { background: rgba(248,113,113,.12); color: var(--red); }
+
+  /* SCENARIOS */
+  .scenario {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .scenario::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  }
+  .scenario.op::before { background: var(--green); }
+  .scenario.mod::before { background: var(--gold); }
+  .scenario.con::before { background: var(--purple); }
+  .scenario-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+  .scenario.op .scenario-label { color: var(--green); }
+  .scenario.mod .scenario-label { color: var(--gold); }
+  .scenario.con .scenario-label { color: var(--purple-light); }
+  .scenario-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 16px; }
+  .s-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .s-row:last-child { border-bottom: none; }
+  .s-key { font-size: 12px; color: var(--text-muted); }
+  .s-val { font-size: 13px; font-weight: 700; color: var(--text); }
+  .s-val.big { font-size: 22px; color: var(--green); }
+  .s-note { font-size: 11px; color: var(--text-dim); margin-top: 10px; font-style: italic; }
+
+  /* ATRIBUTION NOTE */
+  .attr-box {
+    background: rgba(155,127,212,.07);
+    border: 1px solid rgba(155,127,212,.3);
+    border-radius: 12px;
+    padding: 18px 22px;
+  }
+  .attr-box .attr-title { font-size: 13px; font-weight: 600; color: var(--purple-light); margin-bottom: 8px; }
+  .attr-box p { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .attr-box strong { color: var(--text); }
+
+  /* WHAT META TRACKS */
+  .funnel { display: flex; flex-direction: column; gap: 6px; }
+  .funnel-step {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px;
+    position: relative;
+  }
+  .funnel-n { font-size: 22px; font-weight: 700; min-width: 64px; }
+  .funnel-n.gold { color: var(--gold); }
+  .funnel-n.green { color: var(--green); }
+  .funnel-n.purple { color: var(--purple-light); }
+  .funnel-n.yellow { color: var(--yellow); }
+  .funnel-label { font-size: 13px; color: var(--text); font-weight: 500; }
+  .funnel-sub { font-size: 11px; color: var(--text-muted); }
+  .funnel-pct {
+    margin-left: auto; font-size: 11px; font-weight: 700;
+    background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 4px 9px;
+    color: var(--text-muted);
+  }
+  .arrow-down { text-align: center; color: var(--text-dim); font-size: 12px; margin: -2px 0; padding-left: 30px; }
+
+  /* TRACKING RECOS */
+  .reco-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .reco-item:last-child { border-bottom: none; }
+  .reco-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: #0D0B14; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .reco-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .reco-text strong { color: var(--text); font-weight: 600; }
+
+  /* FOOTER */
+  .footer { text-align: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-dim); }
+
+  /* CANVAS */
+  .chart-wrap { position: relative; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content:''; position:absolute; left:8px; top:6px; bottom:6px; width:2px; background: linear-gradient(to bottom, var(--gold), var(--purple), var(--green)); border-radius:2px; }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot { position:absolute; left:-24px; top:4px; width:14px; height:14px; border-radius:50%; border:2px solid var(--bg); flex-shrink:0; }
+  .tl-dot.gold   { background: var(--gold); box-shadow: 0 0 8px rgba(201,165,90,.5); }
+  .tl-dot.green  { background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,.5); }
+  .tl-dot.purple { background: var(--purple); box-shadow: 0 0 8px rgba(155,127,212,.5); }
+  .tl-dot.red    { background: var(--red); box-shadow: 0 0 8px rgba(248,113,113,.5); }
+  .tl-dot.gray   { background: var(--text-dim); }
+  .tl-date { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+  .tl-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .tl-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .tl-body strong { color: var(--text); }
+  .tl-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tl-chip { font-size: 11px; font-weight: 600; border-radius: 6px; padding: 4px 10px; }
+  .tl-chip.gold   { background: rgba(201,165,90,.12); color: var(--gold); }
+  .tl-chip.green  { background: rgba(74,222,128,.12); color: var(--green); }
+  .tl-chip.purple { background: rgba(155,127,212,.12); color: var(--purple-light); }
+  .tl-chip.red    { background: rgba(248,113,113,.12); color: var(--red); }
+  .tl-chip.gray   { background: rgba(138,132,168,.12); color: var(--text-dim); }
+
+  /* PIXEL ANOMALY TABLE */
+  .anom-table { width:100%; border-collapse:collapse; margin-top:12px; }
+  .anom-table th { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); text-align:left; padding:0 0 10px; }
+  .anom-table td { padding:8px 0; border-top:1px solid var(--border); font-size:13px; color:var(--text-muted); }
+  .anom-table td:first-child { color:var(--text); font-weight:500; }
+  .anom-table td.warn { color:var(--red); font-weight:700; }
+  .anom-table td.ok   { color:var(--green); }
+
+  @media (max-width: 900px) {
+    .grid-4 { grid-template-columns: repeat(2,1fr); }
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-2, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img
+    src="https://mariaelenabadillo.com/wp-content/uploads/2023/01/MEB-logo-color.png"
+    alt="Maria Elena Badillo"
+    style="height:64px;object-fit:contain;margin-bottom:18px;filter:brightness(0) invert(1);opacity:0.9;"
+    onerror="this.style.display='none'"
+  >
+  <div class="brand">Maria Elena Badillo · Centro de Bienestar</div>
+  <h1>ROI Campaña <span>CAVA WAP</span></h1>
+  <div class="sub">Análisis de inversión · Campañas de Venta a WhatsApp</div>
+  <div class="period">
+    <span class="dot"></span>
+    10 junio – 30 junio 2026 · 21 días activos · Meta Ads
+  </div>
+</div>
+
+<!-- KPIs PRINCIPALES -->
+<div class="section-title">Resumen Ejecutivo</div>
+<div class="grid grid-4">
+  <div class="card gold-border">
+    <div class="card-label">Inversión total</div>
+    <div class="card-value gold">$197</div>
+    <div class="card-sub">USD gastados en Meta Ads<br>846,834 COP</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Revenue total CAVA</div>
+    <div class="card-value green">$26,775</div>
+    <div class="card-sub">225 ventas × $119 USD<br>(total negocio, no solo pauta)</div>
+  </div>
+  <div class="card">
+    <div class="card-label">ROAS escenario moderado</div>
+    <div class="card-value purple">90.6x</div>
+    <div class="card-sub">Por cada $1 invertido<br>→ $90.6 en revenue</div>
+    <div class="card-badge">Conservador validado</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Costo por lead WAP</div>
+    <div class="card-value gold">$0.65</div>
+    <div class="card-sub">USD por conversación iniciada<br>Benchmark industria: $3–10</div>
+    <div class="card-badge">5–15x bajo benchmark</div>
+  </div>
+</div>
+
+<!-- MÉTRICAS DE CALIDAD -->
+<div class="section-title">Métricas de calidad de la campaña</div>
+<div class="grid grid-2">
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Desempeño vs benchmark de industria</div>
+    <table class="bench-table">
+      <thead>
+        <tr>
+          <th>Métrica</th>
+          <th>Maria Elena</th>
+          <th>Benchmark</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CTR (tasa de clic)</td>
+          <td>4.12%</td>
+          <td>1–2% remarketing</td>
+          <td><span class="tag good">2× arriba</span></td>
+        </tr>
+        <tr>
+          <td>CPM (costo por mil)</td>
+          <td>$3.78 USD</td>
+          <td>$4–8 USD LATAM</td>
+          <td><span class="tag good">Bajo promedio</span></td>
+        </tr>
+        <tr>
+          <td>Frecuencia</td>
+          <td>2.82×</td>
+          <td>2–5× ideal</td>
+          <td><span class="tag good">Rango ideal</span></td>
+        </tr>
+        <tr>
+          <td>Costo/conversación WAP</td>
+          <td>$0.65 USD</td>
+          <td>$3–10 USD</td>
+          <td><span class="tag good">Excepcional</span></td>
+        </tr>
+        <tr>
+          <td>Tasa first reply</td>
+          <td>83.4%</td>
+          <td>40–60%</td>
+          <td><span class="tag good">Alta calidad</span></td>
+        </tr>
+        <tr>
+          <td>Costo por first reply</td>
+          <td>$0.78 USD</td>
+          <td>$5–15 USD</td>
+          <td><span class="tag good">10× bajo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Métricas de alcance y eficiencia</div>
+    <div class="grid grid-2" style="gap:12px">
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px">
+        <div class="card-label">Alcance</div>
+        <div style="font-size:26px;font-weight:700;color:var(--text)">18,484</div>
+        <div class="card-sub">personas únicas<br>remarketing caliente</div>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px">
+        <div class="card-label">Impresiones</div>
+        <div style="font-size:26px;font-weight:700;color:var(--text)">52,049</div>
+        <div class="card-sub">veces visto el anuncio<br>frec. 2.82×</div>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px">
+        <div class="card-label">Clics totales</div>
+        <div style="font-size:26px;font-weight:700;color:var(--gold)">2,145</div>
+        <div class="card-sub">CPC: 395 COP<br>(~$0.09 USD)</div>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px">
+        <div class="card-label">Checkouts web</div>
+        <div style="font-size:26px;font-weight:700;color:var(--purple-light)">19</div>
+        <div class="card-sub">iniciados en sitio<br>atribuidos al anuncio</div>
+      </div>
+    </div>
+    <div class="card-badge warn" style="margin-top:14px">
+      Audiencia: mujeres 25–55 · CO MX US AR CL PA · excl. compradoras
+    </div>
+  </div>
+</div>
+
+<!-- GRÁFICAS DIARIAS -->
+<div class="section-title">Evolución diaria de la campaña</div>
+<div class="grid grid-2">
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Gasto diario (COP)</div>
+    <div class="chart-wrap"><canvas id="chartGasto" height="200"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Conversaciones WAP iniciadas vs First Replies</div>
+    <div class="chart-wrap"><canvas id="chartMsgs" height="200"></canvas></div>
+  </div>
+</div>
+
+<!-- EMBUDO DE ATRIBUCIÓN -->
+<div class="section-title">Lo que Meta atribuye directamente a la campaña</div>
+<div class="grid grid-2-1">
+  <div class="card">
+    <div class="card-label" style="margin-bottom:18px">Embudo de conversión WAP — atribución Meta (7 días)</div>
+    <div class="funnel">
+      <div class="funnel-step">
+        <div class="funnel-n gold">18,484</div>
+        <div>
+          <div class="funnel-label">Personas únicas alcanzadas</div>
+          <div class="funnel-sub">Audiencia remarketing caliente — ya conocían a Maria Elena</div>
+        </div>
+        <div class="funnel-pct">100%</div>
+      </div>
+      <div class="arrow-down">↓ 11.6% hicieron clic</div>
+      <div class="funnel-step">
+        <div class="funnel-n gold">2,145</div>
+        <div>
+          <div class="funnel-label">Clics en el anuncio</div>
+          <div class="funnel-sub">CTR 4.12% — 2× sobre el benchmark</div>
+        </div>
+        <div class="funnel-pct">11.6%</div>
+      </div>
+      <div class="arrow-down">↓ 14% abrieron WhatsApp</div>
+      <div class="funnel-step">
+        <div class="funnel-n green">301</div>
+        <div>
+          <div class="funnel-label">Conversaciones WAP iniciadas</div>
+          <div class="funnel-sub">Personas que llegaron al WhatsApp POR el anuncio (Meta confirma)</div>
+        </div>
+        <div class="funnel-pct">1.6%</div>
+      </div>
+      <div class="arrow-down">↓ 83.4% respondieron</div>
+      <div class="funnel-step">
+        <div class="funnel-n green">251</div>
+        <div>
+          <div class="funnel-label">First replies — conversaciones reales</div>
+          <div class="funnel-sub">Personas que respondieron activamente al equipo de ventas</div>
+        </div>
+        <div class="funnel-pct">83.4%</div>
+      </div>
+      <div class="arrow-down">↓ el equipo de ventas cierra</div>
+      <div class="funnel-step">
+        <div class="funnel-n yellow">225</div>
+        <div>
+          <div class="funnel-label">Ventas totales CAVA</div>
+          <div class="funnel-sub">No todas atribuibles solo a pauta — algunas son orgánicas</div>
+        </div>
+        <div class="funnel-pct">~total</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px">Distribución de conversaciones</div>
+    <div class="chart-wrap"><canvas id="chartFunnel" height="240"></canvas></div>
+    <div style="margin-top:16px">
+      <div class="attr-box">
+        <div class="attr-title">⚡ Por qué hay diferencia</div>
+        <p>Meta atribuye <strong>301 conversaciones al anuncio</strong>. Las ventas orgánicas son personas que llegaron por perfil de IG, stories sin pauta, referidos o búsqueda directa — <strong>no se mezclan con las 301 de Meta</strong>. El número exacto de ventas de pauta requiere cruzar el CRM del equipo de ventas.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FÓRMULAS -->
+<div class="section-title">Fórmulas — cómo se calculan ROAS y ROI</div>
+<div class="grid grid-2">
+  <div class="formula-box">
+    <div class="formula-title">ROAS · Return on Ad Spend</div>
+    <div class="formula-eq">
+      <span class="highlight">Revenue atribuido a la pauta</span><br>
+      <div class="formula-line"></div>
+      <span class="muted">Gasto total en la campaña</span>
+    </div>
+    <div style="margin:14px 0 4px;font-size:13px;color:var(--text-muted)">Ejemplo escenario moderado (150 ventas de pauta):</div>
+    <div class="formula-eq">
+      <span class="highlight">150 × $119 USD = $17,850</span><br>
+      <div class="formula-line"></div>
+      <span class="muted">$197 USD</span>
+    </div>
+    <div class="formula-result">= 90.6x</div>
+    <div class="formula-note">
+      ⚠️ <strong>"Revenue atribuido"</strong> ≠ revenue total del negocio.<br>
+      Solo cuenta el revenue que vino específicamente de leads generados por el anuncio.<br>
+      Por eso el número de ventas de pauta es clave para calcular esto con precisión.
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">ROI · Return on Investment</div>
+    <div class="formula-eq">
+      <span class="highlight">(Revenue atribuido − Gasto)</span> × 100<br>
+      <div class="formula-line"></div>
+      <span class="muted">Gasto total en la campaña</span>
+    </div>
+    <div style="margin:14px 0 4px;font-size:13px;color:var(--text-muted)">Ejemplo escenario moderado:</div>
+    <div class="formula-eq">
+      <span class="highlight">($17,850 − $197)</span> × 100<br>
+      <div class="formula-line"></div>
+      <span class="muted">$197</span>
+    </div>
+    <div class="formula-result">= 8,956%</div>
+    <div class="formula-note">
+      El ROI dice <strong>cuánto ganaste POR CADA PESO invertido</strong>, en porcentaje.<br>
+      Un ROI de 8,956% significa que por cada $100 invertidos, recuperaste $8,956 netos.<br>
+      Nota: no incluye costos de producción del producto, equipo de ventas, etc.
+    </div>
+  </div>
+</div>
+
+<!-- ESCENARIOS -->
+<div class="section-title">Escenarios de ROI según atribución</div>
+<div class="grid grid-3">
+  <div class="scenario op">
+    <div class="scenario-label">Escenario Optimista</div>
+    <div class="scenario-title">100% de ventas<br>de pauta</div>
+    <div class="s-row"><span class="s-key">Ventas atribuidas</span><span class="s-val">225</span></div>
+    <div class="s-row"><span class="s-key">Revenue atribuido</span><span class="s-val">$26,775 USD</span></div>
+    <div class="s-row"><span class="s-key">Inversión</span><span class="s-val">$197 USD</span></div>
+    <div class="s-row"><span class="s-key">Ganancia neta</span><span class="s-val">$26,578 USD</span></div>
+    <div class="s-row"><span class="s-key">ROAS</span><span class="s-val big">135.9x</span></div>
+    <div class="s-row"><span class="s-key">ROI</span><span class="s-val" style="color:var(--green)">13,487%</span></div>
+    <div class="s-row"><span class="s-key">CAC</span><span class="s-val">$0.88 USD</span></div>
+    <div class="s-note">Aplica si todas las 225 ventas llegaron por las conversaciones del anuncio.</div>
+  </div>
+
+  <div class="scenario mod">
+    <div class="scenario-label">★ Escenario Moderado</div>
+    <div class="scenario-title">~150 ventas<br>de pauta (67%)</div>
+    <div class="s-row"><span class="s-key">Ventas atribuidas</span><span class="s-val">~150</span></div>
+    <div class="s-row"><span class="s-key">Revenue atribuido</span><span class="s-val">$17,850 USD</span></div>
+    <div class="s-row"><span class="s-key">Inversión</span><span class="s-val">$197 USD</span></div>
+    <div class="s-row"><span class="s-key">Ganancia neta</span><span class="s-val">$17,653 USD</span></div>
+    <div class="s-row"><span class="s-key">ROAS</span><span class="s-val big" style="color:var(--gold)">90.6x</span></div>
+    <div class="s-row"><span class="s-key">ROI</span><span class="s-val" style="color:var(--gold)">8,956%</span></div>
+    <div class="s-row"><span class="s-key">CAC</span><span class="s-val">$1.31 USD</span></div>
+    <div class="s-note">El más realista. Meta atribuyó 301 convs, de las cuales ~150 cerraron venta.</div>
+  </div>
+
+  <div class="scenario con">
+    <div class="scenario-label">Escenario Conservador</div>
+    <div class="scenario-title">~67 ventas<br>de pauta (30%)</div>
+    <div class="s-row"><span class="s-key">Ventas atribuidas</span><span class="s-val">~67</span></div>
+    <div class="s-row"><span class="s-key">Revenue atribuido</span><span class="s-val">$7,973 USD</span></div>
+    <div class="s-row"><span class="s-key">Inversión</span><span class="s-val">$197 USD</span></div>
+    <div class="s-row"><span class="s-key">Ganancia neta</span><span class="s-val">$7,776 USD</span></div>
+    <div class="s-row"><span class="s-key">ROAS</span><span class="s-val big" style="color:var(--purple-light)">40.5x</span></div>
+    <div class="s-row"><span class="s-key">ROI</span><span class="s-val" style="color:var(--purple-light)">3,944%</span></div>
+    <div class="s-row"><span class="s-key">CAC</span><span class="s-val">$2.94 USD</span></div>
+    <div class="s-note">El más prudente. Asume que solo 30% de las ventas se originó en el anuncio.</div>
+  </div>
+</div>
+
+<div style="margin-top:14px" class="attr-box">
+  <div class="attr-title">Los tres escenarios son excelentes</div>
+  <p>En el peor de los casos (<strong>solo 30% de ventas de pauta, ROAS 40.5x</strong>), por cada $100 USD invertidos en Meta Ads se recuperaron $4,044 USD. Una campaña de pauta se considera exitosa con ROAS >2x. El piso de esta campaña fue 20× arriba de ese umbral.</p>
+</div>
+
+<!-- TRACKING FUTURO -->
+<div class="section-title">Cómo medir con precisión en la próxima campaña</div>
+<div class="card">
+  <div class="card-label" style="margin-bottom:16px">Protocolo de trazabilidad pauta vs orgánico</div>
+  <div class="reco-item">
+    <div class="reco-num">1</div>
+    <div class="reco-text"><strong>Pregunta de apertura en WhatsApp.</strong> Que el equipo de ventas incluya en el primer mensaje: "¿Viste nuestro anuncio en Instagram o llegaste por otro medio?" — dos opciones de respuesta rápida. Esto separa pauta de orgánico desde el primer contacto.</div>
+  </div>
+  <div class="reco-item">
+    <div class="reco-num">2</div>
+    <div class="reco-text"><strong>Hoja de cierre del equipo de ventas.</strong> Una hoja simple con 4 columnas: fecha, nombre, origen (pauta / orgánico / referido), resultado (cerró / no cerró). Con 2 semanas de datos ya tienes la tasa de cierre real por canal.</div>
+  </div>
+  <div class="reco-item">
+    <div class="reco-num">3</div>
+    <div class="reco-text"><strong>Activar el pixel de compra correctamente.</strong> El pixel de CAVA tuvo una anomalía en junio. Si se corrige el event_id en GTM, Meta empezará a reportar las compras reales directamente en el administrador — el ROAS aparecería automático en el panel.</div>
+  </div>
+  <div class="reco-item">
+    <div class="reco-num">4</div>
+    <div class="reco-text"><strong>UTM diferenciado.</strong> Usar un link distinto en el anuncio vs el link en bio de IG. Así en Analytics cada sesión web muestra su origen exacto (pauta vs orgánico) antes de que lleguen al WhatsApp.</div>
+  </div>
+</div>
+
+<!-- GRÁFICA COMPARATIVA ESCENARIOS -->
+<div class="section-title">Comparativa visual de escenarios</div>
+<div class="card">
+  <div class="card-label" style="margin-bottom:16px">ROAS por escenario de atribución</div>
+  <div class="chart-wrap"><canvas id="chartRoas" height="120"></canvas></div>
+</div>
+
+<!-- CRONOLOGÍA -->
+<div class="section-title">Cronología completa — junio 2026</div>
+<div class="grid grid-2">
+
+  <!-- TIMELINE -->
+  <div class="card">
+    <div class="card-label" style="margin-bottom:20px">Línea de tiempo de campañas CAVA</div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot gray"></div>
+        <div class="tl-date">1 junio 2026</div>
+        <div class="tl-title">Sin campañas activas</div>
+        <div class="tl-body">La cuenta no tenía campañas corriendo para CAVA en este momento.</div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-date">2 – 8 junio</div>
+        <div class="tl-title">Fase 1 — RMK CAVA Ventas Web</div>
+        <div class="tl-body">
+          Solo corría la campaña de conversiones web. Aun así generó <strong>29 conversaciones WAP</strong> y <strong>7 checkouts</strong>.
+          Meta reportó 57 "compras" — pero con anomalía de pixel el día 3 (30 compras vs 2 checkouts reales → pixel duplicado).
+        </div>
+        <div class="tl-chips">
+          <span class="tl-chip gold">189,112 COP gastados</span>
+          <span class="tl-chip gold">29 msgs WAP orgánicos</span>
+          <span class="tl-chip red">Pixel duplicado detectado</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot purple"></div>
+        <div class="tl-date">9 junio</div>
+        <div class="tl-title">Fase 2 — Se activan AWS + WAP original</div>
+        <div class="tl-body">
+          Lanza <strong>AWS CAVA | Visitas Perfil</strong> (awareness en CO, MX, US, ES, IT, PA) y la primera versión de la campaña WAP. Tres campañas corriendo simultáneamente.
+        </div>
+        <div class="tl-chips">
+          <span class="tl-chip purple">3 campañas activas</span>
+          <span class="tl-chip gold">Awareness + Web + WAP</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-date">10 junio</div>
+        <div class="tl-title">Fase 3 — Lanza RMK CAVA WAP Copia ⭐</div>
+        <div class="tl-body">
+          Arranca la campaña principal: <strong>RMK CAVA | Ventas WhatsApp - Copia</strong>, optimizada para CONVERSATIONS → WHATSAPP, dirigida a mujeres 25–55 en 6 países que interactuaron con la cuenta en los últimos 30 días, excluyendo compradoras.
+        </div>
+        <div class="tl-chips">
+          <span class="tl-chip green">Campaña principal activada</span>
+          <span class="tl-chip green">46,875 COP/día</span>
+          <span class="tl-chip purple">Remarketing caliente</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot gold"></div>
+        <div class="tl-date">11 – 18 junio</div>
+        <div class="tl-title">Fase 4 — Ecosistema completo activo</div>
+        <div class="tl-body">
+          Las cuatro campañas CAVA corriendo en paralelo: Web, AWS Visitas Perfil, WAP original y WAP Copia.
+          El <strong>11 de junio fue el mejor día</strong> de la WAP Copia: <strong>28 mensajes iniciados</strong> en un solo día.
+          AWS Visitas Perfil se pausa el 16 de junio.
+        </div>
+        <div class="tl-chips">
+          <span class="tl-chip green">Pico: 28 msgs el 11/6</span>
+          <span class="tl-chip gold">4 campañas activas</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot red"></div>
+        <div class="tl-date">18 junio</div>
+        <div class="tl-title">Se pausa RMK CAVA Ventas Web</div>
+        <div class="tl-body">
+          La campaña web se pausa después de 17 días activos. Desde este punto solo queda la campaña WAP Copia como motor principal de CAVA.
+        </div>
+        <div class="tl-chips">
+          <span class="tl-chip red">Web pausada</span>
+          <span class="tl-chip green">WAP Copia como único motor</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot green"></div>
+        <div class="tl-date">19 – 30 junio</div>
+        <div class="tl-title">Fase 5 — Solo WAP Copia</div>
+        <div class="tl-body">
+          La campaña WAP Copia opera sola. Los últimos días mostraron los mayores volúmenes: <strong>34 mensajes el 29/6</strong> y <strong>24 mensajes el 30/6</strong>. La tendencia al cierre del mes iba en alza.
+        </div>
+        <div class="tl-chips">
+          <span class="tl-chip green">Pico final: 34 msgs 29/6</span>
+          <span class="tl-chip green">Tendencia al alza</span>
+          <span class="tl-chip gold">301 convs acumuladas</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL DERECHO: tabla + anomalía pixel -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+
+    <div class="card">
+      <div class="card-label" style="margin-bottom:14px">Gasto total por fase (junio)</div>
+      <div class="chart-wrap"><canvas id="chartFases" height="220"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label" style="margin-bottom:4px">⚠️ Anomalía del pixel — semana 1</div>
+      <div class="tl-body" style="font-size:12px;margin-bottom:10px">
+        Meta reportó <strong style="color:var(--red)">57 compras</strong> en la campaña web (jun 2–7), pero los checkouts no cuadran. El día 3 hubo <strong style="color:var(--red)">30 "compras" con solo 2 checkouts</strong> — señal clara de disparo duplicado del pixel. Estos números <strong>no son ventas reales</strong>.
+      </div>
+      <table class="anom-table">
+        <thead><tr><th>Día</th><th>Checkouts</th><th>Compras Meta</th><th>Veredicto</th></tr></thead>
+        <tbody>
+          <tr><td>2 jun</td><td class="ok">1</td><td class="warn">8</td><td><span class="tl-chip red" style="font-size:10px">Duplicado</span></td></tr>
+          <tr><td>3 jun</td><td class="ok">2</td><td class="warn">30</td><td><span class="tl-chip red" style="font-size:10px">Duplicado severo</span></td></tr>
+          <tr><td>4 jun</td><td class="ok">2</td><td class="warn">16</td><td><span class="tl-chip red" style="font-size:10px">Duplicado</span></td></tr>
+          <tr><td>5 jun</td><td class="ok">1</td><td class="warn">2</td><td><span class="tl-chip red" style="font-size:10px">Posible</span></td></tr>
+          <tr><td>6 jun</td><td class="ok">1</td><td class="ok">0</td><td><span class="tl-chip green" style="font-size:10px">OK</span></td></tr>
+          <tr><td>7 jun</td><td class="ok">0</td><td class="ok">1</td><td><span class="tl-chip gray" style="font-size:10px">Normal</span></td></tr>
+        </tbody>
+      </table>
+      <div class="tl-body" style="font-size:11px;margin-top:12px;font-style:italic">
+        Acción pendiente: corregir event_id en GTM para evitar que el mismo evento se cuente dos veces.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Datos extraídos directamente de Meta Ads Manager · act_1418379029648107 · Generado el 1 julio 2026<br>
+  Análisis para uso interno de Maria Elena Badillo — Centro de Bienestar
+</div>
+
+<script>
+const dias = ['10/6','11/6','12/6','13/6','14/6','15/6','16/6','17/6','18/6','19/6','20/6','21/6','22/6','23/6','24/6','25/6','26/6','27/6','28/6','29/6','30/6'];
+const gasto = [972,31939,22184,37716,28775,48282,35375,18319,30616,46668,42742,44106,60577,55188,43572,50357,31904,41192,61870,58155,56325];
+const msgs  = [0,28,14,10,7,9,11,6,5,13,13,9,16,20,21,14,6,17,24,34,24];
+const reply = [0,27,12,9,7,9,11,6,4,10,7,7,13,15,20,11,5,9,21,26,22];
+
+const defaults = {
+  responsive: true,
+  plugins: { legend: { labels: { color: '#8B84A8', font: { size: 11 } } } },
+  scales: {
+    x: { ticks: { color: '#5A5478', font: { size: 10 } }, grid: { color: '#1C192A' } },
+    y: { ticks: { color: '#5A5478', font: { size: 10 } }, grid: { color: '#1C192A' } }
+  }
+};
+
+// Gasto diario
+new Chart(document.getElementById('chartGasto'), {
+  type: 'bar',
+  data: {
+    labels: dias,
+    datasets: [{
+      label: 'Gasto (COP)',
+      data: gasto,
+      backgroundColor: 'rgba(201,165,90,0.6)',
+      borderColor: '#C9A55A',
+      borderWidth: 1,
+      borderRadius: 4
+    }]
+  },
+  options: { ...defaults }
+});
+
+// Msgs vs Replies
+new Chart(document.getElementById('chartMsgs'), {
+  type: 'line',
+  data: {
+    labels: dias,
+    datasets: [
+      {
+        label: 'Conversaciones iniciadas',
+        data: msgs,
+        borderColor: '#4ADE80',
+        backgroundColor: 'rgba(74,222,128,0.1)',
+        fill: true, tension: 0.4, pointRadius: 3
+      },
+      {
+        label: 'First replies',
+        data: reply,
+        borderColor: '#C9A55A',
+        backgroundColor: 'rgba(201,165,90,0.07)',
+        fill: true, tension: 0.4, pointRadius: 3, borderDash: [4,3]
+      }
+    ]
+  },
+  options: { ...defaults }
+});
+
+// Funnel donut
+new Chart(document.getElementById('chartFunnel'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Alcance (18,484)','Clics (2,145)','Convs WAP (301)','First replies (251)'],
+    datasets: [{
+      data: [18484, 2145, 301, 251],
+      backgroundColor: ['rgba(155,127,212,0.3)','rgba(201,165,90,0.5)','rgba(74,222,128,0.6)','rgba(74,222,128,0.9)'],
+      borderColor: ['#9B7FD4','#C9A55A','#4ADE80','#22C55E'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#8B84A8', font: { size: 11 } } } },
+    cutout: '60%'
+  }
+});
+
+// Gasto por fase
+new Chart(document.getElementById('chartFases'), {
+  type: 'bar',
+  data: {
+    labels: ['Jun 2–8\nSolo Web', 'Jun 9\nWeb+AWS+WAP', 'Jun 10–18\nEcosistema completo', 'Jun 19–30\nSolo WAP Copia'],
+    datasets: [
+      {
+        label: 'RMK CAVA Web',
+        data: [189112, 27329, 295539, 0],
+        backgroundColor: 'rgba(201,165,90,0.7)',
+        borderColor: '#C9A55A', borderWidth:1, borderRadius:4
+      },
+      {
+        label: 'AWS Visitas Perfil',
+        data: [0, 10026, 194711, 0],
+        backgroundColor: 'rgba(155,127,212,0.7)',
+        borderColor: '#9B7FD4', borderWidth:1, borderRadius:4
+      },
+      {
+        label: 'WAP Copia',
+        data: [0, 0, 379648, 467186],
+        backgroundColor: 'rgba(74,222,128,0.7)',
+        borderColor: '#4ADE80', borderWidth:1, borderRadius:4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#8B84A8', font: { size: 11 } } } },
+    scales: {
+      x: { stacked: true, ticks: { color: '#5A5478', font: { size: 10 } }, grid: { color: '#1C192A' } },
+      y: { stacked: true, ticks: { color: '#5A5478', font: { size: 10 }, callback: v => (v/1000)+'K' }, grid: { color: '#1C192A' } }
+    }
+  }
+});
+
+// ROAS escenarios
+new Chart(document.getElementById('chartRoas'), {
+  type: 'bar',
+  data: {
+    labels: ['Conservador (30% pauta)', 'Moderado (67% pauta)', 'Optimista (100% pauta)', 'Umbral éxito campaña'],
+    datasets: [{
+      label: 'ROAS',
+      data: [40.5, 90.6, 135.9, 2],
+      backgroundColor: ['rgba(155,127,212,0.7)','rgba(201,165,90,0.7)','rgba(74,222,128,0.7)','rgba(248,113,113,0.4)'],
+      borderColor: ['#9B7FD4','#C9A55A','#4ADE80','#F87171'],
+      borderWidth: 2,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ROAS ${ctx.parsed.x}x`
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#5A5478', font: { size: 11 }, callback: v => v+'x' }, grid: { color: '#1C192A' } },
+      y: { ticks: { color: '#8B84A8', font: { size: 12 } }, grid: { color: '#1C192A' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
