@@ -672,16 +672,20 @@
       <!-- Totales -->
       <div style="background:var(--card2);border-radius:8px;padding:12px 0 4px;">
         <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
-          <div style="font-size:13px;color:var(--text-muted)">Subtotal gasto neto (Meta)</div>
-          <div style="font-size:14px;font-weight:700;color:var(--text);text-align:right">$1,688,929 COP</div>
+          <div style="font-size:13px;color:var(--text-muted)">Pagado con Mastercard ···· 9992</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);text-align:right">$1,685,816 COP</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
-          <div style="font-size:13px;color:var(--yellow)">IVA 19% servicios digitales (Colombia)</div>
-          <div style="font-size:14px;font-weight:700;color:var(--yellow);text-align:right">$320,897 COP</div>
+          <div style="font-size:13px;color:var(--text-muted)">Crédito publicitario aplicado</div>
+          <div style="font-size:14px;font-weight:700;color:var(--green);text-align:right">− $6 COP</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 12px;">
+          <div style="font-size:13px;color:var(--green)">IVA / VAT (Meta Platforms Ireland Ltd)</div>
+          <div style="font-size:14px;font-weight:700;color:var(--green);text-align:right">$0 COP · 0%</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 12px;border-top:1px solid var(--border);margin-top:4px;">
-          <div style="font-size:14px;font-weight:700;color:var(--text)">TOTAL REAL PAGADO (con impuestos)</div>
-          <div style="font-size:16px;font-weight:800;color:var(--green);text-align:right">$2,009,826 COP</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text)">TOTAL REAL PAGADO · factura Meta</div>
+          <div style="font-size:16px;font-weight:800;color:var(--green);text-align:right">$1,685,822 COP</div>
         </div>
       </div>
 
@@ -693,9 +697,9 @@
     <div class="card-label" style="margin-bottom:16px">Gasto por campaña (COP)</div>
     <div class="chart-wrap"><canvas id="chartGastoBarras" height="280"></canvas></div>
     <div style="margin-top:20px;">
-      <div class="attr-box">
-        <div class="attr-title">Sobre el IVA del 19%</div>
-        <p>Meta Platforms cobra <strong>IVA del 19%</strong> sobre la pauta digital en Colombia según la Ley de Economía Digital. Este impuesto se aplica al total del gasto neto y aparece en la factura electrónica de Meta. El gasto neto es lo que muestra el Administrador de Anuncios; el total real pagado incluye el IVA.</p>
+      <div class="attr-box" style="border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.05);">
+        <div class="attr-title" style="color:var(--green)">✅ Sin IVA — Meta factura desde Irlanda</div>
+        <p>Meta Platforms Ireland Ltd (IE) factura el servicio de pauta. Al ser una empresa irlandesa, el <strong>VAT Rate aplicado es 0%</strong> para Colombia — no se cobra IVA del 19%. El Resumen de Facturación de Meta confirma: <strong>VAT Amount $0 COP</strong>. Lo que ves en el Administrador de Anuncios es exactamente lo que pagaste.</p>
       </div>
     </div>
     <div style="margin-top:12px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
@@ -709,16 +713,20 @@
         <span style="color:var(--text-dim);font-weight:700;">$77,017 COP</span>
       </div>
       <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
-        <span style="color:var(--text-muted)">Total neto cuenta</span>
+        <span style="color:var(--text-muted)">Total neto cuenta (Ads Manager)</span>
         <span style="color:var(--text);font-weight:700;">$1,688,929 COP</span>
       </div>
       <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;">
-        <span style="color:var(--yellow)">+ IVA 19%</span>
-        <span style="color:var(--yellow);font-weight:700;">$320,897 COP</span>
+        <span style="color:var(--green)">IVA / VAT (Meta Platforms Ireland)</span>
+        <span style="color:var(--green);font-weight:700;">$0 COP · 0%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;">
+        <span style="color:var(--text-dim)">Diferencia API vs factura (redondeo)</span>
+        <span style="color:var(--text-dim);font-weight:600;">−$3,107 COP</span>
       </div>
       <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:1px solid var(--border);margin-top:4px;font-size:14px;font-weight:800;">
-        <span style="color:var(--text)">Total real pagado junio</span>
-        <span style="color:var(--green)">$2,009,826 COP</span>
+        <span style="color:var(--text)">Total real pagado junio · según factura</span>
+        <span style="color:var(--green)">$1,685,822 COP</span>
       </div>
     </div>
   </div>
